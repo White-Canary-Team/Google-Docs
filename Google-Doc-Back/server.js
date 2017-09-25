@@ -81,12 +81,14 @@ io.on('connection', socket => {
     socket.name = socket.remoteAddress + ":" + socket.remotePort 
     connections.push(socket);
 
-    socket.on('test', data => {
+    socket.on('edited text', data => {
         console.log(data)
-        socket.broadcast.emit("test2", data);
+        socket.broadcast.emit("new text", data);
     })
 
-/////////////////////////////////////////////////////////////////////
+
+
+//////////git status/////////////////////////////////////////////////////////////////
 
 
 
