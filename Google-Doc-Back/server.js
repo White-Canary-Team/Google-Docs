@@ -1,6 +1,5 @@
 require('dotenv').config()
 
-
 const express = require('express');
 const cors = require('cors')
 const bodyParser = require('body-parser')
@@ -79,23 +78,13 @@ let roomId = {}
 
 io.on('connection', socket => {
     console.log('socket connected')
+    socket.name = socket.remoteAddress + ":" + socket.remotePort 
     connections.push(socket);
 
-///////////////////////// JOIN ROOMS FOR LIVE EDITING ////////////////////////////////////
-    // socket.on('room', data => {
-    //     socket.join(data.id);
-    //     roomid[data.id] = {}
-    //     console.log(`joined room ${data.id}`)
-    //     console.log(roomid, 'room array')
-    // })
-
-    
-//     socket.on('leave room', data => {
-//         socket.leave(data)
-//         delete roomid[data]
-//         console.log('TERMINATED ROOM')
-//         console.log(roomid, 'spliced roomid')
-//     })
+    socket.on('test', data => {
+        console.log(data)
+        socket.broadcast.emit("test2", data);
+    })
 
 /////////////////////////////////////////////////////////////////////
 
