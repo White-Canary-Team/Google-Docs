@@ -11,8 +11,6 @@ class Landing extends Component {
                 <div className='landing-main'>
                     <a href="#" className="go-to-google-button">Go to Google Docs</a>
                 </div>
-                
-                
             </div>
         );
     }
