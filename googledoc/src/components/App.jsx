@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
+import router from '../Router/Router.jsx'
 
 export default class App extends Component {
 	render(){
 		return (
-			<div className='App'>
-				<p>Testing!</p>
+			<div>
+				{/*<header />*/}
+				{router}
 			</div>
 		)
 	}
