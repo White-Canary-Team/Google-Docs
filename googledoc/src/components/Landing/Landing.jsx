@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Typing, {Backspace} from 'react-typing-animation';
+import { slide as Menu } from 'react-burger-menu';
 
 class Landing extends Component {
     render() {
@@ -7,38 +8,42 @@ class Landing extends Component {
             <div>
                 <div className='landing-header'>
                     <p className='google-logo'>Google</p>
-                    <a className='login-button' href="http://localhost:3001/auth">
-                        Login
-                    </a>
+                    <Menu right width={ 300 } >
+                        <a id="home" className="menu-item" href="/">Home</a>
+                        <a id="test" className="menu-item" href='#'>test</a>
+                        <a id="test" className="menu-item" href="#">test</a>
+                        <a id="test" className="menu-item" href="#">test</a>
+                    </Menu>
                 </div>
                 
                 <div className='landing-main'>
                     <div className='typing-animation-container'>
                         <Typing className='typing-animation'>
-                            Create persuasive documents
-                            <Backspace count={20} delay={750}/> {"impactful documents"}
-                            <Backspace count={20} delay={750}/> {"meaningful documents"}
-                            <Backspace count={20} delay={750}/> {"persuasive documents"}
-                            <Backspace count={20} delay={750}/> {"impactful documents"}
-                            <Backspace count={20} delay={750}/> {"meaningful documents"}
-                            <Backspace count={20} delay={750}/> {"persuasive documents"}
-                            <Backspace count={20} delay={750}/> {"impactful documents"}
-                            <Backspace count={20} delay={750}/> {"meaningful documents"}
-                            <Backspace count={20} delay={750}/> {"persuasive documents"}
-                            <Backspace count={20} delay={750}/> {"impactful documents"}
-                            <Backspace count={20} delay={750}/> {"meaningful documents"}
-                            <Backspace count={20} delay={750}/> {"persuasive documents"}
-                            <Backspace count={20} delay={750}/> {"impactful documents"}
-                            <Backspace count={20} delay={750}/> {"meaningful documents"}
-                            <Backspace count={20} delay={750}/> {"persuasive documents"}
-                            <Backspace count={20} delay={750}/> {"impactful documents"}
-                            <Backspace count={20} delay={750}/> {"meaningful documents"}
-                            <Backspace count={20} delay={750}/> {"persuasive documents"}
-                            <Backspace count={20} delay={750}/> {"impactful documents"}
+                            Create persuasive
+                            <Backspace count={10} delay={1000}/> {"impactful"}
+                            <Backspace count={11} delay={1000}/> {"meaningful"}
+                            <Backspace count={11} delay={1000}/> {"persuasive"}
+                            <Backspace count={11} delay={1000}/> {"impactful"}
+                            <Backspace count={11} delay={1000}/> {"meaningful"}
+                            <Backspace count={11} delay={1000}/> {"persuasive"}
+                            <Backspace count={11} delay={1000}/> {"impactful"}
+                            <Backspace count={11} delay={1000}/> {"meaningful"}
+                            <Backspace count={11} delay={1000}/> {"persuasive"}
+                            <Backspace count={11} delay={1000}/> {"impactful"}
+                            <Backspace count={11} delay={1000}/> {"meaningful"}
+                            <Backspace count={11} delay={1000}/> {"persuasive"}
+                            <Backspace count={11} delay={1000}/> {"impactful"}
+                            <Backspace count={11} delay={1000}/> {"meaningful"}
+                            <Backspace count={11} delay={1000}/> {"persuasive"}
+                            <Backspace count={11} delay={1000}/> {"impactful"}
+                            <Backspace count={11} delay={1000}/> {"meaningful"}
+                            <Backspace count={11} delay={1000}/> {"persuasive"}
+                            <Backspace count={11} delay={1000}/> {"impactful"}
                         </Typing>
+                        <p className='typing-animation-documents'>documents</p>
+                    </div>
                         <p className='with-google-docs'>With Google Docs, you can write, edit, and collaborate wherever you are. For free.</p>
                         <a alt='go to google' href="/" className="go-to-google-button">Go to Google Docs</a>
-                    </div>
                 </div>
 
                 <div className='do-more-together'>
