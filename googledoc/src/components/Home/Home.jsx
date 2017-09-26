@@ -12,7 +12,8 @@ class Home extends Component {
             emails: '',
             userId: '',
             documents: [],
-            userName: ''
+            userName: '',
+            searchTerm: ''
         }
     }
     componentWillMount() {
@@ -30,9 +31,10 @@ class Home extends Component {
 
 
     }
+    
 
     render() {
-        console.log(this.props.email)
+        console.log(this.state.searchTerm)
         return (
             <div>
             <Header />            
