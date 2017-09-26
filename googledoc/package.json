@@ -1,6 +1,7 @@
 {
   "name": "googledoc",
   "version": "0.1.0",
+  "proxy": "http://localhost:3001",
   "private": true,
   "build-css": "node-sass-chokidar src/ -o src/",
   "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
@@ -22,6 +23,7 @@
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.13",
+    "react-typing-animation": "^1.1.5",
     "redux": "^3.7.2",
     "socket.io-client": "^2.0.3",
     "typed.js": "^2.0.6"
