@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import HotTable from 'react-handsontable';
+import getPlugin from 'handsontable';
+import HotTable, {render} from 'react-handsontable';
 
 
 class Sheets extends Component {
@@ -10,8 +11,10 @@ class Sheets extends Component {
       rows: 50,
       columns: 50,
       table: [],
+      changes:[],
     }
     this.fillTable = this.fillTable.bind(this)
+    this.handleUndo = this.handleUndo.bind(this)
   }
 
   fillTable = function(fillData){
@@ -36,13 +39,25 @@ class Sheets extends Component {
     return tempTable;
     this.setState({table:tempTable})
   }
+
+  handleChange = function(e){
+    
+  }
+
+  handleUndo = function(){
+
+    // plugin.undo();
+    
+  }
+
+
   render() {
     return (
       <div>
         <div className='menu-bar'>
           <div className='undo-redo'>
-            <div className='undo'>
-
+            <div className='undo' onClick={()=>this.handleUndo()}>
+              <p>undo</p>
             </div>
           </div>
 
@@ -55,6 +70,7 @@ class Sheets extends Component {
           undo={true}
           manualColumnResize={true}
           manualRowResize={true}
+          ref="hot"
           
         ></HotTable>
       </div>
