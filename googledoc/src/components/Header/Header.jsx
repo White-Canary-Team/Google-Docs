@@ -6,7 +6,8 @@ import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import SearchBar from 'material-ui-search-bar'
-
+import Paper from 'material-ui/Paper'
+import { connect } from 'react-redux'
 
 
 class Header extends Component {
@@ -25,6 +26,13 @@ class Header extends Component {
 
 
   render() {
+    const styler = {
+      borderRadius: 50,
+      height: 40,
+      width: 40,
+      margin: 20,
+      display: 'inline-block',
+    };
     console.log(this.state.searchTerm)
     return (
 
@@ -32,10 +40,10 @@ class Header extends Component {
         <div>
           <AppBar
             style={{ "background": "royalblue" }}
-            title={<p className="appHeader"><strong>Google</strong>&nbsp;Docs</p>}
+            title={<p className="appHeader">Google&nbsp;<span>Docs</span> </p>}
             onLeftIconButtonTouchTap={this.handleToggle}
 
-            iconElementRight={<SearchBar
+            iconElementRight={<div><SearchBar
               onChange={(val) => {
                 this.setState({
                   searchTerm: val
@@ -51,8 +59,16 @@ class Header extends Component {
                 background: "rgba(	245,	245,	245, .1)",
                 border: ".5px solid darkblue"
               }}
-            />}
+             
+            />
+            <Paper className="prof-land" style={styler} zDepth={1} circle={true}>
+          <img className="pro-pic" src={this.props.userPic} style={{width:'100%', height:'auto'}}/>
+            </Paper>
+            </div>
+            }
+            
           />
+          
 
 
           <Drawer containerStyle={{ height: 'calc(100% - 64px)', top: 64 }} docked={true} width={200} open={this.state.open} zDepth={2}>
@@ -65,4 +81,9 @@ class Header extends Component {
     );
   }
 }
-export default Header;
+function mapStateToProps(state){
+  return{
+    userPic: state.userPic
+  }
+}
+export default connect(mapStateToProps)(Header);
