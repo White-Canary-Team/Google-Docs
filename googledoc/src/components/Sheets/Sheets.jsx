@@ -62,7 +62,7 @@ class Sheets extends Component {
           </div>
 
         </div>
-        <HotTable 
+        <HotTable className='table'
           data={this.fillTable([['White', 'Canary'],['is so much','better than'], ['Black', 'Canary']])} 
           contextMenu={true} 
           colHeaders={true} 
