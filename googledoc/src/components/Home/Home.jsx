@@ -1,0 +1,47 @@
+import React, { Component } from 'react'
+import axios from 'axios'
+import { connect } from 'react-redux'
+import { emailAdd } from './../../ducks/reducer.js'
+
+
+class Home extends Component {
+    constructor() {
+        super();
+        this.state = {
+            emails: '',
+            userId: '',
+            documents: [],
+            userName: ''
+        }
+    }
+    componentWillMount() {
+        axios.get('/user').then(response => {
+            this.setState({
+                emails: response.data.emails[0].value,
+
+            })
+            this.props.emailAdd(this.state.emails)
+
+            axios.post('/user', {
+                email: this.state.emails,
+            })
+        })
+
+
+    }
+
+    render() {
+        console.log(this.props.email)
+        return (
+            <div>
+                <p>Home</p>
+            </div>
+        )
+    }
+}
+function mapStateToProps(state) {
+    return {
+        email: state.email
+    }
+}
+export default connect(mapStateToProps, { emailAdd })(Home)
