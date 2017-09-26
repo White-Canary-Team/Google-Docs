@@ -8,6 +8,7 @@ const http = require('http')
 const passport = require('passport')
 const Auth0Strategy = require('passport-auth0')
 const session = require('express-session')
+const massive = require('massive')
 // make sure you import the things apove ^
 const app = express();
 var server = http.createServer(app)
@@ -26,6 +27,18 @@ app.use(session({
 }))
 app.use(passport.initialize())
 app.use(passport.session())
+
+massive({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    database: process.env.DB,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    ssl: true
+
+}).then(function(db){
+    app.set('db',db)
+  })
 
 
 passport.use(new Auth0Strategy({
@@ -81,12 +94,14 @@ io.on('connection', socket => {
     socket.name = socket.remoteAddress + ":" + socket.remotePort 
     connections.push(socket);
 
-    socket.on('test', data => {
+    socket.on('edited text', data => {
         console.log(data)
-        socket.broadcast.emit("test2", data);
+        socket.broadcast.emit("new text", data);
     })
 
-/////////////////////////////////////////////////////////////////////
+
+
+//////////git status/////////////////////////////////////////////////////////////////
 
 
 
