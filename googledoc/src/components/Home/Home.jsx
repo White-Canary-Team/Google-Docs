@@ -13,16 +13,18 @@ class Home extends Component {
             userId: '',
             documents: [],
             userName: '',
-            searchTerm: ''
+            searchTerm: '',
+            pic:''
         }
     }
     componentWillMount() {
         axios.get('/user').then(response => {
             this.setState({
                 emails: response.data.emails[0].value,
+                pic: response.data.picture
 
             })
-            this.props.emailAdd(this.state.emails)
+            this.props.emailAdd(this.state.emails, this.state.pic)
 
             axios.post('/user', {
                 email: this.state.emails,
@@ -34,7 +36,7 @@ class Home extends Component {
     
 
     render() {
-        console.log(this.state.searchTerm)
+        console.log(this.props.userPic)
         return (
             <div>
             <Header />            
@@ -45,7 +47,8 @@ class Home extends Component {
 }
 function mapStateToProps(state) {
     return {
-        email: state.email
+        email: state.email,
+        userPic: state.userPic
     }
 }
 export default connect(mapStateToProps, { emailAdd })(Home)
