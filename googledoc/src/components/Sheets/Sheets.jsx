@@ -14,12 +14,14 @@ class Sheets extends Component {
       table: [],
       changeLog:[],
       undoLog:[],
-      filled: false
+      filled: false,
+      zoom: 1.00,
     }
     
     this.handleChange = this.handleChange.bind(this)
     this.handleUndo = this.handleUndo.bind(this)
     this.handleRedo = this.handleRedo.bind(this)
+    this.handleZoom = this.handleZoom.bind(this)
   }
   componentDidMount(){
     let tempTable = [];
@@ -93,24 +95,41 @@ class Sheets extends Component {
       this.setState({table: tempTable})
     }
   }
+  handleZoom(zoomVal){
+    console.log(zoomVal)
+    this.setState({zoom:zoomVal})
+  }
 
 
   render() {
     return (
-      <div >
+      <div className='sheets'>
         <div className='menu-bar'>
           <div className='undo-redo'>
             <div className='undo'  onClick={()=>this.handleUndo()}>
-              <p>undo</p>
+              <i className='fa fa-undo'></i>
             </div>
             <div className='redo'  onClick={()=>this.handleRedo()}>
-              <p>redo</p>
+              <i className='fa fa-repeat'></i>
             </div>
+          </div>
+          {/* <div className='vertical-line'></div> */}
+          <div className='zoom-select blue semi-square'>
+            <select onChange={(event)=>this.handleZoom(event.target.value)} defaultValue={1.00}>
+              <option value={.50}>50%</option>
+              <option value={.75}>75%</option>
+              <option value={.90}>90%</option>
+              <option value={1.00}>100%</option>
+              <option value={1.25}>125%</option>
+              <option value={1.50}>150%</option>
+              <option value={2.00}>200%</option>
+            </select>
           </div>
 
         </div>
-        <div >
-          <HotTable className='table'
+        <div className="table-container" style={{MsTransform: `scale(${this.state.zoom},${this.state.zoom})`, WebkitTransform: `scale(${this.state.zoom},${this.state.zoom})`, transform: `scale(${this.state.zoom},${this.state.zoom})`, transformOrigin: '0% 0%'}}>
+          <HotTable 
+            className='table'
             data={this.state.table} 
             contextMenu={true} 
             colHeaders={true} 
@@ -118,8 +137,9 @@ class Sheets extends Component {
             undo={true}
             manualColumnResize={true}
             manualRowResize={true}
-            onAfterChange={ (changes) => {this.handleChange(changes)}
-            }
+            onAfterChange={ (changes) => {this.handleChange(changes)}}
+
+            
           ></HotTable>
         </div>
       </div>
