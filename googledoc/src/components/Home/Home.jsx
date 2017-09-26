@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { emailAdd } from './../../ducks/reducer.js'
+import Header from './../Header/Header.jsx'
 
 
 class Home extends Component {
@@ -34,6 +35,7 @@ class Home extends Component {
         console.log(this.props.email)
         return (
             <div>
+            <Header />            
                 <p>Home</p>
             </div>
         )
