@@ -2,12 +2,33 @@
     width: 100%;
     height: 40px;
     .undo-redo{
-        width: 80px;
+        width: 400px;
         height: 40px;
+        display: flex;
+        flex-direction: row;
         .undo{
-            width: 40px;
+            width: 200px;
             height: 40px;
             cursor:pointer;
         }
+        .redo{
+            width: 200px;
+            height: 40px;
+            cursor:pointer;
+        }
+    }
+}
+.table{
+    
+    div{
+            color: red;
+        
+        
+    }
+    span.colHeader{
+        color: black;
+    }
+    span.rowHeader{
+        color: black;
     }
 }
