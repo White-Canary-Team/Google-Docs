@@ -75,6 +75,18 @@ app.get('/auth/me', (req, res,next) =>{
 
     }
 })
+//////================USER CREDENTIAL ENDPOINTS++++++++++++++++//////
+app.get('/user', (req,res)=>{
+      console.log('USER ENDPOINT' + req.user)
+      res.status(200).json(req.user)
+  })
+app.post('/user', (req,res) =>{
+    console.log("tester:" + req.body.email)
+    req.app.get('db').createUser([req.body.email]).then(response =>{
+        res.status(200).send(console.log('success'))
+    })
+})
+
 
 // REGULAR CRUD ENDPOINTS HERE
 // app.get('endpoint', ctrl.function)

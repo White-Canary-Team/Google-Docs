@@ -1,6 +1,7 @@
 {
   "name": "googledoc",
   "version": "0.1.0",
+  "proxy": "http://localhost:3001",
   "private": true,
   "build-css": "node-sass-chokidar src/ -o src/",
   "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
