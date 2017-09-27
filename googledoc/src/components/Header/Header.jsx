@@ -8,6 +8,9 @@ import MenuItem from 'material-ui/MenuItem';
 import SearchBar from 'material-ui-search-bar'
 import Paper from 'material-ui/Paper'
 import { connect } from 'react-redux'
+import Popover from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
+
 
 
 class Header extends Component {
@@ -16,14 +19,45 @@ class Header extends Component {
     super(props);
     this.state = {
       open: false,
-      searchTerm: ''
+      searchTerm: '',
+      menu1: false,
+      menu2: false
 
     };
 
   }
 
   handleToggle = (event) => this.setState({ open: !this.state.open });
+  handleTouchTap = (event) => {
+    // This prevents ghost click.
+    event.preventDefault();
 
+    this.setState({
+      menu1: true,
+      anchorEl: event.currentTarget,
+    });
+  };
+  handleRequestClose = () => {
+    this.setState({
+      menu1: false,
+    });
+  };
+  //// Notifacation Button Menu/////////
+
+  handleTouchTapNote = (event) => {
+    // This prevents ghost click.
+    event.preventDefault();
+
+    this.setState({
+      menu2: true,
+      anchorEl: event.currentTarget,
+    });
+  };
+  handleRequestClose2 = () => {
+    this.setState({
+      menu2: false,
+    });
+  };
 
   render() {
     const styler = {
@@ -57,13 +91,47 @@ class Header extends Component {
                 width: 600,
                 left: '17vw',
                 background: "rgba(	245,	245,	245, .1)",
-                border: ".5px solid darkblue"
               }}
              
             />
+            <div>
+            <div className="notification">
+            <i className="fa fa-th fa-2x" aria-hidden="true" onClick={this.handleTouchTap}></i>
+            <Popover
+            open={this.state.menu1}
+            anchorEl={this.state.anchorEl}
+            anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+            targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            onRequestClose={this.handleRequestClose}
+          >
+            <Menu>
+              <MenuItem primaryText="Square Button" />
+              <MenuItem primaryText="Help &amp; feedback" />
+              <MenuItem primaryText="Settings" />
+              <MenuItem primaryText={<a href="http://localhost:3001/auth/logout">Sign out</a>} />
+              </Menu>
+          </Popover>
+            <i id="noteBut" className="fa fa-bell fa-2x" aria-hidden="true" onClick={this.handleTouchTapNote}></i>
+            <Popover
+            open={this.state.menu2}
+            anchorEl={this.state.anchorEl}
+            anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+            targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            onRequestClose={this.handleRequestClose2}
+          >
+            <Menu>
+              <MenuItem primaryText="Notification Button" />
+              <MenuItem primaryText="Help &amp; feedback" />
+              <MenuItem primaryText="Settings" />
+            </Menu>
+          </Popover>
+            </div>
+
+            
             <Paper className="prof-land" style={styler} zDepth={1} circle={true}>
           <img className="pro-pic" src={this.props.userPic} style={{width:'100%', height:'auto'}}/>
             </Paper>
+            </div>
             </div>
             }
             
