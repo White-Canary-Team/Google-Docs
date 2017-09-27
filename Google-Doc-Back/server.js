@@ -111,6 +111,10 @@ io.on('connection', socket => {
         socket.broadcast.emit("new text", data);
     })
 
+    socket.on('dataOut', data => {
+        console.log(data)
+        socket.broadcast.emit('dataIn', data)
+    })
 
 
 //////////git status/////////////////////////////////////////////////////////////////
@@ -118,6 +122,7 @@ io.on('connection', socket => {
 
 
 })
+
 
 
 
