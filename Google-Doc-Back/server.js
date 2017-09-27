@@ -119,6 +119,11 @@ io.on('connection', socket => {
 
 })
 
+app.get('/auth/logout', (req,res,next) =>{
+    req.logOut();
+    res.status(200).redirect('http://localhost:3000')
+})
+
 
 
 
