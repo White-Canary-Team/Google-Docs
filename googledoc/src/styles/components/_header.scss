@@ -8,7 +8,25 @@
 .pro-pic{
     border-radius: 50%;
     float: right;
-    
+    width: 100%; 
+    height: auto   
+}
+.menu-pic-container{
+    background: white;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: auto;
+    background: white;
+    color: blue;
+    align-items: center;
+    font-family: $roboto;
+    font-size: 18px;
+    padding-bottom: 5px;    
+}
+.pro-pic-dropdown{
+    border: 2px solid whitesmoke;
+    border-radius: 50%;
     
 }
 .prof-land{
