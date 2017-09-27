@@ -5,6 +5,7 @@ import Quill from '../components/Quill/Quill.jsx'
 import Sheets from '../components/Sheets/Sheets.jsx'
 import Home from '../components/Home/Home.jsx'
 
+import QuillHeader from '../components/Quill/QuillHeader/QuillHeader.jsx';
 
 export default (
     <Switch>
@@ -13,7 +14,7 @@ export default (
         <Route component={Quill} path='/Quill' exact />
         <Route component={Sheets} path='/Sheets' exact />
 
-
+        <Route component={QuillHeader} path='/testquill' />
     </Switch>
 )
 
