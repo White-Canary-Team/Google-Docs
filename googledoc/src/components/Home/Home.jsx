@@ -3,6 +3,7 @@ import axios from 'axios'
 import { connect } from 'react-redux'
 import { emailAdd } from './../../ducks/reducer.js'
 import Header from './../Header/Header.jsx'
+import {Link} from 'react-router-dom'
 
 
 class Home extends Component {
@@ -40,7 +41,9 @@ class Home extends Component {
         return (
             <div>
             <Header />            
-                <p>Home</p>
+                <Link to="/testquill">Quill Header</Link>
+                <Link to="/profile">Profile</Link>
+
             </div>
         )
     }
