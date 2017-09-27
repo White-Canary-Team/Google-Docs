@@ -55,7 +55,7 @@ app.get('/test', (req, res)=>{console.log('testing')})
 app.get('/auth', passport.authenticate('auth0'));
 
 app.get('/auth/callback', passport.authenticate('auth0',{
-    successRedirect: 'http://localhost:3000/',
+    successRedirect: 'http://localhost:3000/Home',
     failureRedirect:'http://localhost:3000/'
 }))
 passport.serializeUser(function(user, done) {

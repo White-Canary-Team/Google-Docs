@@ -1,7 +1,9 @@
 @import 'reset';
 // @import 'globals';
 
-// ===== VARIABLES ===== //
+// ===== VARIABLES ===== //\
+
+@import './Variables.scss';
 
 @import 'variables';
 
@@ -14,3 +16,4 @@
 @import './components/quill.scss';
 @import './components/sheets.scss';
 @import './components/landing.scss';
+@import './components/header.scss'

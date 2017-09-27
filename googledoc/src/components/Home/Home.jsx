@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { emailAdd } from './../../ducks/reducer.js'
+import Header from './../Header/Header.jsx'
 
 
 class Home extends Component {
@@ -11,16 +12,19 @@ class Home extends Component {
             emails: '',
             userId: '',
             documents: [],
-            userName: ''
+            userName: '',
+            searchTerm: '',
+            pic:''
         }
     }
     componentWillMount() {
         axios.get('/user').then(response => {
             this.setState({
                 emails: response.data.emails[0].value,
+                pic: response.data.picture
 
             })
-            this.props.emailAdd(this.state.emails)
+            this.props.emailAdd(this.state.emails, this.state.pic)
 
             axios.post('/user', {
                 email: this.state.emails,
@@ -29,11 +33,13 @@ class Home extends Component {
 
 
     }
+    
 
     render() {
-        console.log(this.props.email)
+        console.log(this.props.userPic)
         return (
             <div>
+            <Header />            
                 <p>Home</p>
             </div>
         )
@@ -41,7 +47,8 @@ class Home extends Component {
 }
 function mapStateToProps(state) {
     return {
-        email: state.email
+        email: state.email,
+        userPic: state.userPic
     }
 }
 export default connect(mapStateToProps, { emailAdd })(Home)
