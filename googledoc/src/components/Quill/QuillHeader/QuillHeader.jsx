@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
+import Header from './../../Header/Header.jsx'
 import FlatButton from 'material-ui/FlatButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
@@ -42,9 +42,11 @@ class QuillHeader extends Component {
     };
 
     render() {
-        console.log('email', this.props.email);
+        console.log(this.props);
+
         return (
             <MuiThemeProvider>
+                
                 <div className='quill-header-container'>
 
                     <div className='left-section-button'><img className='top-left-hamburger' alt='no one' src='https://cdn4.iconfinder.com/data/icons/wirecons-free-vector-icons/32/menu-alt-512.png' /></div>
@@ -114,9 +116,9 @@ class QuillHeader extends Component {
 }
 
 function mapStateToProps(state) {
+    console.log("state" , state)
     return {
-      email: state.email,
-      userPic: state.userPic
+        email: state.email
     }
   }
   export default connect(mapStateToProps)(QuillHeader)
