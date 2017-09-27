@@ -1,0 +1,49 @@
+.appHeader{
+    color: whitesmoke;
+    font-family: $roboto;
+    span{
+        font-family: $openSans
+    }
+}
+.pro-pic{
+    border-radius: 50%;
+    float: right;
+    width: 100%; 
+    height: auto   
+}
+.menu-pic-container{
+    background: white;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: auto;
+    background: white;
+    color: blue;
+    align-items: center;
+    font-family: $roboto;
+    font-size: 18px;
+    padding-bottom: 5px;    
+}
+.pro-pic-dropdown{
+    border: 2px solid whitesmoke;
+    border-radius: 50%;
+    
+}
+.prof-land{
+    position: absolute;
+    top: -15%;
+    right: 0;   
+}
+.notification{
+    width: 30%;
+    display: inline-flex;
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    background-color: transparent;
+    right: 8%;
+    top: 24%;
+    #noteBut{
+        padding-left: 13px;
+    }
+}
