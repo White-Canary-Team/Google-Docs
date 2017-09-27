@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import getPlugin from 'handsontable';
-import HotTable, {render} from 'react-handsontable';
+import HotTable from 'react-handsontable';
+import io from 'socket.io-client';
+
+let socket;
 
 
 class Sheets extends Component {
@@ -16,13 +18,18 @@ class Sheets extends Component {
       undoLog:[],
       filled: false,
       zoom: 1.00,
+      activeSelection:[null,null,null,null]
     }
     
     this.handleChange = this.handleChange.bind(this)
     this.handleUndo = this.handleUndo.bind(this)
     this.handleRedo = this.handleRedo.bind(this)
     this.handleZoom = this.handleZoom.bind(this)
+    this.handleSelect = this.handleSelect.bind(this)
+    this.handleDataType = this.handleDataType.bind(this)
   }
+
+  //On mount, take fillData info from state and put into a 50x50 matrix, then push this matrix to state as table
   componentDidMount(){
     let tempTable = [];
     for (let i=0;i<this.state.rows;i++){
@@ -36,7 +43,6 @@ class Sheets extends Component {
     if (this.state.fillData){
       let fillData=this.state.fillData
       for (let k=0;k<fillData.length;k++){
-        let tempRow = []
         for (let l=0;l<fillData[k].length;l++){
           tempTable[k].splice(l,1,fillData[k][l])
         }
@@ -44,20 +50,25 @@ class Sheets extends Component {
       }
     }
     this.setState({table:tempTable});
+
+    socket = io('http://localhost:3001');
+    socket.on('dataIn', data=>{
+      this.setState({table:data});
+    })
   }
   
-
+  // When user makes a change, it is added to a change log. this.state.table is updated by HotTable (or by componentDidMount - not really sure)
   handleChange = function(changes){
     if (changes){      
       let tempChangeLog = this.state.changeLog.slice();
-      tempChangeLog.push(changes)
-      // console.log(`Temp: ${tempChangeLog}`)
+      tempChangeLog.push(changes[0]);
       this.setState({changeLog:tempChangeLog})
-      // console.log(`Change Log: ${this.state.changeLog}`)
+
+      socket.emit('dataOut', this.state.table)
     }
   }
   
-
+  // When a user selects 'undo', the most recent change is popped off the change log and put onto an undo log.
   handleUndo(){
     if(this.state.changeLog[0]){
       let tempChangeLog = this.state.changeLog
@@ -69,13 +80,14 @@ class Sheets extends Component {
       // console.log(this.state.undoLog)
       let row = lastItem[0][0];
       let column = lastItem[0][1];
-      console.log(this.state.undoLog)
+      // console.log(this.state.undoLog)
       // console.log(row)
       let tempTable = this.state.table.slice();
       tempTable[row].splice(column,1,lastItem[0][2])
       this.setState({table: tempTable})
     }
   }
+  // Opposite of undo
   handleRedo(){
     if(this.state.undoLog[0]){
       let tempUndoLog = this.state.undoLog
@@ -90,14 +102,65 @@ class Sheets extends Component {
       // console.log(row, column)
       // console.log(row)
       let tempTable = this.state.table.slice();
-      console.log(nextItem)
+      // console.log(nextItem)
       tempTable[row].splice(column,1,nextItem[0][3])
       this.setState({table: tempTable})
     }
   }
+  // Handle undo - handsontable does not do well with zoom changes. The column headers will move weird on scroll.
   handleZoom(zoomVal){
-    console.log(zoomVal)
+    // console.log(zoomVal)
     this.setState({zoom:zoomVal})
+  }
+  // Push current selection to state so we can change properties of only these cells.
+  handleSelect(rStart, cStart, rEnd, cEnd){
+    this.setState({activeSelection: [rStart, cStart, rEnd, cEnd]})
+  }
+  // Change selected cells to dollar format (also changes from number to string)
+  handleDataType(type){
+    let tempTable = this.state.table.slice();
+    let selected = this.state.activeSelection.slice();
+    if (selected[0]){
+      for (let i = selected[0]; i <= selected[2]; i++){
+        for (let j = selected[1]; j <= selected[3]; j++){
+          let value = tempTable[i][j];
+          let valLength = value.split('').length;
+          if (value.split('')[0]==='$'){
+            value = value.split('');
+            value.shift();
+            value = value.join('');
+          } else if (value.split('')[valLength - 1] === '%'){
+            value = value.split('')
+            value.pop()
+            value = value.join('');
+            value = Number(value)/100;
+          }
+          if ((typeof value !== 'string' && typeof value !== 'number')||Number(value)!=value || value === '') value = value;
+          else{
+            type === 'percent' ? value = Number(value)*100 : null;
+            value = value.toString().split('');
+            
+            if (value.indexOf('.') !== -1 && value.indexOf('.') == value.lastIndexOf('.')){
+
+              let decimals = value.length - 1 - value.lastIndexOf('.');
+              if (decimals < 2){
+                for(let k=0;k<decimals;k++){
+                  value.push('0')
+                }
+              } else if (decimals > 2){
+                for ( let l=decimals;l>2; l--){
+                  value.pop()
+                }
+              } else value = value;
+            } else value.push('.00')
+            type === 'dollars' ? value = '$' + value.join('') : type === 'percent' ? value = value.join('') + '%' : null;
+            tempTable[i].splice(j,1,value)
+
+          }
+        }
+      }
+      this.setState({table:tempTable})
+    }
   }
 
 
@@ -105,6 +168,7 @@ class Sheets extends Component {
     return (
       <div className='sheets'>
         <div className='menu-bar'>
+
           <div className='undo-redo'>
             <div className='undo'  onClick={()=>this.handleUndo()}>
               <i className='fa fa-undo'></i>
@@ -113,7 +177,7 @@ class Sheets extends Component {
               <i className='fa fa-repeat'></i>
             </div>
           </div>
-          {/* <div className='vertical-line'></div> */}
+
           <div className='zoom-select blue semi-square'>
             <select onChange={(event)=>this.handleZoom(event.target.value)} defaultValue={1.00}>
               <option value={.50}>50%</option>
@@ -126,7 +190,15 @@ class Sheets extends Component {
             </select>
           </div>
 
+          <div className='data-type-select'>
+            <div className='dollars' onClick={()=>this.handleDataType('dollars')}>$</div>
+            <div className='percent'onClick={()=>this.handleDataType('percent')}>%</div>
+            <div className='less'onClick={()=>this.handleDataType('less')}>{'.0<'}</div>
+            <div className='more'onClick={()=>this.handleDataType('more')}>{'.0>'}</div> 
+          </div>
+
         </div>
+
         <div className="table-container" style={{MsTransform: `scale(${this.state.zoom},${this.state.zoom})`, WebkitTransform: `scale(${this.state.zoom},${this.state.zoom})`, transform: `scale(${this.state.zoom},${this.state.zoom})`, transformOrigin: '0% 0%'}}>
           <HotTable 
             className='table'
@@ -138,7 +210,8 @@ class Sheets extends Component {
             manualColumnResize={true}
             manualRowResize={true}
             onAfterChange={ (changes) => {this.handleChange(changes)}}
-
+            onAfterSelectionEnd={ (rStart, cStart, rEnd, cEnd) =>{this.handleSelect(rStart, cStart, rEnd, cEnd)}}
+            // onAfterDeselect={()=>{this.handleSelect(null,null,null,null)}} 
             
           ></HotTable>
         </div>

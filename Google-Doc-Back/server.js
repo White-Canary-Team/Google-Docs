@@ -111,6 +111,10 @@ io.on('connection', socket => {
         socket.broadcast.emit("new text", data);
     })
 
+    socket.on('dataOut', data => {
+        console.log(data)
+        socket.broadcast.emit('dataIn', data)
+    })
 
 
 //////////git status/////////////////////////////////////////////////////////////////
@@ -118,6 +122,12 @@ io.on('connection', socket => {
 
 
 })
+
+app.get('/auth/logout', (req,res,next) =>{
+    req.logOut();
+    res.status(200).redirect('http://localhost:3000')
+})
+
 
 
 

@@ -22,7 +22,8 @@ export function emailAdd(email, picture){
 export default function reducer(state = initialState, action){
     switch(action.type){
         case GET_EMAIL:
-        return Object.assign({},state,{email: action.payload.email, userPic: action.payload.picture})
+            console.log('reducer', state)
+            return Object.assign({},state,{email: action.payload.email, userPic: action.payload.picture})
     }
     return state
 }
