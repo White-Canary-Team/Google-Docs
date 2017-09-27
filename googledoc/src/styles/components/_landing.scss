@@ -1,0 +1,310 @@
+// * {
+//   border: 1px solid red !important;
+// }
+
+
+
+.landing-header {
+    height: 10vh;
+	display: flex;
+	position: fixed;
+	background-color: white;
+	width: 100%;
+}
+
+.google-logo {
+    padding-top: 18px;
+    padding-left: 18px;
+    font-size: 30px;
+    color: gray;
+}
+
+/* Position and sizing of burger button */
+.bm-burger-button {
+	position: fixed;
+	width: 30px;
+	height: 24px;
+	right: 30px;
+	top: 22px;
+}
+  
+/* Color/shape of burger icon bars */
+.bm-burger-bars {
+	background: gray;
+}
+
+/* Position and sizing of clickable cross button */
+.bm-cross-button {
+	height: 24px;
+	width: 24px;
+}
+
+/* Color/shape of close button cross */
+.bm-cross {
+	background: #bdc3c7;
+}
+
+/* General sidebar styles */
+.bm-menu {
+	background: white;
+	padding: 2.5em 1.5em 0;
+	font-size: 1.15em;
+}
+
+/* Wrapper for item list */
+.bm-item-list {
+	color: #b8b7ad;
+	padding: 0.8em;
+}
+
+.menu-item {
+	color: gray;
+    text-align: center;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    padding-left: 5px;
+    text-decoration: none;
+	font-family: 'Open Sans';
+	font-size: 30px;
+}
+
+.menu-item:hover {
+	/* background: grey; */
+	color: #00ABEE;
+	box-shadow: inset 0 -2px 0 0 #00ABEE;
+}
+
+.login-button {
+	position: absolute;
+	right: 0;
+	margin-right: 30px;
+	margin-top: 21px;
+	-moz-box-shadow:inset 0px -3px 7px 0px #29bbff;
+	-webkit-box-shadow:inset 0px -3px 7px 0px #29bbff;
+	box-shadow:inset 0px -3px 7px 0px #29bbff;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #2dabf9), color-stop(1, #0688fa));
+	background:-moz-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:-webkit-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:-o-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:-ms-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:linear-gradient(to bottom, #2dabf9 5%, #0688fa 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#2dabf9', endColorstr='#0688fa',GradientType=0);
+	background-color:#2dabf9;
+	-moz-border-radius:1px;
+	-webkit-border-radius:1px;
+	border-radius:1px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	padding:7px 23px;
+	text-decoration:none;
+	text-shadow:0px 0px 50px #263666;
+}
+.login-button:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #0688fa), color-stop(1, #2dabf9));
+	background:-moz-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:-webkit-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:-o-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:-ms-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:linear-gradient(to bottom, #0688fa 5%, #2dabf9 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#0688fa', endColorstr='#2dabf9',GradientType=0);
+	background-color:#0688fa;
+}
+.login-button:active {
+	position:relative;
+	top:1px;
+}
+
+.landing-main {
+    background-image: url("https://i.imgur.com/Ezy3NhT.jpg");
+    
+      /* Full height */
+      height: 100vh; 
+    
+      /* Create the parallax scrolling effect */
+      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    
+      text-align: center;
+      color: white;
+	  font-size: 60px;
+	  font-family: 'Open Sans';
+	  text-shadow: 0 2px 3px rgba(0,0,0,.2);
+}
+
+.typing-animation-container {
+	display: flex;
+	text-align: center;
+}
+
+.typing-animation {
+	padding-top: 40vh;
+	padding-left: 18%;
+}
+.typing-animation-documents {
+	padding-top: 40vh;
+}
+
+.with-google-docs {
+	font-size: 21px;
+	padding-top: 10px;
+}
+
+.go-to-google-button {
+    // padding-top: 48vh;
+	-moz-box-shadow:inset 0px 0px 7px 0px #29bbff;
+	-webkit-box-shadow:inset 0px 0px 7px 0px #29bbff;
+	box-shadow:inset 0px 0px 7px 0px #29bbff;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #2dabf9), color-stop(1, #0688fa));
+	background:-moz-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:-webkit-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:-o-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:-ms-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:linear-gradient(to bottom, #2dabf9 5%, #0688fa 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#2dabf9', endColorstr='#0688fa',GradientType=0);
+	background-color:#2dabf9;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	padding:18px 67px;
+	text-decoration:none;
+	text-shadow:0px 0px 0px #263666;
+}
+.go-to-google-button:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #0688fa), color-stop(1, #2dabf9));
+	background:-moz-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:-webkit-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:-o-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:-ms-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:linear-gradient(to bottom, #0688fa 5%, #2dabf9 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#0688fa', endColorstr='#2dabf9',GradientType=0);
+	background-color:#0688fa;
+}
+.go-to-google-button:active {
+	position:relative;
+	top:1px;
+}
+
+.do-more-together {
+	height: 100vh;
+	background-color: #F6F6F6;
+	display: flex;
+}
+.do-more-together-images {
+	width: 50%;
+	margin-top: 40vh;
+}
+.kim{
+	margin-left: 20px;
+}
+.tom{
+	margin-left: 20px;
+}
+.pam{
+	margin-left: 20px;
+}
+.do-more-button {
+	height: 120px;
+	margin-left: 20px;
+}
+
+.do-more-together-text {
+	width: 50%;
+	font-family: 'Open Sans';
+}
+.do-more{
+	font-size: 48px;
+	font-weight: 200;
+	margin-top: 35vh;
+	margin-left: 20px;
+	color: #444444;
+}
+.everyone-work-together{
+	font-size: 21px;
+	line-height: 32px;
+	margin-left: 20px;
+	color: #4c4c4c;
+}
+hr {
+	width: 75%;
+	margin-left: 20px;
+	opacity: 0.2;
+}
+.do-more-together-text a {
+	margin-left: 20px;
+}
+
+.get-to-your-documents-container {
+	margin-top: 20px;
+	height: 66vh;
+	// width: 100%;
+	display: flex;
+	font-family: 'Open Sans';
+}
+
+.get-to {
+	margin-left: 8%;
+	margin-top: 8%;
+	margin-right: 8%;
+	font-size: 40px;
+	color: #4c4c4c;
+	font-weight: 300;
+}
+.access-and-create {
+	margin-left: 8%;
+	margin-right: 8%;
+	margin-top: 20px;
+	font-size: 21px;
+	font-weight: 200;
+	color: #555555;
+}
+
+.download-app-button {
+	margin-left: 8vw;
+	margin-top: 20px;
+	-moz-box-shadow:inset 0px -3px 7px 0px #29bbff;
+	-webkit-box-shadow:inset 0px -3px 7px 0px #29bbff;
+	box-shadow:inset 0px -3px 7px 0px #29bbff;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #2dabf9), color-stop(1, #0688fa));
+	background:-moz-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:-webkit-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:-o-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:-ms-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:linear-gradient(to bottom, #2dabf9 5%, #0688fa 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#2dabf9', endColorstr='#0688fa',GradientType=0);
+	background-color:#2dabf9;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:16px;
+	padding:15px 63px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #263666;
+}
+.download-app-button:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #0688fa), color-stop(1, #2dabf9));
+	background:-moz-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:-webkit-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:-o-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:-ms-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:linear-gradient(to bottom, #0688fa 5%, #2dabf9 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#0688fa', endColorstr='#2dabf9',GradientType=0);
+	background-color:#0688fa;
+}
+.download-app-button:active {
+	position:relative;
+	top:1px;
+}
+
+.phone-tablet-image {
+	height: 100%;
+	float: right;
+	padding-right: 5vw;
+}
