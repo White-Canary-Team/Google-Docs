@@ -26,7 +26,7 @@ class Sheets extends Component {
     this.handleRedo = this.handleRedo.bind(this)
     this.handleZoom = this.handleZoom.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
-    this.handleDollars = this.handleDollars.bind(this)
+    this.handleDataType = this.handleDataType.bind(this)
   }
 
   //On mount, take fillData info from state and put into a 50x50 matrix, then push this matrix to state as table
@@ -117,17 +117,31 @@ class Sheets extends Component {
     this.setState({activeSelection: [rStart, cStart, rEnd, cEnd]})
   }
   // Change selected cells to dollar format (also changes from number to string)
-  handleDollars(){
+  handleDataType(type){
     let tempTable = this.state.table.slice();
     let selected = this.state.activeSelection.slice();
     if (selected[0]){
       for (let i = selected[0]; i <= selected[2]; i++){
         for (let j = selected[1]; j <= selected[3]; j++){
           let value = tempTable[i][j];
-          if ((typeof value !== 'string' && typeof value !== 'number')||value.split[0]==='$'||Number(value)!=value || value === '') value = value;
+          let valLength = value.split('').length;
+          if (value.split('')[0]==='$'){
+            value = value.split('');
+            value.shift();
+            value = value.join('');
+          } else if (value.split('')[valLength - 1] === '%'){
+            value = value.split('')
+            value.pop()
+            value = value.join('');
+            value = Number(value)/100;
+          }
+          if ((typeof value !== 'string' && typeof value !== 'number')||Number(value)!=value || value === '') value = value;
           else{
+            type === 'percent' ? value = Number(value)*100 : null;
             value = value.toString().split('');
+            
             if (value.indexOf('.') !== -1 && value.indexOf('.') == value.lastIndexOf('.')){
+
               let decimals = value.length - 1 - value.lastIndexOf('.');
               if (decimals < 2){
                 for(let k=0;k<decimals;k++){
@@ -139,8 +153,9 @@ class Sheets extends Component {
                 }
               } else value = value;
             } else value.push('.00')
-            value = '$' + value.join('');
+            type === 'dollars' ? value = '$' + value.join('') : type === 'percent' ? value = value.join('') + '%' : null;
             tempTable[i].splice(j,1,value)
+
           }
         }
       }
@@ -176,8 +191,10 @@ class Sheets extends Component {
           </div>
 
           <div className='data-type-select'>
-            <div className='dollars' onClick={()=>this.handleDollars()}>$</div>
-            <div className='percent'>%</div>
+            <div className='dollars' onClick={()=>this.handleDataType('dollars')}>$</div>
+            <div className='percent'onClick={()=>this.handleDataType('percent')}>%</div>
+            <div className='less'onClick={()=>this.handleDataType('less')}>{'.0<'}</div>
+            <div className='more'onClick={()=>this.handleDataType('more')}>{'.0>'}</div> 
           </div>
 
         </div>
