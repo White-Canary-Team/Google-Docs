@@ -125,6 +125,10 @@ class Sheets extends Component {
               <option value={2.00}>200%</option>
             </select>
           </div>
+          <div className='data-type-select'>
+            <div className='dollars'>$</div>
+            <div className='percent'>%</div>
+          </div>
 
         </div>
         <div className="table-container" style={{MsTransform: `scale(${this.state.zoom},${this.state.zoom})`, WebkitTransform: `scale(${this.state.zoom},${this.state.zoom})`, transform: `scale(${this.state.zoom},${this.state.zoom})`, transformOrigin: '0% 0%'}}>
