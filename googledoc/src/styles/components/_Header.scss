@@ -4,7 +4,11 @@
     span{
         font-family: $openSans
     }
+    .link{
+        text-decoration: none;
+    }
 }
+
 .pro-pic{
     border-radius: 50%;
     float: right;

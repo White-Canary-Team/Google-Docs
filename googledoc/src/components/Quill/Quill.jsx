@@ -3,6 +3,7 @@ import 'react-quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
 import _ from 'lodash'
 import io from 'socket.io-client'
+import QuillHeader from './QuillHeader/QuillHeader';
 let socket
 
 class Editor extends React.Component {
@@ -33,6 +34,7 @@ class Editor extends React.Component {
         const typing = _.debounce(value => { this.handleChange(value)}, 700)
         return (
             <div className="main-wrapper-quill">
+                <QuillHeader />
                 <ReactQuill theme={'snow'} onChange={typing} value={this.state.text} modules={Editor.modules}>
                   <div className="my-editing-area"/>
                 </ReactQuill>
