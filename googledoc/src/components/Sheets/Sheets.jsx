@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom';
 import HotTable from 'react-handsontable';
 import io from 'socket.io-client';
+import SheetsHeader from './SheetsHeader/SheetsHeader.jsx';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import RaisedButton from 'material-ui/RaisedButton';
 
 let socket;
 
@@ -20,7 +25,9 @@ class Sheets extends Component {
       undoLog:[],
       filled: false,
       zoom: 1.00,
-      activeSelection:[null,null,null,null]
+      activeSelection:[null,null,null,null],
+      latestColor: 'black',
+      latestBg: 'white',
     }
     
     this.handleChange = this.handleChange.bind(this)
@@ -124,7 +131,7 @@ class Sheets extends Component {
     }
   }
   // Handle undo - handsontable does not do well with zoom changes. The column headers will move weird on scroll.
-  handleZoom(zoomVal){
+  handleZoom(event, index, zoomVal){
     this.setState({zoom:zoomVal})
   }
   // Push current selection to state so we can change properties of only these cells.
@@ -187,25 +194,30 @@ class Sheets extends Component {
   }
   handleColorChange(newColor){
     let selected = this.state.activeSelection.slice();
-    let tempStyles = this.state.styles.slice();
-    for (let i=selected[0];i<=selected[2];i++){
-      for (let j=selected[1];j<=selected[3];j++){
-        let bg = tempStyles[i][j].bg
-        tempStyles[i].splice(j,1,{bg:bg,color:newColor})
+    if (selected[0]){
+      let tempStyles = this.state.styles.slice();
+      for (let i=selected[0];i<=selected[2];i++){
+        for (let j=selected[1];j<=selected[3];j++){
+          let bg = tempStyles[i][j].bg
+          tempStyles[i].splice(j,1,{bg:bg,color:newColor})
+        }
       }
+      this.setState({styles: tempStyles, latestColor: newColor})
     }
-    this.setState({styles: tempStyles})
   }
   handleBgChange(newBgColor){
     let selected = this.state.activeSelection.slice();
-    let tempStyles = this.state.styles.slice();
-    for (let i=selected[0];i<=selected[2];i++){
-      for (let j=selected[1];j<=selected[3];j++){
-        let color = tempStyles[i][j].color
-        tempStyles[i].splice(j,1,{color:color,bg:newBgColor})
+    if (selected[0]){
+      let tempStyles = this.state.styles.slice();
+      for (let i=selected[0];i<=selected[2];i++){
+        for (let j=selected[1];j<=selected[3];j++){
+          let color = tempStyles[i][j].color
+          tempStyles[i].splice(j,1,{color:color,bg:newBgColor})
+        }
       }
+      this.setState({styles: tempStyles, latestBg: newBgColor})
     }
-    this.setState({styles: tempStyles})
+    
   }
   getStyles(row,col){
     let bg = this.state.styles[row][col].bg;
@@ -215,7 +227,9 @@ class Sheets extends Component {
 
   render() {
     return (
+      <MuiThemeProvider>
       <div className='sheets'>
+        <SheetsHeader />
         <div className='menu-bar'>
 
           <div className='undo-redo'>
@@ -226,18 +240,18 @@ class Sheets extends Component {
               <i className='fa fa-repeat'></i>
             </div>
           </div>
-
-          <div className='zoom-select blue semi-square'>
-            <select onChange={(event)=>this.handleZoom(event.target.value)} defaultValue={1.00}>
-              <option value={.50}>50%</option>
-              <option value={.75}>75%</option>
-              <option value={.90}>90%</option>
-              <option value={1.00}>100%</option>
-              <option value={1.25}>125%</option>
-              <option value={1.50}>150%</option>
-              <option value={2.00}>200%</option>
-            </select>
+          <div>
+          <DropDownMenu value={this.state.zoom} onChange={this.handleZoom} className='zoom-select'>
+            <MenuItem value={.50} primaryText="50%" />
+            <MenuItem value={.75} primaryText="75%" />
+            <MenuItem value={.90} primaryText="90%" />
+            <MenuItem value={1.00} primaryText="100%" />
+            <MenuItem value={1.25} primaryText="125%" />
+            <MenuItem value={1.5} primaryText="150%" />
+            <MenuItem value={2.00} primaryText="200%" />
+          </DropDownMenu>
           </div>
+          
 
           <div className='data-type-select'>
             <div className='dollars' onClick={()=>this.handleDataType('dollars')}>$</div>
@@ -245,8 +259,7 @@ class Sheets extends Component {
             <div className='less'onClick={()=>this.handleDataType('less')}>{'.0<'}</div>
             <div className='more'onClick={()=>this.handleDataType('more')}>{'.0>'}</div> 
           </div>
-          <div className = 'color-select'>
-            {/* <div className='to-blue' onClick={()=>this.handleColorChange('blue')}>Blue</div> */}
+         {/* <div className='color-select'>
             <select onChange={(event)=>this.handleColorChange(event.target.value)} defaultValue={'black'}>
               <option value={'black'}>black</option>
               <option value={'red'}>red</option>
@@ -260,23 +273,38 @@ class Sheets extends Component {
               <option value={'magenta'}>magenta</option>
               <option value={'white'}>white</option>
             </select>
+          </div> */}
+          <div className='color-select'>
+            <DropDownMenu value={this.state.latestColor} onChange={(event, key, value)=>this.handleColorChange(value)}  selectedMenuItemStyle={ {backgroundColor:'#f5f5f5', color:this.state.latestColor}} style={{color:this.state.latestColor,backgroundColor: 'red'}}>
+              <MenuItem value={'black'} primaryText="black" style={ {color: 'black'}} />
+              <MenuItem value={'red'} primaryText="red" style={ {color: 'red'}}/>
+              <MenuItem value={'orange'} primaryText="orange" style={ {color: 'orange'}}/>
+              <MenuItem value={'yellow'} primaryText="yellow" style={ {color: 'yellow'}}/>
+              <MenuItem value={'lime'} primaryText="green" style={ {color: '#51ff3f'}}/>
+              <MenuItem value={'cyan'} primaryText="cyan" style={ {color: 'cyan'}}/>
+              <MenuItem value={'cornflowerblue'} primaryText="cornflowerblue" style={ {color: 'cornflowerblue'}}/>
+              <MenuItem value={'blue'} primaryText="blue" style={ {color: 'blue'}}/>
+              <MenuItem value={'purple'} primaryText="purple" style={ {color: 'purple'}}/>
+              <MenuItem value={'magenta'} primaryText="magenta" style={ {color: 'magenta'}}/>
+              <MenuItem value={'white'} primaryText="white" style={ {color: 'gray'}}/>
+            </DropDownMenu>
+          </div>  
+          <div className='bg-select'>
+            <DropDownMenu value={this.state.latestBg} onChange={(event, key, value)=>this.handleBgChange(value)}  selectedMenuItemStyle={{ color:'lightgray'}}>
+              <MenuItem value={'bg-white'} primaryText="white" style={ {backgroundColor: 'white', color: 'black'}}/>
+              <MenuItem value={'bg-red'} primaryText="red" style={ {backgroundColor: 'red', color: 'white'}}/>
+              <MenuItem value={'bg-orange'} primaryText="orange" style={ {backgroundColor: 'orange', color: 'white'}}/>
+              <MenuItem value={'bg-yellow'} primaryText="yellow" style={ {backgroundColor: 'yellow', color: 'black'}}/>
+              <MenuItem value={'bg-lime'} primaryText="green" style={ {backgroundColor: 'lime', color: 'white'}}/>
+              <MenuItem value={'bg-cyan'} primaryText="cyan" style={ {backgroundColor: 'cyan', color: 'white'}}/>
+              <MenuItem value={'bg-cornflowerblue'} primaryText="cornflowerblue" style={ {backgroundColor: 'cornflowerblue', color: 'white'}}/>
+              <MenuItem value={'bg-blue'} primaryText="blue" style={ {backgroundColor: 'blue', color: 'white'}}/>
+              <MenuItem value={'bg-purple'} primaryText="purple" style={ {backgroundColor: 'purple', color: 'white'}}/>
+              <MenuItem value={'bg-magenta'} primaryText="magenta" style={ {backgroundColor: 'magenta', color: 'white'}}/>
+              <MenuItem value={'bg-black'} primaryText="black" style={ {backgroundColor: 'black', color: 'white'}} />
+            </DropDownMenu>
           </div>
-          <div className = 'bg-select'>
-            {/* <div className='to-blue' onClick={()=>this.handleColorChange('blue')}>Blue</div> */}
-            <select onChange={(event)=>this.handleBgChange(event.target.value)} defaultValue={'bgwhite'}>
-              <option value={'bg-black'}>black</option>
-              <option value={'bg-red'}>red</option>
-              <option value={'bg-orange'}>orange</option>
-              <option value={'bg-yellow'}>yellow</option>
-              <option value={'bg-green'}>green</option>
-              <option value={'bg-cyan'}>cyan</option>
-              <option value={'bg-cornflowerblue'}>cornflower blue</option>
-              <option value={'bg-blue'}>blue</option>
-              <option value={'bg-purple'}>purple</option>
-              <option value={'bg-magenta'}>magenta</option>
-              <option value={'bg-white'}>white</option>
-            </select>
-          </div>
+          
           
 
         </div>
@@ -303,6 +331,7 @@ class Sheets extends Component {
           ></HotTable>
         </div>
       </div>
+      </MuiThemeProvider>
     );
   }
 }
