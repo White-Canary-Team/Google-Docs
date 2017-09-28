@@ -16,7 +16,7 @@ const style = {
     "margin-right": 5
   };
 
-class QuillHeader extends Component {
+class SheetsHeader extends Component {
     constructor() {
         super();
 
@@ -67,8 +67,8 @@ class QuillHeader extends Component {
 
                 <div className='quill-header-container'>
 
-                    <div className='left-section-button-quill'>
-                        <Link to='/home'><img className='top-left-hamburger' alt='no one' src='https://cdn4.iconfinder.com/data/icons/wirecons-free-vector-icons/32/menu-alt-512.png' /></Link>
+                    <div className='left-section-button-sheets'>
+                        <Link to='/home'><img className='top-left-hamburger' alt='no one' src='https://cdn2.iconfinder.com/data/icons/freecns-cumulus/16/519904-098_Spreadsheet-128.png' /></Link>
                     </div>
 
                     <div className='file-edit-menu-container'>
@@ -180,4 +180,5 @@ function mapStateToProps(state) {
         email: state.email
     }
   }
-  export default connect(mapStateToProps)(QuillHeader)
+
+export default connect(mapStateToProps)(SheetsHeader)
