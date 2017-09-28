@@ -31,7 +31,7 @@ class Home extends Component {
 
             })
             this.props.emailAdd(this.state.emails, this.state.pic)
-            4
+            
             axios.post('/user', {
                 email: this.state.emails,
             })
