@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import HotTable from 'react-handsontable';
 import io from 'socket.io-client';
 
@@ -12,7 +12,7 @@ class Sheets extends Component {
     this.state={
       rows: 50,
       fillData:[['White', 'Canary'],['is so much','better than'], ['Black', 'Canary']],
-      fillStyles:[[{bg:' bg-blue',color:'white'}, {bg:'bg-gray',color:'yellow'}]],
+      // fillStyles:[[{bg:' bg-blue',color:'white'}, {bg:'bg-gray',color:'yellow'}]],
       columns: 50,
       table: [],
       styles: [],
@@ -31,6 +31,7 @@ class Sheets extends Component {
     this.handleDataType = this.handleDataType.bind(this)
     this.getStyles = this.getStyles.bind(this)
     this.handleColorChange = this.handleColorChange.bind(this)
+    this.handleBgChange = this.handleBgChange.bind(this)
   }
 
   //On mount, take fillData info from state and put into a 50x50 matrix, then push this matrix to state as table
@@ -97,49 +98,47 @@ class Sheets extends Component {
   // When a user selects 'undo', the most recent change is popped off the change log and put onto an undo log.
   handleUndo(){
     if(this.state.changeLog[0]){
-      let tempChangeLog = this.state.changeLog
+      let tempChangeLog = this.state.changeLog;
       let lastItem = tempChangeLog.pop();
-      let tempUndoLog = this.state.undoLog
-      tempUndoLog.push(lastItem)
-      // console.log(lastItem);
-      // console.log(this.state.changeLog)
-      // console.log(this.state.undoLog)
+      let tempUndoLog = this.state.undoLog;
+      tempUndoLog.push(lastItem);
       let row = lastItem[0][0];
       let column = lastItem[0][1];
-      // console.log(this.state.undoLog)
-      // console.log(row)
       let tempTable = this.state.table.slice();
-      tempTable[row].splice(column,1,lastItem[0][2])
-      this.setState({table: tempTable})
+      tempTable[row].splice(column,1,lastItem[0][2]);
+      this.setState({table: tempTable});
     }
   }
   // Opposite of undo
   handleRedo(){
     if(this.state.undoLog[0]){
-      let tempUndoLog = this.state.undoLog
+      let tempUndoLog = this.state.undoLog;
       let nextItem = tempUndoLog.pop();
-      let tempChangeLog = this.state.changeLog
+      let tempChangeLog = this.state.changeLog;
       tempChangeLog.push(nextItem)
-      // console.log(lastItem);
-      // console.log(this.state.changeLog)
-      // console.log(this.state.undoLog)
       let row = nextItem[0][0];
       let column = nextItem[0][1];
-      // console.log(row, column)
-      // console.log(row)
       let tempTable = this.state.table.slice();
-      // console.log(nextItem)
       tempTable[row].splice(column,1,nextItem[0][3])
       this.setState({table: tempTable})
     }
   }
   // Handle undo - handsontable does not do well with zoom changes. The column headers will move weird on scroll.
   handleZoom(zoomVal){
-    // console.log(zoomVal)
     this.setState({zoom:zoomVal})
   }
   // Push current selection to state so we can change properties of only these cells.
   handleSelect(rStart, cStart, rEnd, cEnd){
+    if (rStart > rEnd) {
+      let temp = rStart;
+      rStart = rEnd;
+      rEnd = temp;
+    }
+    if (cStart > cEnd) {
+      let temp = cStart;
+      cStart = cEnd;
+      cEnd = temp;
+    }
     this.setState({activeSelection: [rStart, cStart, rEnd, cEnd]})
   }
   // Change selected cells to dollar format (also changes from number to string)
@@ -161,9 +160,8 @@ class Sheets extends Component {
             value = value.join('');
             value = Number(value)/100;
           }
-          if ((typeof value !== 'string' && typeof value !== 'number')||Number(value)!=value || value === '') value = value;
-          else{
-            type === 'percent' ? value = Number(value)*100 : null;
+          if ((typeof value === 'string' || typeof value === 'number') && Number(value)==value && value !== ''){ 
+            value = (type === 'percent' ? Number(value)*100 : value);
             value = value.toString().split('');
             
             if (value.indexOf('.') !== -1 && value.indexOf('.') == value.lastIndexOf('.')){
@@ -177,11 +175,10 @@ class Sheets extends Component {
                 for ( let l=decimals;l>2; l--){
                   value.pop()
                 }
-              } else value = value;
+              }
             } else value.push('.00')
-            type === 'dollars' ? value = '$' + value.join('') : type === 'percent' ? value = value.join('') + '%' : null;
+            value = (type === 'dollars' ? '$' + value.join('') : type === 'percent' ? value.join('') + '%' : value);
             tempTable[i].splice(j,1,value)
-
           }
         }
       }
@@ -194,10 +191,18 @@ class Sheets extends Component {
     for (let i=selected[0];i<=selected[2];i++){
       for (let j=selected[1];j<=selected[3];j++){
         let bg = tempStyles[i][j].bg
-        console.log(bg)
-        console.log()
-        console.log(newColor)
         tempStyles[i].splice(j,1,{bg:bg,color:newColor})
+      }
+    }
+    this.setState({styles: tempStyles})
+  }
+  handleBgChange(newBgColor){
+    let selected = this.state.activeSelection.slice();
+    let tempStyles = this.state.styles.slice();
+    for (let i=selected[0];i<=selected[2];i++){
+      for (let j=selected[1];j<=selected[3];j++){
+        let color = tempStyles[i][j].color
+        tempStyles[i].splice(j,1,{color:color,bg:newBgColor})
       }
     }
     this.setState({styles: tempStyles})
@@ -241,8 +246,38 @@ class Sheets extends Component {
             <div className='more'onClick={()=>this.handleDataType('more')}>{'.0>'}</div> 
           </div>
           <div className = 'color-select'>
-            <div className='to-blue' onClick={()=>this.handleColorChange('blue')}>Blue</div>
+            {/* <div className='to-blue' onClick={()=>this.handleColorChange('blue')}>Blue</div> */}
+            <select onChange={(event)=>this.handleColorChange(event.target.value)} defaultValue={'black'}>
+              <option value={'black'}>black</option>
+              <option value={'red'}>red</option>
+              <option value={'orange'}>orange</option>
+              <option value={'yellow'}>yellow</option>
+              <option value={'green'}>green</option>
+              <option value={'cyan'}>cyan</option>
+              <option value={'cornflowerblue'}>cornflower blue</option>
+              <option value={'blue'}>blue</option>
+              <option value={'purple'}>purple</option>
+              <option value={'magenta'}>magenta</option>
+              <option value={'white'}>white</option>
+            </select>
           </div>
+          <div className = 'bg-select'>
+            {/* <div className='to-blue' onClick={()=>this.handleColorChange('blue')}>Blue</div> */}
+            <select onChange={(event)=>this.handleBgChange(event.target.value)} defaultValue={'bgwhite'}>
+              <option value={'bg-black'}>black</option>
+              <option value={'bg-red'}>red</option>
+              <option value={'bg-orange'}>orange</option>
+              <option value={'bg-yellow'}>yellow</option>
+              <option value={'bg-green'}>green</option>
+              <option value={'bg-cyan'}>cyan</option>
+              <option value={'bg-cornflowerblue'}>cornflower blue</option>
+              <option value={'bg-blue'}>blue</option>
+              <option value={'bg-purple'}>purple</option>
+              <option value={'bg-magenta'}>magenta</option>
+              <option value={'bg-white'}>white</option>
+            </select>
+          </div>
+          
 
         </div>
 

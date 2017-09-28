@@ -77,9 +77,8 @@
 
         .table{
             div{
-                    color: red;
-                
-                
+                    color: black;
+                    font-family: 'Arial'
             }
             span.colHeader{
                 color: black;
@@ -113,28 +112,68 @@
             .ht_clone_top th {
                 // font-size: 12px;
                 background-color: #F3F3F3;
-              }
+            }
             
+            .black {
+                color: black;
+            }
             .red {
-                background-color: #F00;
+                color: red;
             }
-            .blue{
-                color: blue;
-            }
-            .bg-blue{
-                background-color: blue;
-            }
-            .bg-gray{
-                background-color: gray;
-            }
-            .white{
-                color: white;
+            .orange{
+                color: orange;
             }
             .yellow{
                 color: yellow;
             }
-            
-            
+            .green{
+                color: #51ff3f;
+            }
+            .cyan{
+                color: cyan;
+            }
+            .cornflowerblue{
+                color: cornflowerblue
+            }
+            .blue{
+                color: blue;
+            }
+            .purple{
+                color: purple
+            }
+            .magenta{
+                color: magenta
+            }
+            .bg-black {
+                background-color: black;
+            }
+            .bg-red {
+                background-color: red;
+            }
+            .bg-orange{
+                background-color: orange;
+            }
+            .bg-yellow{
+                background-color: yellow;
+            }
+            .bg-green{
+                background-color: #51ff3f;
+            }
+            .bg-cyan{
+                background-color: cyan;
+            }
+            .bg-cornflowerblue{
+                background-color: cornflowerblue
+            }
+            .bg-blue{
+                background-color: blue;
+            }
+            .bg-purple{
+                background-color: purple
+            }
+            .bg-magenta{
+                background-color: magenta
+            }
         }
         
     }
