@@ -110,6 +110,14 @@ app.post('/jsheets', (req,res)=>{
     })
 })
 
+app.put('/update-username', (req, res) => {
+    console.log(req.body);
+    const { id, username } = req.body
+    req.app.get('db').updateUsername([id, username]).then(response => {
+        res.status(200).send(response);
+    })
+})
+
 
 
 
