@@ -5,7 +5,7 @@
 
 
 .landing-header {
-    height: 10vh;
+    height: 70px;
 	display: flex;
 	position: fixed;
 	background-color: white;
@@ -138,15 +138,21 @@
 
 .typing-animation-container {
 	display: flex;
-	text-align: center;
+	// width: 100%;
+	// text-align: center;
+	// align-items: center;
+	// justify-content: center;
 }
 
 .typing-animation {
 	padding-top: 40vh;
-	padding-left: 18%;
+	// padding-left: 18%;
+	margin-left: auto;
+	// margin-right: auto;
 }
 .typing-animation-documents {
 	padding-top: 40vh;
+	margin-right: auto;
 }
 
 .with-google-docs {
