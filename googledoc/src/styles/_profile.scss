@@ -1,0 +1,64 @@
+.profile-main-wrapper{
+    height: 100vh;
+    width: 100vw;
+}
+
+.profile-banner{
+    height: 40%;
+    width: 100%;
+    background-color: #F5F5F5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.profile-page-user-pic{
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+}
+
+.profile-page-email{
+    padding-top: 1.5%;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.edit-username-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 15%;
+}
+.username-input {
+     padding: 5px;
+     font-size: 16px;
+     border-width: 0px;
+     border-color: #CCCCCC;
+     background-color: #FFFFFF;
+     color: #000000;
+     border-style: solid;
+     border-radius: 50px;
+     box-shadow: 0px 0px 5px rgba(66,66,66,.75);
+     text-shadow: undefined 0px 0px 5px px rgba(66,66,66,.75);
+     margin-left: 1%;
+}
+.edit-username-text{
+    font-size: 25px;
+    font-family: Roboto, sans-serif
+}
+
+.document-username-divider{
+    border: 0;
+    height: 1px;
+    background: #333;
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,hsla(0,0%,0%,0)), color-stop(50%,hsla(0,0%,0%,.75)), color-stop(100%,hsla(0,0%,0%,0)));
+    background: -webkit-linear-gradient(left, hsla(0,0%,0%,0) 0%, hsla(0,0%,0%,.75) 50%, hsla(0,0%,0%,0) 100%);
+    background:    -moz-linear-gradient(left, hsla(0,0%,0%,0) 0%, hsla(0,0%,0%,.75) 50%, hsla(0,0%,0%,0) 100%);
+    background:     -ms-linear-gradient(left, hsla(0,0%,0%,0) 0%, hsla(0,0%,0%,.75) 50%, hsla(0,0%,0%,0) 100%);
+    background:      -o-linear-gradient(left, hsla(0,0%,0%,0) 0%, hsla(0,0%,0%,.75) 50%, hsla(0,0%,0%,0) 100%);
+    background:         linear-gradient(left, hsla(0,0%,0%,0) 0%, hsla(0,0%,0%,.75) 50%, hsla(0,0%,0%,0) 100%);
+    margin-top: 2%;
+}
+
