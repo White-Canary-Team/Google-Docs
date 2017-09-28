@@ -12,8 +12,10 @@ class Sheets extends Component {
     this.state={
       rows: 50,
       fillData:[['White', 'Canary'],['is so much','better than'], ['Black', 'Canary']],
+      fillStyles:[[{bg:' bg-blue',color:'white'}, {bg:'bg-gray',color:'yellow'}]],
       columns: 50,
       table: [],
+      styles: [],
       changeLog:[],
       undoLog:[],
       filled: false,
@@ -27,6 +29,8 @@ class Sheets extends Component {
     this.handleZoom = this.handleZoom.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
     this.handleDataType = this.handleDataType.bind(this)
+    this.getStyles = this.getStyles.bind(this)
+    this.handleColorChange = this.handleColorChange.bind(this)
   }
 
   //On mount, take fillData info from state and put into a 50x50 matrix, then push this matrix to state as table
@@ -50,6 +54,28 @@ class Sheets extends Component {
       }
     }
     this.setState({table:tempTable});
+
+    let tempStyles = [];
+    for (let i=0;i<this.state.rows;i++){
+      let row = [];
+      for (let j=0;j<this.state.columns;j++){
+        row.push({bg:'',color:''})
+      }
+      tempStyles.push(row);
+    }
+    
+    if (this.state.fillStyles){
+      let fillStyles=this.state.fillStyles
+      for (let k=0;k<fillStyles.length;k++){
+        for (let l=0;l<fillStyles[k].length;l++){
+          tempStyles[k].splice(l,1,fillStyles[k][l])
+        }
+        
+      }
+    }
+    this.setState({styles:tempStyles})
+
+
 
     socket = io('http://localhost:3001');
     socket.on('dataIn', data=>{
@@ -162,7 +188,25 @@ class Sheets extends Component {
       this.setState({table:tempTable})
     }
   }
-
+  handleColorChange(newColor){
+    let selected = this.state.activeSelection.slice();
+    let tempStyles = this.state.styles.slice();
+    for (let i=selected[0];i<=selected[2];i++){
+      for (let j=selected[1];j<=selected[3];j++){
+        let bg = tempStyles[i][j].bg
+        console.log(bg)
+        console.log()
+        console.log(newColor)
+        tempStyles[i].splice(j,1,{bg:bg,color:newColor})
+      }
+    }
+    this.setState({styles: tempStyles})
+  }
+  getStyles(row,col){
+    let bg = this.state.styles[row][col].bg;
+    let color = this.state.styles[row][col].color;
+    return (bg + ' ' + color);
+  }
 
   render() {
     return (
@@ -196,6 +240,9 @@ class Sheets extends Component {
             <div className='less'onClick={()=>this.handleDataType('less')}>{'.0<'}</div>
             <div className='more'onClick={()=>this.handleDataType('more')}>{'.0>'}</div> 
           </div>
+          <div className = 'color-select'>
+            <div className='to-blue' onClick={()=>this.handleColorChange('blue')}>Blue</div>
+          </div>
 
         </div>
 
@@ -203,6 +250,11 @@ class Sheets extends Component {
           <HotTable 
             className='table'
             data={this.state.table} 
+            cells={(row,col,prop)=>{
+              const cellProperties = {};
+              cellProperties.className = this.getStyles(row,col);
+              return cellProperties;
+            }}
             contextMenu={true} 
             colHeaders={true} 
             rowHeaders={true}
