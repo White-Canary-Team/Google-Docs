@@ -10,6 +10,7 @@ import Paper from 'material-ui/Paper'
 import { connect } from 'react-redux'
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
+import { Link } from 'react-router-dom'
 
 
 
@@ -101,7 +102,7 @@ class Header extends Component {
       <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
         <div>
           <AppBar
-            style={{ "background": "royalblue" }}
+            style={{ "background": "#2979FF" }}
             title={<p className="appHeader">Google&nbsp;<span>Docs</span> </p>}
             onLeftIconButtonTouchTap={this.handleToggle}
 
@@ -132,11 +133,11 @@ class Header extends Component {
                     targetOrigin={{ horizontal: 'left', vertical: 'top' }}
                     onRequestClose={this.handleRequestClose}
                   >
-                    <Menu>
+                    <Menu style={{ textDecoration:"none"}}>
                       <MenuItem primaryText="Square Button" />
-                      <MenuItem primaryText="Help &amp; feedback" />
+                      <MenuItem primaryText="" />
                       <MenuItem primaryText="Settings" />
-                      <MenuItem primaryText={<a href="http://localhost:3001/auth/logout">Sign out</a>} />
+                      <MenuItem containerElement={<a href="http://localhost:3001/auth/logout"/>} className="link" primaryText="Sign out" />
                     </Menu>
                   </Popover>
                   <i id="noteBut" className="fa fa-bell fa-2x" aria-hidden="true" onClick={this.handleTouchTapNote} style={ {color: selected}}></i>
@@ -170,7 +171,7 @@ class Header extends Component {
                     <div className="menu-pic-container">
                       <img className="pro-pic-dropdown" src={this.props.userPic} style={{ width: '100', height: '100' }} />
                         {this.props.email}
-                        <button>My Account</button>
+                        <Link to="/profile"> <button>My Account</button></Link>
                       </div>
                     
                     <MenuItem primaryText={this.props.email} />
@@ -186,7 +187,7 @@ class Header extends Component {
 
 
           <Drawer containerStyle={{ height: 'calc(100% - 64px)', top: 64 }} docked={true} width={200} open={this.state.open} zDepth={2}>
-            <MenuItem>Test 2</MenuItem>
+            <MenuItem containerElement={<Link to="/Quill"/>} primaryText="Quill"/>
             <MenuItem>Test 1</MenuItem>
           </Drawer>
         </div>
