@@ -14,7 +14,6 @@ export default (
         <Route component={Quill} path='/Quill' exact />
         <Route component={Sheets} path='/Sheets' exact />
         <Route component={Profile} path='/Profile' exact />
-        <Route component={QuillHeader} path='/testquill' />
     </Switch>
 )
 

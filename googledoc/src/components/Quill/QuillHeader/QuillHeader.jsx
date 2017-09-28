@@ -4,11 +4,16 @@ import { connect } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from './../../Header/Header.jsx'
 import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 
+const style = {
+    "margin-left": 12,
+    "margin-right": 5
+  };
 
 class QuillHeader extends Component {
     constructor() {
@@ -16,7 +21,8 @@ class QuillHeader extends Component {
 
         this.state = {
             fileOpen: false,
-            editOpen: false
+            editOpen: false,
+            emailOpen: false
         };
     }
 
@@ -34,6 +40,11 @@ class QuillHeader extends Component {
         this.setState({editOpen: true, anchorEl: event.currentTarget});
     };
 
+    handleEmailTouchTap = (event) => {
+        event.preventDefault();
+        this.setState({emailOpen: true, anchorEl: event.currentTarget})
+    };
+
     handleFileRequestClose = () => {
         this.setState({fileOpen: false});
     };
@@ -41,6 +52,11 @@ class QuillHeader extends Component {
     handleEditRequestClose = () => {
         this.setState({editOpen: false});
     };
+
+    handleEmailRequestClose = () => {
+        this.setState({emailOpen: false});
+    }
+
 
     render() {
         console.log(this.props);
@@ -107,8 +123,46 @@ class QuillHeader extends Component {
                         </div>
                     </div>
 
+                    <div className='right-side-content'>
+                        <div className='top-right-email-dropdown'>
+                            <FlatButton 
+                                fullWidth={true} 
+                                onClick={this.handleEmailTouchTap} 
+                                label={this.props.email} 
+                                icon={<ArrowDropRight />}
+                                labelPosition="before"
+                            />
+                            <Popover
+                            open={this.state.emailOpen}
+                            anchorEl={this.state.anchorEl}
+                            anchorOrigin={{
+                            horizontal: 'left',
+                            vertical: 'bottom'
+                        }}
+                            targetOrigin={{
+                            horizontal: 'left',
+                            vertical: 'top'
+                        }}
+                            onRequestClose={this.handleEmailRequestClose}>
+                            <Menu>
+                                <MenuItem primaryText="Paste"/>
+                                <MenuItem primaryText="Select All"/>
+                                <MenuItem primaryText="Find"/>
 
-                    {/* Test */}
+                            </Menu>
+                        </Popover>
+                        </div>
+                        
+                        <div className='comment-and-share'>
+                            <RaisedButton 
+                                label="Comments" />
+                            <RaisedButton 
+                                label="Share" 
+                                style={style} 
+                                backgroundColor={"#2979FF"} 
+                                labelColor={"white"} />
+                        </div>
+                    </div>
 
                 </div>
             </MuiThemeProvider>
