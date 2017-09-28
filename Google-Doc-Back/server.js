@@ -87,10 +87,28 @@ app.post('/user', (req,res) =>{
     })
 })
 
+app.get('/allUsers', (req,res)=>{
+    req.app.get('db').getUsers().then(response =>{
+        res.status(200).send(response)
+    })
+
+})
+
 
 // REGULAR CRUD ENDPOINTS HERE
 // app.get('endpoint', ctrl.function)
-
+app.post('/quill', (req,res)=>{
+    const { title, creator} = req.body
+    req.app.get('db').createQuillDoc([title, creator]).then(response=>{
+        res.status(200).send(console.log('We got it"'))
+    })
+})
+app.post('/jsheets', (req,res)=>{
+    const { title, creator} = req.body
+    req.app.get('db').createSheetDoc([title, creator]).then(response=>{
+        res.status(200).send(console.log('We did it"'))
+    })
+})
 
 
 
