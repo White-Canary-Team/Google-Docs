@@ -105,14 +105,14 @@ app.get('/documents', (req, res) =>{
 
 
 app.post('/quill', (req,res)=>{
-    const { title, creator} = req.body
-    req.app.get('db').createQuillDoc([title, creator]).then(response=>{
+    const { title, creator, doctype} = req.body
+    req.app.get('db').createQuillDoc([title, creator, doctype]).then(response=>{
         res.status(200).send(console.log('We got it"'))
     })
 })
 app.post('/jsheets', (req,res)=>{
-    const { title, creator} = req.body
-    req.app.get('db').createSheetDoc([title, creator]).then(response=>{
+    const { title, creator, doctype} = req.body
+    req.app.get('db').createSheetDoc([title, creator, doctype]).then(response=>{
         res.status(200).send(console.log('We did it"'))
     })
 })
