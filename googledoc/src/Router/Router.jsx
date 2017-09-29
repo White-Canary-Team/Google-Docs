@@ -11,8 +11,8 @@ export default (
     <Switch>
         <Route component={Landing} path='/' exact />
         <Route component={Home} path='/Home' exact />
-        <Route component={Quill} path='/Quill' exact />
-        <Route component={Sheets} path='/Sheets' exact />
+        <Route component={Quill} path='/Quill/:id' exact />
+        <Route component={Sheets} path='/Sheets/:id' exact />
         <Route component={Profile} path='/Profile' exact />
     </Switch>
 )
