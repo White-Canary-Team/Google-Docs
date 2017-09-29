@@ -4,9 +4,16 @@ import HotTable from 'react-handsontable';
 import io from 'socket.io-client';
 import SheetsHeader from './SheetsHeader/SheetsHeader.jsx';
 import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
+// import MenuItem from 'material-ui/MenuItem';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
+import FormatColorText from 'material-ui/svg-icons/editor/format-color-text';
+import FormatColorFill from 'material-ui/svg-icons/editor/format-color-fill';
+
+// import fontColorText from 'material-design-icons/icons/editor/alarm';
 
 let socket;
 
@@ -27,7 +34,7 @@ class Sheets extends Component {
       zoom: 1.00,
       activeSelection:[null,null,null,null],
       latestColor: 'black',
-      latestBg: 'white',
+      latestBg: 'bg-white',
     }
     
     this.handleChange = this.handleChange.bind(this)
@@ -112,6 +119,8 @@ class Sheets extends Component {
       let row = lastItem[0][0];
       let column = lastItem[0][1];
       let tempTable = this.state.table.slice();
+      console.log(tempTable)
+      console.log(row, column)
       tempTable[row].splice(column,1,lastItem[0][2]);
       this.setState({table: tempTable});
     }
@@ -192,30 +201,33 @@ class Sheets extends Component {
       this.setState({table:tempTable})
     }
   }
-  handleColorChange(newColor){
+  handleColorChange(event,value){
     let selected = this.state.activeSelection.slice();
     if (selected[0]){
       let tempStyles = this.state.styles.slice();
       for (let i=selected[0];i<=selected[2];i++){
         for (let j=selected[1];j<=selected[3];j++){
           let bg = tempStyles[i][j].bg
-          tempStyles[i].splice(j,1,{bg:bg,color:newColor})
+          tempStyles[i].splice(j,1,{bg:bg,color:value})
         }
       }
-      this.setState({styles: tempStyles, latestColor: newColor})
+      this.setState({styles: tempStyles, latestColor: value})
     }
   }
-  handleBgChange(newBgColor){
+  handleBgChange(event, value){
     let selected = this.state.activeSelection.slice();
     if (selected[0]){
       let tempStyles = this.state.styles.slice();
       for (let i=selected[0];i<=selected[2];i++){
         for (let j=selected[1];j<=selected[3];j++){
           let color = tempStyles[i][j].color
-          tempStyles[i].splice(j,1,{color:color,bg:newBgColor})
+          tempStyles[i].splice(j,1,{color:color,bg:value})
         }
       }
-      this.setState({styles: tempStyles, latestBg: newBgColor})
+      // let valColor = value.split('').splice(3).join('');
+      // console.log(valColor)
+      this.setState({styles: tempStyles, latestBg:value})
+      console.log(this.state.latestBg)
     }
     
   }
@@ -275,7 +287,7 @@ class Sheets extends Component {
             </select>
           </div> */}
           <div className='color-select'>
-            <DropDownMenu value={this.state.latestColor} onChange={(event, key, value)=>this.handleColorChange(value)}  selectedMenuItemStyle={ {backgroundColor:'#f5f5f5', color:this.state.latestColor}} style={{color:this.state.latestColor,backgroundColor: 'red'}}>
+            {/* <DropDownMenu value={this.state.latestColor} onChange={(event, key, value)=>this.handleColorChange(value)}  selectedMenuItemStyle={ {backgroundColor:'#f5f5f5', color:this.state.latestColor}} style={{color:this.state.latestColor,backgroundColor: 'red'}}>
               <MenuItem value={'black'} primaryText="black" style={ {color: 'black'}} />
               <MenuItem value={'red'} primaryText="red" style={ {color: 'red'}}/>
               <MenuItem value={'orange'} primaryText="orange" style={ {color: 'orange'}}/>
@@ -287,10 +299,34 @@ class Sheets extends Component {
               <MenuItem value={'purple'} primaryText="purple" style={ {color: 'purple'}}/>
               <MenuItem value={'magenta'} primaryText="magenta" style={ {color: 'magenta'}}/>
               <MenuItem value={'white'} primaryText="white" style={ {color: 'gray'}}/>
-            </DropDownMenu>
+            </DropDownMenu> */}
+
+            <IconMenu
+              iconButtonElement={<IconButton><FormatColorText /></IconButton>}
+              anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+              targetOrigin={{horizontal: 'left', vertical: 'top'}}
+              value={this.state.latestColor}
+              onChange={this.handleColorChange}
+              iconStyle={{color:this.state.latestColor}}
+              selectedMenuItemStyle={{backgroundColor:'#f5f5f5', color:this.state.latestColor}}
+            >
+              <MenuItem value={'black'} primaryText="black" style={ {color: 'black'}} />
+              <MenuItem value={'red'} primaryText="red" style={ {color: 'red'}}/>
+              <MenuItem value={'orange'} primaryText="orange" style={ {color: 'orange'}}/>
+              <MenuItem value={'yellow'} primaryText="yellow" style={ {color: 'yellow'}}/>
+              <MenuItem value={'lime'} primaryText="green" style={ {color: '#51ff3f'}}/>
+              <MenuItem value={'cyan'} primaryText="cyan" style={ {color: 'cyan'}}/>
+              <MenuItem value={'cornflowerblue'} primaryText="cornflowerblue" style={ {color: 'cornflowerblue'}}/>
+              <MenuItem value={'blue'} primaryText="blue" style={ {color: 'blue'}}/>
+              <MenuItem value={'purple'} primaryText="purple" style={ {color: 'purple'}}/>
+              <MenuItem value={'magenta'} primaryText="magenta" style={ {color: 'magenta'}}/>
+              <MenuItem value={'white'} primaryText="white" style={ {color: 'gray'}}/>
+            </IconMenu>
+
           </div>  
-          <div className='bg-select'>
-            <DropDownMenu value={this.state.latestBg} onChange={(event, key, value)=>this.handleBgChange(value)}  selectedMenuItemStyle={{ color:'lightgray'}}>
+
+          <div className='bg-select' style={{backgroundColor:this.state.latestBg}}>
+            {/* <DropDownMenu value={this.state.latestBg} onChange={(event, key, value)=>this.handleBgChange(value)}  selectedMenuItemStyle={{ color:'lightgray'}}>
               <MenuItem value={'bg-white'} primaryText="white" style={ {backgroundColor: 'white', color: 'black'}}/>
               <MenuItem value={'bg-red'} primaryText="red" style={ {backgroundColor: 'red', color: 'white'}}/>
               <MenuItem value={'bg-orange'} primaryText="orange" style={ {backgroundColor: 'orange', color: 'white'}}/>
@@ -302,7 +338,28 @@ class Sheets extends Component {
               <MenuItem value={'bg-purple'} primaryText="purple" style={ {backgroundColor: 'purple', color: 'white'}}/>
               <MenuItem value={'bg-magenta'} primaryText="magenta" style={ {backgroundColor: 'magenta', color: 'white'}}/>
               <MenuItem value={'bg-black'} primaryText="black" style={ {backgroundColor: 'black', color: 'white'}} />
-            </DropDownMenu>
+            </DropDownMenu> */}
+            <IconMenu
+              iconButtonElement={<IconButton><FormatColorFill /></IconButton>}
+              anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+              targetOrigin={{horizontal: 'left', vertical: 'top'}}
+              value={this.state.latestBg}
+              onChange={this.handleBgChange}
+              iconStyle={{backgroundColor:this.state.latestBg}}
+              selectedMenuItemStyle={{ color:'lightgray'}}
+            >
+              <MenuItem value={'bg-white'} primaryText="white" style={ {backgroundColor: 'white', color: 'black'}}/>
+              <MenuItem value={'bg-red'} primaryText="red" style={ {backgroundColor: 'red', color: 'white'}}/>
+              <MenuItem value={'bg-orange'} primaryText="orange" style={ {backgroundColor: 'orange', color: 'white'}}/>
+              <MenuItem value={'bg-yellow'} primaryText="yellow" style={ {backgroundColor: 'yellow', color: 'black'}}/>
+              <MenuItem value={'bg-lime'} primaryText="green" style={ {backgroundColor: 'lime', color: 'white'}}/>
+              <MenuItem value={'bg-cyan'} primaryText="cyan" style={ {backgroundColor: 'cyan', color: 'white'}}/>
+              <MenuItem value={'bg-cornflowerblue'} primaryText="cornflowerblue" style={ {backgroundColor: 'cornflowerblue', color: 'white'}}/>
+              <MenuItem value={'bg-blue'} primaryText="blue" style={ {backgroundColor: 'blue', color: 'white'}}/>
+              <MenuItem value={'bg-purple'} primaryText="purple" style={ {backgroundColor: 'purple', color: 'white'}}/>
+              <MenuItem value={'bg-magenta'} primaryText="magenta" style={ {backgroundColor: 'magenta', color: 'white'}}/>
+              <MenuItem value={'bg-black'} primaryText="black" style={ {backgroundColor: 'black', color: 'white'}} />
+            </IconMenu>
           </div>
           
           
