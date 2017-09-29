@@ -24,6 +24,7 @@ class Home extends Component {
     this.handleSheet = this.handleSheet.bind(this)
     }
     componentWillMount() {
+
         axios.get('/user').then(response => {
             this.setState({
                 emails: response.data.emails[0].value,
@@ -53,6 +54,12 @@ class Home extends Component {
 
 
     })
+        axios.get('/documents').then(response =>{
+            console.log(response.data)
+            this.setState({
+                documents: response.data
+            })
+        })
 }
 handleQuill(){
     axios.post('/quill', {
@@ -71,7 +78,21 @@ handleSheet(){
 
 
 
+
     render() {
+        let filteredDoc = this.state.documents.filter((e) =>{
+            if(e.creator === this.props.userId || e.editors === this.props.userId){
+                return e
+            }
+        
+        })
+        let myDocs = filteredDoc.map((c,i)=>{
+            let docStyle = c.doctype === 'word' ? "2px solid #90CAF9": "2px solid #A5D6A7"
+            return(
+                <Paper className="doc-box" style={{border: docStyle}} zDepth={2} rounded={false} key={i}> {c.title} {c.id}</Paper>
+                
+            )
+        })
         let style = {
             height: 100,
             width: 100,
@@ -80,7 +101,7 @@ handleSheet(){
             display: 'inline-block',
             padding: 20
         };
-        console.log(this.props.userId)
+        console.log(filteredDoc)
         return (
             <MuiThemeProvider>
                 <div>
@@ -98,10 +119,7 @@ handleSheet(){
                         <p>Recent Documents</p>
 
                         <div className='my-docs'>
-                            <Paper className="doc-box" zDepth={2} rounded={false} />
-                            <Paper className="doc-box" zDepth={2} rounded={false} />
-                            <Paper className="doc-box" zDepth={2} rounded={false} />
-                            <Paper className="doc-box" zDepth={2} rounded={false} />
+                            {myDocs}
 
                         </div>
 
