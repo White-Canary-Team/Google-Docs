@@ -1,2 +1,2 @@
-INSERT INTO jsheets(title,creator)
-VALUES($1, $2)
+INSERT INTO jsheets(title,creator, doctype)
+VALUES($1, $2, $3)

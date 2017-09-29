@@ -1,2 +1,2 @@
-INSERT INTO Quill(title,creator)
-VALUES($1, $2)
+INSERT INTO Quill(title,creator,doctype)
+VALUES($1, $2, $3)

@@ -41,11 +41,12 @@ class Home extends Component {
             if(this.state.emails){
                 let uid = response.data.filter((e)=>{
                     if(e.email === this.state.emails){
-                      console.log(uid)
+                      
                         return e.id
                     }
                     return null
                 })
+                
                 this.setState({
                     userId: uid[0].id
                 })
@@ -64,14 +65,16 @@ class Home extends Component {
 handleQuill(){
     axios.post('/quill', {
         title: "untitled document",
-        creator: this.props.userId
+        creator: this.props.userId,
+        doctype: "word"
     })
 }
 
 handleSheet(){
     axios.post('/jsheets', {
         title: "untitled document",
-        creator: this.props.userId
+        creator: this.props.userId,
+        doctype: "excel"
     })
 }
 
@@ -81,18 +84,27 @@ handleSheet(){
 
     render() {
         let filteredDoc = this.state.documents.filter((e) =>{
-            if(e.creator === this.props.userId || e.editors === this.props.userId){
+            if(e.creator === this.state.userId){
                 return e
             }
-        
+            return null
+                           
         })
+        console.log(filteredDoc) 
         let myDocs = filteredDoc.map((c,i)=>{
+            console.log("C", c)
+            let quillLink = `/quill/${c.id}`;
+            let sheetLink = `/sheets/${c.id}`;
             let docStyle = c.doctype === 'word' ? "2px solid #90CAF9": "2px solid #A5D6A7"
-            return(
-                <Paper className="doc-box" style={{border: docStyle}} zDepth={2} rounded={false} key={i}> {c.title} {c.id}</Paper>
-                
-            )
+            let docLink = c.doctype === 'word' ? 
+            <Link to={quillLink}> <Paper className="doc-box" style={{border: docStyle}} zDepth={2}  key={i} rounded={false}> {c.title} {c.id}</Paper></Link> :
+            <Link to={sheetLink}> <Paper className="doc-box" style={{border: docStyle}} zDepth={2} key={i}  rounded={false}>{c.title} {c.id}</Paper></Link>
+            
+            return( docLink)
+            
+            
         })
+        console.log(this.props.userId)
         let style = {
             height: 100,
             width: 100,
@@ -101,7 +113,6 @@ handleSheet(){
             display: 'inline-block',
             padding: 20
         };
-        console.log(filteredDoc)
         return (
             <MuiThemeProvider>
                 <div>
@@ -119,8 +130,8 @@ handleSheet(){
                         <p>Recent Documents</p>
 
                         <div className='my-docs'>
+                            
                             {myDocs}
-
                         </div>
 
 
