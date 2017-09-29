@@ -31,3 +31,10 @@
     height: 160px;
     width: 120px;
 }
+.my-docs{
+    display: inline-flex;
+    flex-wrap: wrap;
+    width: 80%;
+    justify-content: space-between;
+    margin-left: 10%;
+}
