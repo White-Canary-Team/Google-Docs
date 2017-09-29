@@ -14,6 +14,9 @@ import FormatColorText from 'material-ui/svg-icons/editor/format-color-text';
 import FormatColorFill from 'material-ui/svg-icons/editor/format-color-fill';
 import Undo from 'material-ui/svg-icons/content/undo';
 import Redo from 'material-ui/svg-icons/content/redo';
+import FormatBold from 'material-ui/svg-icons/editor/format-bold';
+import FormatItalic from 'material-ui/svg-icons/editor/format-italic';
+import FormatStrikethrough from 'material-ui/svg-icons/editor/format-strikethrough';
 // import fontColorText from 'material-design-icons/icons/editor/alarm';
 
 let socket;
@@ -37,7 +40,10 @@ class Sheets extends Component {
       latestColor: 'black',
       latestBg: 'bg-white',
       latestFont: 'arial',
-      latestFontSize: 'ten-point'
+      latestFs: 'ten-point',
+      latestBold: '',
+      latestItalic: '',
+      latestStrike: '',
     }
     
     this.handleChange = this.handleChange.bind(this)
@@ -50,7 +56,10 @@ class Sheets extends Component {
     this.handleColorChange = this.handleColorChange.bind(this)
     this.handleBgChange = this.handleBgChange.bind(this)
     this.handleFontChange = this.handleFontChange.bind(this)
-    this.handleFontSizeChange = this.handleFontSizeChange.bind(this)
+    this.handleFsChange = this.handleFsChange.bind(this)
+    this.handleBold = this.handleBold.bind(this)
+    this.handleItalic = this.handleItalic.bind(this)
+    this.handleStrike = this.handleStrike.bind(this)
   }
 
   //On mount, take fillData info from state and put into a 50x50 matrix, then push this matrix to state as table
@@ -79,7 +88,7 @@ class Sheets extends Component {
     for (let i=0;i<this.state.rows;i++){
       let row = [];
       for (let j=0;j<this.state.columns;j++){
-        row.push({bg:this.state.latestBg,color:this.state.latestColor,font:this.state.latestFont, fontSize: this.state.latestFontSize})
+        row.push({bg:this.state.latestBg,color:this.state.latestColor,font:this.state.latestFont, fs: this.state.latestFs, bold:this.state.latestBold, italic:this.state.latestItalic, strike:this.state.latestSrike})
       }
       tempStyles.push(row);
     }
@@ -214,8 +223,11 @@ class Sheets extends Component {
         for (let j=selected[1];j<=selected[3];j++){
           let bg = tempStyles[i][j].bg
           let font = tempStyles[i][j].font
-          let fontSize = tempStyles[i][j].fontSize
-          tempStyles[i].splice(j,1,{bg:bg,font:font,fontSize:fontSize,color:value})
+          let fs = tempStyles[i][j].fs
+          let bold = tempStyles[i][j].bold
+          let italic = tempStyles[i][j].italic
+          let strike = tempStyles[i][j].strike
+          tempStyles[i].splice(j,1,{bg:bg,font:font,fs:fs,color:value,})
         }
       }
       this.setState({styles: tempStyles, latestColor: value})
@@ -229,8 +241,11 @@ class Sheets extends Component {
         for (let j=selected[1];j<=selected[3];j++){
           let color = tempStyles[i][j].color
           let font = tempStyles[i][j].font
-          let fontSize = tempStyles[i][j].fontSize
-          tempStyles[i].splice(j,1,{color:color,font:font,fontSize:fontSize,bg:value})
+          let fs = tempStyles[i][j].fs
+          let bold = tempStyles[i][j].bold
+          let italic = tempStyles[i][j].italic
+          let strike = tempStyles[i][j].strike
+          tempStyles[i].splice(j,1,{color:color,font:font,fs:fs,bg:value,bold:bold,italic:italic,strike:strike})
         }
       }
       this.setState({styles: tempStyles, latestBg:value})
@@ -246,15 +261,18 @@ class Sheets extends Component {
         for (let j=selected[1];j<=selected[3];j++){
           let color = tempStyles[i][j].color;
           let bg = tempStyles[i][j].bg;
-          let fontSize = tempStyles[i][j].fontSize
-          tempStyles[i].splice(j,1,{color:color,bg:bg,fontSize:fontSize,font:value})
+          let fs = tempStyles[i][j].fs
+          let bold = tempStyles[i][j].bold
+          let italic = tempStyles[i][j].italic
+          let strike = tempStyles[i][j].strike
+          tempStyles[i].splice(j,1,{color:color,bg:bg,fs:fs,font:value,bold:bold,italic:italic,strike:strike})
         }
       }
       this.setState({styles: tempStyles, latestFont:value})
     } else this.setState({latestFont: value})
     
   }
-  handleFontSizeChange(event,key,value){
+  handleFsChange(event,key,value){
     let selected = this.state.activeSelection.slice();
     if (selected[0]){
       let tempStyles = this.state.styles.slice();
@@ -263,19 +281,88 @@ class Sheets extends Component {
           let color = tempStyles[i][j].color;
           let bg = tempStyles[i][j].bg;
           let font = tempStyles[i][j].font
-          tempStyles[i].splice(j,1,{color:color,bg:bg,font:font,fontSize:value})
+          let bold = tempStyles[i][j].bold
+          let italic = tempStyles[i][j].italic
+          let strike = tempStyles[i][j].strike
+          tempStyles[i].splice(j,1,{color:color,bg:bg,font:font,fs:value,bold:bold,italic:italic,strike:strike})
         }
       }
-      this.setState({styles: tempStyles, latestFontSize:value})
-    } else this.setState({latestFontSize: value})
+      this.setState({styles: tempStyles, latestFs:value})
+    } else this.setState({latestFs: value})
+    
+  }
+  handleBold(){
+    let selected = this.state.activeSelection.slice();
+    let newBold = this.state.latestBold ? '' : 'bold';
+    if (selected[0]){
+      let tempStyles = this.state.styles.slice();
+      for (let i=selected[0];i<=selected[2];i++){
+        for (let j=selected[1];j<=selected[3];j++){
+          let color = tempStyles[i][j].color;
+          let bg = tempStyles[i][j].bg;
+          let font = tempStyles[i][j].font
+          let fs = tempStyles[i][j].fs
+          let italic = tempStyles[i][j].italic
+          let strike = tempStyles[i][j].strike
+          // let newBold = (this.state.latestBold === true ? false : true)
+          tempStyles[i].splice(j,1,{color:color,bg:bg,font:font,fs:fs,bold:newBold,italic:italic,strike:strike})
+        }
+      }
+      this.setState({styles: tempStyles, latestBold:newBold})
+    } else this.setState({latestBold: newBold})
+    
+  }
+  handleItalic(){
+    let selected = this.state.activeSelection.slice();
+    let newItalic = (this.state.latestItalic ? '' : 'italic')
+    if (selected[0]){
+      let tempStyles = this.state.styles.slice();
+      for (let i=selected[0];i<=selected[2];i++){
+        for (let j=selected[1];j<=selected[3];j++){
+          let color = tempStyles[i][j].color;
+          let bg = tempStyles[i][j].bg;
+          let font = tempStyles[i][j].font
+          let fs = tempStyles[i][j].fs
+          let bold = tempStyles[i][j].bold
+          let strike = tempStyles[i][j].strike
+          
+          tempStyles[i].splice(j,1,{color:color,bg:bg,font:font,fs:fs,bold:bold,italic:newItalic,strike:strike})
+        }
+      }
+      this.setState({styles: tempStyles, latestItalic:newItalic})
+    } else this.setState({latestItalic: newItalic})
+    
+  }
+  handleStrike(){
+    let selected = this.state.activeSelection.slice();
+    let newStrike = (this.state.latestStrike? '' : 'strike')
+    if (selected[0]){
+      let tempStyles = this.state.styles.slice();
+      for (let i=selected[0];i<=selected[2];i++){
+        for (let j=selected[1];j<=selected[3];j++){
+          let color = tempStyles[i][j].color;
+          let bg = tempStyles[i][j].bg;
+          let font = tempStyles[i][j].font
+          let fs = tempStyles[i][j].fs
+          let bold = tempStyles[i][j].bold
+          let italic = tempStyles[i][j].italic
+          
+          tempStyles[i].splice(j,1,{color:color,bg:bg,font:font,fs:fs,bold:bold,italic:italic,strike:newStrike})  
+        }
+      }
+      this.setState({styles: tempStyles, latestStrike:newStrike})
+    } else this.setState({latestStrike: newStrike})
     
   }
   getStyles(row,col){
     let bg = this.state.styles[row][col].bg;
     let color = this.state.styles[row][col].color;
     let font = this.state.styles[row][col].font;
-    let fontSize = this.state.styles[row][col].fontSize;
-    return (bg + ' ' + color + ' ' + font + ' ' + fontSize);
+    let fs = this.state.styles[row][col].fs;
+    let bold = this.state.styles[row][col].bold;
+    let italic = this.state.styles[row][col].italic;
+    let strike = this.state.styles[row][col].strike;
+    return (bg + ' ' + color + ' ' + font + ' ' + fs + ' ' + bold + ' ' + italic + ' ' + strike );
   }
 
   render() {
@@ -287,10 +374,10 @@ class Sheets extends Component {
 
           <div className='undo-redo'>
             <div className='undo'  onClick={()=>this.handleUndo()}>
-              <Undo style={{color: 'gray', fontSize: '4px'}}/>
+              <Undo style={{color: 'gray', fs: '4px'}}/>
             </div>
             <div className='redo'  onClick={()=>this.handleRedo()}>
-              <Redo style={{color: 'gray', fontSize: '4px'}}/>
+              <Redo style={{color: 'gray', fs: '4px'}}/>
             </div>
           </div>
           <div className='zoom-select-container'>
@@ -324,38 +411,51 @@ class Sheets extends Component {
             </DropDownMenu>
           </div>
           <div className='font-size-select-container'>
-            <DropDownMenu value={this.state.latestFontSize} className='font-size-select' onChange={this.handleFontSizeChange} selectedMenuItemStyle={{color:'gray'}}  iconStyle={{fill: '#3b3b3b', marginTop: '-4px'}}>
+            <DropDownMenu value={this.state.latestFs} className='font-size-select' onChange={this.handleFsChange} selectedMenuItemStyle={{color:'gray'}}  iconStyle={{fill: '#3b3b3b', marginTop: '-4px', marginRight: '-10px'}} style={{width:'60px'}} autoWidth={false}>
               <MenuItem value={'eight-point'} primaryText="8" />  
               <MenuItem value={'ten-point'} primaryText="10" />
               <MenuItem value={'twelve-point'} primaryText="12" />
             </DropDownMenu>
           </div>
+          <div className='font-style'>
+            <div className={`bold-select ${this.state.latestBold ? 'selected' : 'deselected'}`} onClick={this.handleBold}>
+              <FormatBold/>
+            </div>
+            <div className={`italic-select ${this.state.latestItalic ? 'selected' : 'deselected'}`} onClick={this.handleItalic}>
+              <FormatItalic/>
+            </div>
+            <div className={`strike-select ${this.state.latestStrike ? 'selected' : 'deselected'}`} onClick={this.handleStrike}>
+              <FormatStrikethrough/>
+            </div>
 
-          <div className='color-select'>
 
-            <IconMenu
-              iconButtonElement={<IconButton><FormatColorText /></IconButton>}
-              anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-              targetOrigin={{horizontal: 'left', vertical: 'top'}}
-              value={this.state.latestColor}
-              onChange={this.handleColorChange}
-              iconStyle={{color:this.state.latestColor}}
-              selectedMenuItemStyle={{backgroundColor:'#f5f5f5', color:this.state.latestColor}}
-            >
-              <MenuItem value={'black'} primaryText="black" style={ {color: 'black'}} />
-              <MenuItem value={'red'} primaryText="red" style={ {color: 'red'}}/>
-              <MenuItem value={'orange'} primaryText="orange" style={ {color: 'orange'}}/>
-              <MenuItem value={'yellow'} primaryText="yellow" style={ {color: 'yellow'}}/>
-              <MenuItem value={'lime'} primaryText="green" style={ {color: '#51ff3f'}}/>
-              <MenuItem value={'cyan'} primaryText="cyan" style={ {color: 'cyan'}}/>
-              <MenuItem value={'cornflowerblue'} primaryText="cornflowerblue" style={ {color: 'cornflowerblue'}}/>
-              <MenuItem value={'blue'} primaryText="blue" style={ {color: 'blue'}}/>
-              <MenuItem value={'purple'} primaryText="purple" style={ {color: 'purple'}}/>
-              <MenuItem value={'magenta'} primaryText="magenta" style={ {color: 'magenta'}}/>
-              <MenuItem value={'white'} primaryText="white" style={ {color: 'gray'}}/>
-            </IconMenu>
 
-          </div>  
+            <div className='color-select'>
+
+              <IconMenu
+                iconButtonElement={<IconButton><FormatColorText /></IconButton>}
+                anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+                targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                value={this.state.latestColor}
+                onChange={this.handleColorChange}
+                iconStyle={{color:this.state.latestColor}}
+                selectedMenuItemStyle={{backgroundColor:'#f5f5f5', color:this.state.latestColor}}
+              >
+                <MenuItem value={'black'} primaryText="black" style={ {color: 'black'}} />
+                <MenuItem value={'red'} primaryText="red" style={ {color: 'red'}}/>
+                <MenuItem value={'orange'} primaryText="orange" style={ {color: 'orange'}}/>
+                <MenuItem value={'yellow'} primaryText="yellow" style={ {color: 'yellow'}}/>
+                <MenuItem value={'lime'} primaryText="green" style={ {color: '#51ff3f'}}/>
+                <MenuItem value={'cyan'} primaryText="cyan" style={ {color: 'cyan'}}/>
+                <MenuItem value={'cornflowerblue'} primaryText="cornflowerblue" style={ {color: 'cornflowerblue'}}/>
+                <MenuItem value={'blue'} primaryText="blue" style={ {color: 'blue'}}/>
+                <MenuItem value={'purple'} primaryText="purple" style={ {color: 'purple'}}/>
+                <MenuItem value={'magenta'} primaryText="magenta" style={ {color: 'magenta'}}/>
+                <MenuItem value={'white'} primaryText="white" style={ {color: 'gray'}}/>
+              </IconMenu>
+
+            </div> 
+          </div> 
 
           <div className='bg-select' style={{backgroundColor:this.state.latestBg}}>
             {/* <DropDownMenu value={this.state.latestBg} onChange={(event, key, value)=>this.handleBgChange(value)}  selectedMenuItemStyle={{ color:'lightgray'}}>
