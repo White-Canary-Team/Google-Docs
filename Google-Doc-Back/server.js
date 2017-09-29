@@ -59,18 +59,17 @@ app.get('/auth/callback', passport.authenticate('auth0',{
     failureRedirect:'http://localhost:3000/'
 }))
 passport.serializeUser(function(user, done) {
-    console.log( "serializing--->" ,user)
+    // console.log( "serializing--->" ,user)
     done(null,user);
   });
 passport.deserializeUser(function(user,done){
-    console.log("deSerializing ===>" ,user)
+    // console.log("deSerializing ===>" ,user)
     done(null,user)
 })
 app.get('/auth/me', (req, res,next) =>{
     if(!req.user){
         return res.status(404).send("user not found")
     } else{
-        console.log(req.user)
         res.status(200).send(req.user)
 
     }
@@ -118,7 +117,6 @@ app.post('/jsheets', (req,res)=>{
 })
 
 app.put('/update-username', (req, res) => {
-    console.log(req.body);
     const { id, username } = req.body
     req.app.get('db').updateUsername([id, username]).then(response => {
         res.status(200).send(response);
@@ -132,16 +130,34 @@ app.put('/update-username', (req, res) => {
 
 //Socket Stuff Down Here
 let connections = [];
-let roomId = {}
+let roomid = {}
+
 
 io.on('connection', socket => {
     console.log('socket connected')
     socket.name = socket.remoteAddress + ":" + socket.remotePort 
     connections.push(socket);
 
+    socket.on('room', data => {
+        console.log(data, 'alksdjflkads')
+        socket.join(data.id);
+        roomid[data.id] = {};
+        docId = data.id
+        console.log(`joined room ${data.id}`)
+    })
+
+    socket.on('leave room', data => {
+     
+        socket.leave(data)
+        delete roomid[data]
+        console.log('TERMINATED ROOM')
+        console.log(roomid, 'spliced roomid')
+    })
+
     socket.on('edited text', data => {
-        console.log(data)
-        socket.broadcast.emit("new text", data);
+    if ( roomid.hasOwnProperty(data.id) ){
+        socket.broadcast.to(data.id).emit("new text", data.value);
+    } else return null
     })
 
     socket.on('dataOut', data => {
@@ -149,6 +165,10 @@ io.on('connection', socket => {
         socket.broadcast.emit('dataIn', data)
     })
 
+    socket.on('disconnect', function () {
+        console.log('asdlfjasdf')
+    connections.splice(connections.indexOf(socket), 1);
+     });
 
 //////////git status/////////////////////////////////////////////////////////////////
 
