@@ -1,12 +1,25 @@
+import axios from 'axios'
+
+
 const GET_EMAIL = "GET_EMAIL"
 const GET_ID = "GET_ID"
+const GET_DOCS ="GET_DOCS"
+const GET_DOCS_PENDING = "GET_DOCS_PENDING"
+const GET_DOCS_FULFILLED = "GET_DOCS_FULFILLED"
 
 
 let initialState = {
     email: '',
     userId: '',
     documents: [],
-    userPic:''
+    userPic:'',
+    loading:false
+}
+export function getDocs(){
+    return{
+        type: GET_DOCS,
+        payload: axios.get('/documents').then(response=>response.data)
+    }
 }
 
 
@@ -27,6 +40,7 @@ export function getID(id){
 }
 
 
+
 export default function reducer(state = initialState, action){
     switch(action.type){
         case GET_EMAIL:
@@ -35,6 +49,13 @@ export default function reducer(state = initialState, action){
         
         case GET_ID:
             return Object.assign({},state,{userId: action.payload})
+
+        case GET_DOCS_PENDING:
+            return Object.assign({}, state, {loading: true})
+
+        case GET_DOCS_FULFILLED:
+            return Object.assign({},state,{loading: false, documents: action.payload})
     }
+        
     return state
 }

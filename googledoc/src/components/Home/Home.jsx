@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { connect } from 'react-redux'
-import { emailAdd, getID } from './../../ducks/reducer.js'
+import { emailAdd, getID, getDocs } from './../../ducks/reducer.js'
 import Header from './../Header/Header.jsx'
 import { Link } from 'react-router-dom'
 import Paper from 'material-ui/Paper'
@@ -55,12 +55,16 @@ class Home extends Component {
 
 
     })
-        axios.get('/documents').then(response =>{
-            console.log(response.data)
-            this.setState({
-                documents: response.data
-            })
-        })
+        //axios.get('/documents').then(response =>{
+        //    console.log(response.data)
+        //    this.setState({
+        //        documents: response.data
+        //    })
+        //})
+}
+componentDidMount(){
+    this.props.getDocs()
+    
 }
 handleQuill(){
     axios.post('/quill', {
@@ -83,15 +87,15 @@ handleSheet(){
 
 
     render() {
-        let filteredDoc = this.state.documents.filter((e) =>{
-            if(e.creator === this.state.userId){
+        let filteredDoc = this.props.documents ? this.props.documents.filter((e) =>{
+            if(e.creator === this.props.userId){
                 return e
             }
             return null
                            
-        })
+        }): null
         console.log(filteredDoc) 
-        let myDocs = filteredDoc.map((c,i)=>{
+        let myDocs = filteredDoc ? filteredDoc.map((c,i)=>{
             console.log("C", c)
             let quillLink = `/quill/${c.id}`;
             let sheetLink = `/sheets/${c.id}`;
@@ -103,8 +107,10 @@ handleSheet(){
             return( docLink)
             
             
-        })
-        console.log(this.props.userId)
+        }): null
+        let loader =  this.props.loading ? <div className="loader"> <i className="fa fa-spinner fa-pulse fa-5x fa-fw"></i></div>:myDocs
+
+        console.log(this.props.loading)
         let style = {
             height: 100,
             width: 100,
@@ -131,7 +137,7 @@ handleSheet(){
 
                         <div className='my-docs'>
                             
-                            {myDocs}
+                            {loader}
                         </div>
 
 
@@ -146,7 +152,9 @@ function mapStateToProps(state) {
     return {
         email: state.email,
         userPic: state.userPic,
-        userId: state.userId
+        userId: state.userId,
+        loading: state.loading,
+        documents: state.documents
     }
 }
-export default connect(mapStateToProps, { emailAdd, getID })(Home)
+export default connect(mapStateToProps, { emailAdd, getID, getDocs })(Home)
