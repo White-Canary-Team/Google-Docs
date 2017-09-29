@@ -18,15 +18,25 @@ class Editor extends React.Component {
 
     componentDidMount() {
     socket =  io('http://localhost:3001');
+
+    socket.emit('room', { id: this.props.match.params.id})
+
     socket.on('new text', data => {
       console.log(data)
       this.setState({text: data})
     })
+
+
+}
+
+componentWillUnmount(){
+        socket.emit('leave room', this.props.match.params.id);
     }
+
 
     handleChange(value) {
       console.log(value, 'this is the value')
-      socket.emit("edited text", value);
+      socket.emit("edited text", {value:value, id: this.props.match.params.id});
   }
 
 
