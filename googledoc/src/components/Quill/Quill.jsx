@@ -45,10 +45,6 @@ class Editor extends React.Component {
 }
 
 
-/* 
- * Quill modules to attach to editor
- * See http://quilljs.com/docs/modules/ for complete options
- */
 Editor.modules = {
     toolbar: {
         container:
