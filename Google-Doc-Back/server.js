@@ -97,6 +97,13 @@ app.get('/allUsers', (req,res)=>{
 
 // REGULAR CRUD ENDPOINTS HERE
 // app.get('endpoint', ctrl.function)
+app.get('/documents', (req, res) =>{
+    req.app.get('db').getAllDocs().then(response =>{
+        res.status(200).send(response)
+    })
+})
+
+
 app.post('/quill', (req,res)=>{
     const { title, creator} = req.body
     req.app.get('db').createQuillDoc([title, creator]).then(response=>{
