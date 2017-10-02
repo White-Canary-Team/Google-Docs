@@ -156,7 +156,15 @@ io.on('connection', socket => {
 
     socket.on('edited text', data => {
     if ( roomid.hasOwnProperty(data.id) ){
-        socket.broadcast.to(data.id).emit("new text", data.value);
+        socket.broadcast.to(data.id).emit("new text", data.value)
+
+        app.put('/save-test', (req, res) => {
+            const { id, value } = req.body
+            req.app.get('db').autoSave([value, id]).then(response => {
+                res.status(200).send(response);
+            })
+        })
+        
     } else return null
     })
 

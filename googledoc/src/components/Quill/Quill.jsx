@@ -1,6 +1,7 @@
 import React from "react";
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
+import axios from 'axios'
 import _ from 'lodash'
 import io from 'socket.io-client'
 import QuillHeader from './QuillHeader/QuillHeader';
@@ -41,7 +42,11 @@ componentWillUnmount(){
 
 
     render() {
-        const typing = _.debounce(value => { this.handleChange(value)}, 700)
+        const typing = _.debounce(value => {
+        this.handleChange(value),
+        axios.put('/save-test', {value: value, id: this.props.match.params.id} )
+        
+    }, 700) 
         return (
             <div className="main-wrapper-quill">
                 <QuillHeader />
