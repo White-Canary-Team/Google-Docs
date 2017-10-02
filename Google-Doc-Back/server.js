@@ -160,9 +160,7 @@ io.on('connection', socket => {
 
         app.put('/save-test', (req, res) => {
             const { id, value } = req.body
-            req.app.get('db').autoSave([value, id]).then(response => {
-                res.status(200).send(response);
-            })
+            req.app.get('db').autoSave([value, id])
         })
         
     } else return null

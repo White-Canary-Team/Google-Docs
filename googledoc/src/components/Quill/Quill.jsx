@@ -5,6 +5,7 @@ import axios from 'axios'
 import _ from 'lodash'
 import io from 'socket.io-client'
 import QuillHeader from './QuillHeader/QuillHeader';
+import {connect} from 'react-redux'
 let socket
 
 class Editor extends React.Component {
@@ -19,6 +20,13 @@ class Editor extends React.Component {
 
     componentDidMount() {
     socket =  io('http://localhost:3001');
+    this.props.documents.map((doc, i)=>{
+        if (+doc.id === +this.props.match.params.id){
+        console.log(this.props.match.params.id, 'lkasdjflkasdjflkas')
+            
+            this.setState({text: doc.body})
+        } 
+    })
 
     socket.emit('room', { id: this.props.match.params.id})
 
@@ -87,6 +95,12 @@ Editor.modules = {
 
     }
 }
+function mapStateToProps(state){
+    return {
+        documents: state.documents,
+        email: state.email
+    }
+}
 
 
-export default Editor;
+export default connect(mapStateToProps)(Editor);
