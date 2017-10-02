@@ -23,7 +23,7 @@ app.use(session({
     secret: 'alexcharliechrisruston',
     resave: false,
     saveUninitialized: true,
-    cookie: {secure: false}
+    cookie: { secure: false }
 }))
 app.use(passport.initialize())
 app.use(passport.session())
@@ -36,9 +36,9 @@ massive({
     password: process.env.DB_PASSWORD,
     ssl: true
 
-}).then(function(db){
-    app.set('db',db)
-  })
+}).then(function (db) {
+    app.set('db', db)
+})
 
 
 passport.use(new Auth0Strategy({
@@ -46,48 +46,48 @@ passport.use(new Auth0Strategy({
     clientID: process.env.AUTH_CLIENT_ID,
     clientSecret: process.env.AUTH_CLIENT_SECRET,
     callbackURL: process.env.AUTH_CALLBACK
-}, function(accessToken, refreshToken, extraParams, profile, done){
-    return done(null,profile)
+}, function (accessToken, refreshToken, extraParams, profile, done) {
+    return done(null, profile)
 }))
 //Auth Endpoints///
-app.get('/test', (req, res)=>{console.log('testing')})
+app.get('/test', (req, res) => { console.log('testing') })
 
 app.get('/auth', passport.authenticate('auth0'));
 
-app.get('/auth/callback', passport.authenticate('auth0',{
+app.get('/auth/callback', passport.authenticate('auth0', {
     successRedirect: 'http://localhost:3000/Home',
-    failureRedirect:'http://localhost:3000/'
+    failureRedirect: 'http://localhost:3000/'
 }))
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
     // console.log( "serializing--->" ,user)
-    done(null,user);
-  });
-passport.deserializeUser(function(user,done){
+    done(null, user);
+});
+passport.deserializeUser(function (user, done) {
     // console.log("deSerializing ===>" ,user)
-    done(null,user)
+    done(null, user)
 })
-app.get('/auth/me', (req, res,next) =>{
-    if(!req.user){
+app.get('/auth/me', (req, res, next) => {
+    if (!req.user) {
         return res.status(404).send("user not found")
-    } else{
+    } else {
         res.status(200).send(req.user)
 
     }
 })
 //////================USER CREDENTIAL ENDPOINTS++++++++++++++++//////
-app.get('/user', (req,res)=>{
-      console.log('USER ENDPOINT' + req.user)
-      res.status(200).json(req.user)
-  })
-app.post('/user', (req,res) =>{
+app.get('/user', (req, res) => {
+    console.log('USER ENDPOINT' + req.user)
+    res.status(200).json(req.user)
+})
+app.post('/user', (req, res) => {
     console.log("tester:" + req.body.email)
-    req.app.get('db').createUser([req.body.email]).then(response =>{
+    req.app.get('db').createUser([req.body.email]).then(response => {
         res.status(200).send(console.log('success'))
     })
 })
 
-app.get('/allUsers', (req,res)=>{
-    req.app.get('db').getUsers().then(response =>{
+app.get('/allUsers', (req, res) => {
+    req.app.get('db').getUsers().then(response => {
         res.status(200).send(response)
     })
 
@@ -96,22 +96,22 @@ app.get('/allUsers', (req,res)=>{
 
 // REGULAR CRUD ENDPOINTS HERE
 // app.get('endpoint', ctrl.function)
-app.get('/documents', (req, res) =>{
-    req.app.get('db').getAllDocs().then(response =>{
+app.get('/documents', (req, res) => {
+    req.app.get('db').getAllDocs().then(response => {
         res.status(200).send(response)
     })
 })
 
 
-app.post('/quill', (req,res)=>{
-    const { title, creator, doctype} = req.body
-    req.app.get('db').createQuillDoc([title, creator, doctype]).then(response=>{
+app.post('/quill', (req, res) => {
+    const { title, creator, doctype } = req.body
+    req.app.get('db').createQuillDoc([title, creator, doctype]).then(response => {
         res.status(200).send(console.log('We got it"'))
     })
 })
-app.post('/jsheets', (req,res)=>{
-    const { title, creator, doctype} = req.body
-    req.app.get('db').createSheetDoc([title, creator, doctype]).then(response=>{
+app.post('/jsheets', (req, res) => {
+    const { title, creator, doctype } = req.body
+    req.app.get('db').createSheetDoc([title, creator, doctype]).then(response => {
         res.status(200).send(console.log('We did it"'))
     })
 })
@@ -135,7 +135,7 @@ let roomid = {}
 
 io.on('connection', socket => {
     console.log('socket connected')
-    socket.name = socket.remoteAddress + ":" + socket.remotePort 
+    socket.name = socket.remoteAddress + ":" + socket.remotePort
     connections.push(socket);
 
     socket.on('room', data => {
@@ -147,7 +147,7 @@ io.on('connection', socket => {
     })
 
     socket.on('leave room', data => {
-     
+
         socket.leave(data)
         delete roomid[data]
         console.log('TERMINATED ROOM')
@@ -155,16 +155,16 @@ io.on('connection', socket => {
     })
 
     socket.on('edited text', data => {
-    if ( roomid.hasOwnProperty(data.id) ){
-        socket.broadcast.to(data.id).emit("new text", data.value)
+        if (roomid.hasOwnProperty(data.id)) {
+            socket.broadcast.to(data.id).emit("new text", data.value)
 
-        app.put('/save-test', (req, res) => {
-            const { id, value } = req.body
-            req.app.get('db').autoSave([value, id])
-        })
-        
-    } else return null
+        } else return null
     })
+    app.put('/save-test', (req, res) => {
+        const { id, value } = req.body
+        req.app.get('db').autoSave([value, id]).then(response =>{res.status(200).send(response)})
+    })
+
 
     socket.on('dataOut', data => {
         console.log(data)
@@ -173,16 +173,16 @@ io.on('connection', socket => {
 
     socket.on('disconnect', function () {
         console.log('asdlfjasdf')
-    connections.splice(connections.indexOf(socket), 1);
-     });
+        connections.splice(connections.indexOf(socket), 1);
+    });
 
-//////////git status/////////////////////////////////////////////////////////////////
+    //////////git status/////////////////////////////////////////////////////////////////
 
 
 
 })
 
-app.get('/auth/logout', (req,res,next) =>{
+app.get('/auth/logout', (req, res, next) => {
     req.logOut();
     res.status(200).redirect('http://localhost:3000')
 })

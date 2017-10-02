@@ -6,6 +6,7 @@ import _ from 'lodash'
 import io from 'socket.io-client'
 import QuillHeader from './QuillHeader/QuillHeader';
 import {connect} from 'react-redux'
+import { getDocs } from './../../ducks/reducer.js'
 let socket
 
 class Editor extends React.Component {
@@ -20,6 +21,8 @@ class Editor extends React.Component {
 
     componentDidMount() {
     socket =  io('http://localhost:3001');
+
+    this.props.getDocs()
     this.props.documents.map((doc, i)=>{
         if (+doc.id === +this.props.match.params.id){
         console.log(this.props.match.params.id, 'lkasdjflkasdjflkas')
@@ -54,7 +57,7 @@ componentWillUnmount(){
         this.handleChange(value),
         axios.put('/save-test', {value: value, id: this.props.match.params.id} )
         
-    }, 700) 
+    }, 2000) 
         return (
             <div className="main-wrapper-quill">
                 <QuillHeader />
@@ -103,4 +106,4 @@ function mapStateToProps(state){
 }
 
 
-export default connect(mapStateToProps)(Editor);
+export default connect(mapStateToProps, { getDocs })(Editor);
