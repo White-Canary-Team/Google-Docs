@@ -89,7 +89,7 @@ class Home extends Component {
 
     render() {
         let filteredDoc = this.props.documents ? this.props.documents.filter((e) => {
-            if (e.creator === this.props.userId) {
+            if (e.creator === this.props.userId || +e.editors === this.props.userId) {
                 return e
             }
             return null
