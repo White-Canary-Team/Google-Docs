@@ -19,7 +19,8 @@ class Home extends Component {
             documents: [],
             userName: '',
             searchTerm: '',
-            pic: ''
+            pic: '',
+            refresh : true
         }
         this.handleQuill = this.handleQuill.bind(this)
         this.handleSheet = this.handleSheet.bind(this)
@@ -64,7 +65,8 @@ class Home extends Component {
         //})
     }
     componentDidMount() {
-        this.props.getDocs()
+        this.props.getDocs();
+
 
     }
     handleQuill() {
@@ -87,7 +89,9 @@ class Home extends Component {
 
 
 
+
     render() {
+        console.log(this.state.refresh, 'refresh')
         let filteredDoc = this.props.documents ? this.props.documents.filter((e) => {
             if (e.creator === this.props.userId || +e.editors === this.props.userId) {
                 return e

@@ -13,7 +13,7 @@ class Editor extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-        text: '',
+            text: ''
     } 
     this.handleChange = this.handleChange.bind(this)
   }
@@ -22,19 +22,13 @@ class Editor extends React.Component {
     componentDidMount() {
     socket =  io('http://localhost:3001');
 
-    this.props.getDocs()
-    this.props.documents.map((doc, i)=>{
-        if (+doc.id === +this.props.match.params.id){
-        console.log(this.props.match.params.id, 'lkasdjflkasdjflkas')
-            
-            this.setState({text: doc.body})
-        } 
+    axios.get(`/getDocumentById/${this.props.match.params.id}`).then( res => {
+        this.setState({text: res.data[0].body})
     })
 
     socket.emit('room', { id: this.props.match.params.id})
 
     socket.on('new text', data => {
-      console.log(data)
       this.setState({text: data})
     })
 
@@ -50,6 +44,7 @@ componentWillUnmount(){
       console.log(value, 'this is the value')
       socket.emit("edited text", {value:value, id: this.props.match.params.id});
   }
+
 
 
     render() {

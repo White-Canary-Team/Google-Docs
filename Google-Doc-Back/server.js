@@ -123,6 +123,12 @@ app.put('/update-username', (req, res) => {
     })
 })
 
+app.get('/getDocumentById/:id', (req, res) => {
+    req.app.get('db').docById([req.params.id]).then(response => {
+        res.status(200).send(response);
+    })
+})
+
 
 
 
@@ -139,7 +145,6 @@ io.on('connection', socket => {
     connections.push(socket);
 
     socket.on('room', data => {
-        console.log(data, 'alksdjflkads')
         socket.join(data.id);
         roomid[data.id] = {};
         docId = data.id
@@ -167,12 +172,11 @@ io.on('connection', socket => {
 
 
     socket.on('dataOut', data => {
-        console.log(data)
+
         socket.broadcast.emit('dataIn', data)
     })
 
     socket.on('disconnect', function () {
-        console.log('asdlfjasdf')
         connections.splice(connections.indexOf(socket), 1);
     });
 
