@@ -217,7 +217,7 @@ class Sheets extends Component {
   }
   handleColorChange(event,value){
     let selected = this.state.activeSelection.slice();
-    if (selected[0]){
+    if (selected[0] || selected[0] === 0){
       let tempStyles = this.state.styles.slice();
       for (let i=selected[0];i<=selected[2];i++){
         for (let j=selected[1];j<=selected[3];j++){
@@ -235,7 +235,8 @@ class Sheets extends Component {
   }
   handleBgChange(event, value){
     let selected = this.state.activeSelection.slice();
-    if (selected[0]){
+    // console.log(selected,value)
+    if (selected[0] || selected[0] === 0){
       let tempStyles = this.state.styles.slice();
       for (let i=selected[0];i<=selected[2];i++){
         for (let j=selected[1];j<=selected[3];j++){
@@ -249,13 +250,13 @@ class Sheets extends Component {
         }
       }
       this.setState({styles: tempStyles, latestBg:value})
-      
+      console.log(this.state.latestBg)
     }
     
   }
   handleFontChange(event,key,value){
     let selected = this.state.activeSelection.slice();
-    if (selected[0]){
+    if (selected[0] || selected[0] === 0){
       let tempStyles = this.state.styles.slice();
       for (let i=selected[0];i<=selected[2];i++){
         for (let j=selected[1];j<=selected[3];j++){
@@ -274,7 +275,7 @@ class Sheets extends Component {
   }
   handleFsChange(event,key,value){
     let selected = this.state.activeSelection.slice();
-    if (selected[0]){
+    if (selected[0] || selected[0] === 0){
       let tempStyles = this.state.styles.slice();
       for (let i=selected[0];i<=selected[2];i++){
         for (let j=selected[1];j<=selected[3];j++){
@@ -294,7 +295,7 @@ class Sheets extends Component {
   handleBold(){
     let selected = this.state.activeSelection.slice();
     let newBold = this.state.latestBold ? '' : 'bold';
-    if (selected[0]){
+    if (selected[0] || selected[0] === 0){
       let tempStyles = this.state.styles.slice();
       for (let i=selected[0];i<=selected[2];i++){
         for (let j=selected[1];j<=selected[3];j++){
@@ -315,7 +316,7 @@ class Sheets extends Component {
   handleItalic(){
     let selected = this.state.activeSelection.slice();
     let newItalic = (this.state.latestItalic ? '' : 'italic')
-    if (selected[0]){
+    if (selected[0] || selected[0] === 0){
       let tempStyles = this.state.styles.slice();
       for (let i=selected[0];i<=selected[2];i++){
         for (let j=selected[1];j<=selected[3];j++){
@@ -336,7 +337,7 @@ class Sheets extends Component {
   handleStrike(){
     let selected = this.state.activeSelection.slice();
     let newStrike = (this.state.latestStrike? '' : 'strike')
-    if (selected[0]){
+    if (selected[0] ){
       let tempStyles = this.state.styles.slice();
       for (let i=selected[0];i<=selected[2];i++){
         for (let j=selected[1];j<=selected[3];j++){
@@ -381,7 +382,7 @@ class Sheets extends Component {
             </div>
           </div>
           <div className='zoom-select-container'>
-            <DropDownMenu value={this.state.zoom} onChange={this.handleZoom} className='zoom-select' selectedMenuItemStyle={{color:'gray'}} iconStyle={{fill: '#3b3b3b', marginTop: '-4px'}}>
+            <DropDownMenu value={this.state.zoom} onChange={this.handleZoom} className='zoom-select' selectedMenuItemStyle={{color:'gray'}} iconStyle={{fill: '#3b3b3b', marginTop: '-46px', marginRight: '-20px'}} style={{width:'80px', marginLeft:'-9px', marginTop:'84px'}} menuItemStyle={{width:'60px'}} labelStyle={{marginLeft:'10px', marginTop:'-84px'}} autoWidth={false}>
               <MenuItem value={.50} primaryText="50%" />
               <MenuItem value={.75} primaryText="75%" />
               <MenuItem value={.90} primaryText="90%" />
@@ -402,7 +403,7 @@ class Sheets extends Component {
          
 
           <div className='font-select-container'>
-            <DropDownMenu value={this.state.latestFont} className='font-select' onChange={this.handleFontChange} selectedMenuItemStyle={{fontFamily:this.state.latestFont, color:'gray'}} iconStyle={{fill: '#3b3b3b', marginTop: '-4px'}}>
+            <DropDownMenu value={this.state.latestFont} className='font-select' onChange={this.handleFontChange} selectedMenuItemStyle={{fontFamily:this.state.latestFont, color:'gray'}} iconStyle={{fill:'#3b3b3b', marginTop:'-46px', marginRight:'-15px'}} labelStyle={{marginTop:'-84px'}} style={{width:'100px', marginLeft:'-9px', marginTop:'84px'}} menuItemStyle={{width:'100px', marginLeft:'-10px'}} autoWidth={false}>
               {/* iconStyle={{fill: '#3b3b3b'}} */}
               <MenuItem value={'arial'} primaryText="Arial" style={{fontFamily: 'Arial'}}/>  
               <MenuItem value={'open-sans'} primaryText="Open Sans" style={{fontFamily: 'Open Sans'}}/>
@@ -411,7 +412,7 @@ class Sheets extends Component {
             </DropDownMenu>
           </div>
           <div className='font-size-select-container'>
-            <DropDownMenu value={this.state.latestFs} className='font-size-select' onChange={this.handleFsChange} selectedMenuItemStyle={{color:'gray'}}  iconStyle={{fill: '#3b3b3b', marginTop: '-4px', marginRight: '-10px'}} style={{width:'60px'}} autoWidth={false}>
+            <DropDownMenu value={this.state.latestFs} className='font-size-select' onChange={this.handleFsChange} selectedMenuItemStyle={{color:'gray'}}  iconStyle={{fill:'#3b3b3b', marginTop:'-46px', marginRight:'-15px'}} style={{width:'70px', marginLeft:'-9px', marginTop:'84px'}} labelStyle={{marginLeft:'10px', marginTop:'-84px'}} autoWidth={false}>
               <MenuItem value={'eight-point'} primaryText="8" />  
               <MenuItem value={'ten-point'} primaryText="10" />
               <MenuItem value={'twelve-point'} primaryText="12" />
@@ -458,19 +459,6 @@ class Sheets extends Component {
           </div> 
 
           <div className='bg-select' style={{backgroundColor:this.state.latestBg}}>
-            {/* <DropDownMenu value={this.state.latestBg} onChange={(event, key, value)=>this.handleBgChange(value)}  selectedMenuItemStyle={{ color:'lightgray'}}>
-              <MenuItem value={'bg-white'} primaryText="white" style={ {backgroundColor: 'white', color: 'black'}}/>
-              <MenuItem value={'bg-red'} primaryText="red" style={ {backgroundColor: 'red', color: 'white'}}/>
-              <MenuItem value={'bg-orange'} primaryText="orange" style={ {backgroundColor: 'orange', color: 'white'}}/>
-              <MenuItem value={'bg-yellow'} primaryText="yellow" style={ {backgroundColor: 'yellow', color: 'black'}}/>
-              <MenuItem value={'bg-lime'} primaryText="green" style={ {backgroundColor: 'lime', color: 'white'}}/>
-              <MenuItem value={'bg-cyan'} primaryText="cyan" style={ {backgroundColor: 'cyan', color: 'white'}}/>
-              <MenuItem value={'bg-cornflowerblue'} primaryText="cornflowerblue" style={ {backgroundColor: 'cornflowerblue', color: 'white'}}/>
-              <MenuItem value={'bg-blue'} primaryText="blue" style={ {backgroundColor: 'blue', color: 'white'}}/>
-              <MenuItem value={'bg-purple'} primaryText="purple" style={ {backgroundColor: 'purple', color: 'white'}}/>
-              <MenuItem value={'bg-magenta'} primaryText="magenta" style={ {backgroundColor: 'magenta', color: 'white'}}/>
-              <MenuItem value={'bg-black'} primaryText="black" style={ {backgroundColor: 'black', color: 'white'}} />
-            </DropDownMenu> */}
             <IconMenu
               iconButtonElement={<IconButton><FormatColorFill /></IconButton>}
               anchorOrigin={{horizontal: 'left', vertical: 'top'}}
