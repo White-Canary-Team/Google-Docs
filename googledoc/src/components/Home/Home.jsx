@@ -172,7 +172,7 @@ class Home extends Component {
 
                     </div>
                     <Tabs>
-                        <Tab label="All Documents">
+                        <Tab label="All Documents" style={{background: '#2979FF'}}>
                             <div className="recent-doc">
                                 <p>Recent Documents</p>
 
@@ -184,7 +184,7 @@ class Home extends Component {
 
                             </div>
                         </Tab>
-                        <Tab label="Word Documents">
+                        <Tab label="Word Documents" style={{background: '#2979FF'}}>
                             <div className="recent-doc">
                                 <p> Word Documents</p>
 
@@ -196,7 +196,7 @@ class Home extends Component {
 
                         </Tab>
 
-                        <Tab label="ExcelDocs">
+                        <Tab label="ExcelDocs" style={{background: '#2979FF'}}>
                             <div className="recent-doc">
                                 <p> Excel Documents</p>
 
