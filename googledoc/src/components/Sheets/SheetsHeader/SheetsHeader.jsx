@@ -10,6 +10,7 @@ import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
+import ViewList from 'material-ui/svg-icons/action/view-list';
 
 const style = {
     "margin-left": 12,
@@ -68,7 +69,8 @@ class SheetsHeader extends Component {
                 <div className='quill-header-container'>
 
                     <div className='left-section-button-sheets'>
-                        <Link to='/home'><img className='top-left-hamburger' alt='no one' src='https://cdn2.iconfinder.com/data/icons/freecns-cumulus/16/519904-098_Spreadsheet-128.png' /></Link>
+                        {/* <Link to='/home'><img className='top-left-hamburger' alt='no one' src='https://cdn2.iconfinder.com/data/icons/freecns-cumulus/16/519904-098_Spreadsheet-128.png' /></Link> */}
+                        <Link to='/home'><ViewList style={{color:'white', marginTop:'18px',marginLeft:'4px',width:'40px',height:'40px'}}/></Link>
                     </div>
 
                     <div className='file-edit-menu-container'>
