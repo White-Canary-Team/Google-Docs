@@ -117,6 +117,7 @@ class Sheets extends Component {
     if (changes){      
       let tempChangeLog = this.state.changeLog.slice();
       tempChangeLog.push(changes[0]);
+      // console.log(tempChangeLog)
       this.setState({changeLog:tempChangeLog})
 
       socket.emit('dataOut', this.state.table)
@@ -126,31 +127,32 @@ class Sheets extends Component {
   // When a user selects 'undo', the most recent change is popped off the change log and put onto an undo log.
   handleUndo(){
     if(this.state.changeLog[0]){
-      let tempChangeLog = this.state.changeLog;
+      let tempChangeLog = this.state.changeLog.slice();
       let lastItem = tempChangeLog.pop();
-      let tempUndoLog = this.state.undoLog;
+      
+      let tempUndoLog = this.state.undoLog.slice();
       tempUndoLog.push(lastItem);
-      let row = lastItem[0][0];
-      let column = lastItem[0][1];
+      let row = lastItem[0];
+      let column = lastItem[1];
       let tempTable = this.state.table.slice();
-      console.log(tempTable)
-      console.log(row, column)
+      // console.log(row, tempTable)
       tempTable[row].splice(column,1,lastItem[0][2]);
-      this.setState({table: tempTable});
+      this.setState({table: tempTable, undoLog: tempUndoLog, changeLog:tempChangeLog});
     }
   }
   // Opposite of undo
   handleRedo(){
     if(this.state.undoLog[0]){
-      let tempUndoLog = this.state.undoLog;
+      let tempUndoLog = this.state.undoLog.slice();
       let nextItem = tempUndoLog.pop();
-      let tempChangeLog = this.state.changeLog;
+      let tempChangeLog = this.state.changeLog.slice();
+      console.log(nextItem)
       tempChangeLog.push(nextItem)
-      let row = nextItem[0][0];
-      let column = nextItem[0][1];
+      let row = nextItem[0];
+      let column = nextItem[1];
       let tempTable = this.state.table.slice();
-      tempTable[row].splice(column,1,nextItem[0][3])
-      this.setState({table: tempTable})
+      tempTable[row].splice(column,1,nextItem[3])
+      this.setState({table: tempTable, changeLog:tempChangeLog, undoLog:tempUndoLog})
     }
   }
   // Handle undo - handsontable does not do well with zoom changes. The column headers will move weird on scroll.
@@ -170,6 +172,28 @@ class Sheets extends Component {
       cEnd = temp;
     }
     this.setState({activeSelection: [rStart, cStart, rEnd, cEnd]})
+    let allBold='bold';
+    let allItalic='italic';
+    let allStrike='strike';
+    let allSameColor = this.state.styles[rStart][cStart].color;
+    let allSameBg = this.state.styles[rStart][cStart].bg;
+    let allSameFs = this.state.styles[rStart][cStart].fs;
+    let allSameFont = this.state.styles[rStart][cStart].font;
+    console.log(allSameColor) 
+    for (let i=rStart;i<=rEnd;i++){
+      for (let j=cStart;j<=cEnd;j++){
+        if (this.state.styles[i][j].bold !== 'bold') allBold = ''
+        if (this.state.styles[i][j].italic !== 'italic') allItalic = ''
+        if (this.state.styles[i][j].strike !== 'strike') allStrike = ''
+        if (this.state.styles[i][j].color !== allSameColor) allSameColor = 'black'
+        if (this.state.styles[i][j].bg !== allSameBg) allSameBg = 'bg-white'
+        if (this.state.styles[i][j].fs !== allSameFs) allSameFs = 'ten-point'
+        if (this.state.styles[i][j].font !== allSameFont) allSameFont = 'arial'
+       
+      }
+    }
+    this.setState({latestBold:allBold, latestItalic:allItalic, latestStrike: allStrike, latestColor:allSameColor, latestBg:allSameBg, latestFs:allSameFs, latestFont:allSameFont})
+
   }
   // Change selected cells to dollar format (also changes from number to string)
   handleDataType(type){
@@ -297,6 +321,8 @@ class Sheets extends Component {
     let newBold = this.state.latestBold ? '' : 'bold';
     if (selected[0] || selected[0] === 0){
       let tempStyles = this.state.styles.slice();
+      let allBold = true;
+      
       for (let i=selected[0];i<=selected[2];i++){
         for (let j=selected[1];j<=selected[3];j++){
           let color = tempStyles[i][j].color;
@@ -382,7 +408,7 @@ class Sheets extends Component {
             </div>
           </div>
           <div className='zoom-select-container'>
-            <DropDownMenu value={this.state.zoom} onChange={this.handleZoom} className='zoom-select' selectedMenuItemStyle={{color:'gray'}} iconStyle={{fill: '#3b3b3b', marginTop: '-46px', marginRight: '-20px'}} style={{width:'80px', marginLeft:'-9px', marginTop:'84px'}} menuItemStyle={{width:'60px'}} labelStyle={{marginLeft:'10px', marginTop:'-84px'}} autoWidth={false}>
+            <DropDownMenu value={this.state.zoom} onChange={this.handleZoom} className='zoom-select' anchorOrigin={{ vertical:'bottom', horizontal: 'left'}} selectedMenuItemStyle={{color:'gray'}} iconStyle={{fill: '#3b3b3b', marginTop: '-4px', marginRight: '-15px'}} style={{width:'80px', marginLeft:'-9px'}} menuItemStyle={{width:'60px'}} labelStyle={{marginLeft:'0px', height:'36px'}} autoWidth={false}>
               <MenuItem value={.50} primaryText="50%" />
               <MenuItem value={.75} primaryText="75%" />
               <MenuItem value={.90} primaryText="90%" />
@@ -397,13 +423,13 @@ class Sheets extends Component {
           <div className='data-type-select'>
             <div className='dollars' onClick={()=>this.handleDataType('dollars')}>$</div>
             <div className='percent'onClick={()=>this.handleDataType('percent')}>%</div>
-            <div className='less'onClick={()=>this.handleDataType('less')}>{'.0<'}</div>
-            <div className='more'onClick={()=>this.handleDataType('more')}>{'.0>'}</div> 
+            {/* <div className='less'onClick={()=>this.handleDataType('less')}>{'.0<'}</div>
+            <div className='more'onClick={()=>this.handleDataType('more')}>{'.0>'}</div>  */}
           </div>
          
 
           <div className='font-select-container'>
-            <DropDownMenu value={this.state.latestFont} className='font-select' onChange={this.handleFontChange} selectedMenuItemStyle={{fontFamily:this.state.latestFont, color:'gray'}} iconStyle={{fill:'#3b3b3b', marginTop:'-46px', marginRight:'-15px'}} labelStyle={{marginTop:'-84px'}} style={{width:'100px', marginLeft:'-9px', marginTop:'84px'}} menuItemStyle={{width:'100px', marginLeft:'-10px'}} autoWidth={false}>
+            <DropDownMenu value={this.state.latestFont} className='font-select' onChange={this.handleFontChange} anchorOrigin={{ vertical: 'bottom', horizontal: 'left'}} selectedMenuItemStyle={{fontFamily:this.state.latestFont, color:'gray'}} iconStyle={{fill:'#3b3b3b', marginTop:'-4px', marginRight:'-15px'}} style={{width:'100px', marginLeft:'-9px'}} menuItemStyle={{width:'100px', marginLeft:'-20px'}} labelStyle={{height:'36px'}} autoWidth={false}>
               {/* iconStyle={{fill: '#3b3b3b'}} */}
               <MenuItem value={'arial'} primaryText="Arial" style={{fontFamily: 'Arial'}}/>  
               <MenuItem value={'open-sans'} primaryText="Open Sans" style={{fontFamily: 'Open Sans'}}/>
@@ -412,7 +438,7 @@ class Sheets extends Component {
             </DropDownMenu>
           </div>
           <div className='font-size-select-container'>
-            <DropDownMenu value={this.state.latestFs} className='font-size-select' onChange={this.handleFsChange} selectedMenuItemStyle={{color:'gray'}}  iconStyle={{fill:'#3b3b3b', marginTop:'-46px', marginRight:'-15px'}} style={{width:'70px', marginLeft:'-9px', marginTop:'84px'}} labelStyle={{marginLeft:'10px', marginTop:'-84px'}} autoWidth={false}>
+            <DropDownMenu value={this.state.latestFs} className='font-size-select' onChange={this.handleFsChange} anchorOrigin={{ vertical: 'bottom', horizontal: 'left'}} selectedMenuItemStyle={{color:'gray'}}  iconStyle={{fill:'#3b3b3b', marginTop:'-4px', marginRight:'-15px'}} style={{width:'80px', marginLeft:'0px'}} labelStyle={{height:'36px', width:'64px'}} autoWidth={false}>
               <MenuItem value={'eight-point'} primaryText="8" />  
               <MenuItem value={'ten-point'} primaryText="10" />
               <MenuItem value={'twelve-point'} primaryText="12" />
@@ -435,7 +461,7 @@ class Sheets extends Component {
 
               <IconMenu
                 iconButtonElement={<IconButton><FormatColorText /></IconButton>}
-                anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+                anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
                 targetOrigin={{horizontal: 'left', vertical: 'top'}}
                 value={this.state.latestColor}
                 onChange={this.handleColorChange}
@@ -458,10 +484,10 @@ class Sheets extends Component {
             </div> 
           </div> 
 
-          <div className='bg-select' style={{backgroundColor:this.state.latestBg}}>
+          <div className={`bg-select ${this.state.latestBg}`} style={{backgroundColor:this.state.latestBg}}>
             <IconMenu
               iconButtonElement={<IconButton><FormatColorFill /></IconButton>}
-              anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+              anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
               targetOrigin={{horizontal: 'left', vertical: 'top'}}
               value={this.state.latestBg}
               onChange={this.handleBgChange}
