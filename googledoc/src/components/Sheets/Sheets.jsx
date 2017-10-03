@@ -17,6 +17,7 @@ import Redo from 'material-ui/svg-icons/content/redo';
 import FormatBold from 'material-ui/svg-icons/editor/format-bold';
 import FormatItalic from 'material-ui/svg-icons/editor/format-italic';
 import FormatStrikethrough from 'material-ui/svg-icons/editor/format-strikethrough';
+import axios from 'axios'
 // import fontColorText from 'material-design-icons/icons/editor/alarm';
 
 let socket;
@@ -26,10 +27,10 @@ class Sheets extends Component {
   constructor(){
     super();
     this.state={
-      rows: 50,
+      rows: 35,
       fillData:[['White', 'Canary'],['is so much','better than'], ['Black', 'Canary']],
       // fillStyles:[[{bg:' bg-blue',color:'white'}, {bg:'bg-gray',color:'yellow'}]],
-      columns: 50,
+      columns: 30,
       table: [],
       styles: [],
       changeLog:[],
@@ -64,6 +65,11 @@ class Sheets extends Component {
 
   //On mount, take fillData info from state and put into a 50x50 matrix, then push this matrix to state as table
   componentDidMount(){
+    axios.get(`/getSheetById/${this.props.match.params.id}`).then( response =>{
+      console.log(response.data["0"].body)
+      // this.setState({ table: body, styles: styles })
+    })
+
     let tempTable = [];
     for (let i=0;i<this.state.rows;i++){
       let row = [];
@@ -103,14 +109,20 @@ class Sheets extends Component {
       }
     }
     this.setState({styles:tempStyles})
-
-
-
     socket = io('http://localhost:3001');
+
+
+    socket.emit('room', { id: this.props.match.params.id})
     socket.on('dataIn', data=>{
-      this.setState({table:data});
+      console.log(data, 'fornt end sould be new data')
+      this.setState({table:data.table, styles:data.styles});
     })
   }
+
+
+  componentWillUnmount(){
+        socket.emit('leave room', this.props.match.params.id);
+    }
   
   // When user makes a change, it is added to a change log. this.state.table is updated by HotTable (or by componentDidMount - not really sure)
   handleChange = function(changes){
@@ -120,7 +132,8 @@ class Sheets extends Component {
       // console.log(tempChangeLog)
       this.setState({changeLog:tempChangeLog})
 
-      socket.emit('dataOut', this.state.table)
+      socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
+      axios.put('/save-sheet', {table: this.state.table, styles: this.state.styles, id: this.props.match.params.id})
     }
   }
   
@@ -138,6 +151,9 @@ class Sheets extends Component {
       // console.log(row, tempTable)
       tempTable[row].splice(column,1,lastItem[0][2]);
       this.setState({table: tempTable, undoLog: tempUndoLog, changeLog:tempChangeLog});
+      socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
+
+      
     }
   }
   // Opposite of undo
@@ -153,6 +169,8 @@ class Sheets extends Component {
       let tempTable = this.state.table.slice();
       tempTable[row].splice(column,1,nextItem[3])
       this.setState({table: tempTable, changeLog:tempChangeLog, undoLog:tempUndoLog})
+      socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
+      
     }
   }
   // Handle undo - handsontable does not do well with zoom changes. The column headers will move weird on scroll.
@@ -238,6 +256,8 @@ class Sheets extends Component {
       }
       this.setState({table:tempTable})
     }
+      socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
+    
   }
   handleColorChange(event,value){
     let selected = this.state.activeSelection.slice();
@@ -255,6 +275,8 @@ class Sheets extends Component {
         }
       }
       this.setState({styles: tempStyles, latestColor: value})
+      socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
+      
     }
   }
   handleBgChange(event, value){
@@ -274,6 +296,8 @@ class Sheets extends Component {
         }
       }
       this.setState({styles: tempStyles, latestBg:value})
+      socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
+      
       console.log(this.state.latestBg)
     }
     
@@ -294,6 +318,8 @@ class Sheets extends Component {
         }
       }
       this.setState({styles: tempStyles, latestFont:value})
+      socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
+      
     } else this.setState({latestFont: value})
     
   }
@@ -313,6 +339,8 @@ class Sheets extends Component {
         }
       }
       this.setState({styles: tempStyles, latestFs:value})
+      socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
+      
     } else this.setState({latestFs: value})
     
   }
@@ -336,6 +364,8 @@ class Sheets extends Component {
         }
       }
       this.setState({styles: tempStyles, latestBold:newBold})
+      socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
+      
     } else this.setState({latestBold: newBold})
     
   }
@@ -358,6 +388,8 @@ class Sheets extends Component {
       }
       this.setState({styles: tempStyles, latestItalic:newItalic})
     } else this.setState({latestItalic: newItalic})
+      socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
+    
     
   }
   handleStrike(){
@@ -379,6 +411,8 @@ class Sheets extends Component {
       }
       this.setState({styles: tempStyles, latestStrike:newStrike})
     } else this.setState({latestStrike: newStrike})
+      socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
+    
     
   }
   getStyles(row,col){
