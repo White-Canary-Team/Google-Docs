@@ -167,15 +167,15 @@ class Header extends Component {
                   targetOrigin={{ horizontal: 'right', vertical: 'top' }}
                   onRequestClose={this.handleRequestClose3}
                 >
-                  <Menu style={{ width: 300, height: '10%', background: "pink" }}>
+                  <Menu style={{ width: 300, height: '10%', background: "whitesmoke" }}>
                     <div className="menu-pic-container">
                       <img className="pro-pic-dropdown" src={this.props.userPic} style={{ width: '100', height: '100' }} />
                         {this.props.email}
                         <Link to="/profile"> <button>My Account</button></Link>
                       </div>
                     
-                    <MenuItem primaryText={this.props.email} />
-                    <MenuItem primaryText="Settings" />
+                    <MenuItem primaryText={this.props.email} style={{color: 'darkgray'}} />
+                    <MenuItem containerElement={<a href="http://localhost:3001/auth/logout"/>} className="link" primaryText="Sign out" style={{color: 'darkgray'}} />
                   </Menu>
                 </Popover>
               </div>

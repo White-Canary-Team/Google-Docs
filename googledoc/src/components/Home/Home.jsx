@@ -81,7 +81,9 @@ class Home extends Component {
         axios.post('/jsheets', {
             title: "untitled document",
             creator: this.props.userId,
-            doctype: "excel"
+            doctype: "excel",
+            body: '[[placeholder]]',
+            styles: '[[black]]'
         })
     }
 

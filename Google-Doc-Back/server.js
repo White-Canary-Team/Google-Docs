@@ -110,8 +110,8 @@ app.post('/quill', (req, res) => {
     })
 })
 app.post('/jsheets', (req, res) => {
-    const { title, creator, doctype } = req.body
-    req.app.get('db').createSheetDoc([title, creator, doctype]).then(response => {
+    const { title, creator, doctype, body, styles } = req.body
+    req.app.get('db').createSheetDoc([title, creator, doctype, body, styles]).then(response => {
         res.status(200).send(console.log('We did it"'))
     })
 })
