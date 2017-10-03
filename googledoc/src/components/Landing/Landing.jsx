@@ -10,7 +10,7 @@ class Landing extends Component {
                     <p className='google-logo'>Google</p>
                     <Menu right width={ 300 } >
                         <a id="home" className="menu-item" href="/">Home</a>
-                        <a id="test" className="menu-item" href='#'>test</a>
+                        <a id="test" className="menu-item" href='/meetteam'>Meet The Team</a>
                         <a id="test" className="menu-item" href="#">test</a>
                         <a id="test" className="menu-item" href="#">test</a>
                     </Menu>
