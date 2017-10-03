@@ -131,7 +131,6 @@ app.get('/getDocumentById/:id', (req, res) => {
 
 app.get('/getSheetById/:id', (req, res) => {
     req.app.get('db').SheetById([req.params.id]).then(response => {
-        console.log(response, 'after db ')
         res.status(200).send(response);
     })
 })

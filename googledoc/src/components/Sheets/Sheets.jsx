@@ -66,8 +66,10 @@ class Sheets extends Component {
   //On mount, take fillData info from state and put into a 50x50 matrix, then push this matrix to state as table
   componentDidMount(){
     axios.get(`/getSheetById/${this.props.match.params.id}`).then( response =>{
-      console.log(response.data["0"].body)
-      // this.setState({ table: body, styles: styles })
+      console.log(JSON.parse(response.data["0"].styles))
+
+
+      this.setState({ table: JSON.parse(response.data['0'].body), styles: JSON.parse(response.data["0"].styles) })
     })
 
     let tempTable = [];
@@ -152,6 +154,8 @@ class Sheets extends Component {
       tempTable[row].splice(column,1,lastItem[0][2]);
       this.setState({table: tempTable, undoLog: tempUndoLog, changeLog:tempChangeLog});
       socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
+      axios.put('/save-sheet', {table: this.state.table, styles: this.state.styles, id: this.props.match.params.id})
+
 
       
     }
@@ -170,6 +174,8 @@ class Sheets extends Component {
       tempTable[row].splice(column,1,nextItem[3])
       this.setState({table: tempTable, changeLog:tempChangeLog, undoLog:tempUndoLog})
       socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
+      axios.put('/save-sheet', {table: this.state.table, styles: this.state.styles, id: this.props.match.params.id})
+
       
     }
   }
@@ -257,7 +263,8 @@ class Sheets extends Component {
       this.setState({table:tempTable})
     }
       socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
-    
+      axios.put('/save-sheet', {table: this.state.table, styles: this.state.styles, id: this.props.match.params.id})
+
   }
   handleColorChange(event,value){
     let selected = this.state.activeSelection.slice();
@@ -276,7 +283,8 @@ class Sheets extends Component {
       }
       this.setState({styles: tempStyles, latestColor: value})
       socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
-      
+      axios.put('/save-sheet', {table: this.state.table, styles: this.state.styles, id: this.props.match.params.id})
+
     }
   }
   handleBgChange(event, value){
@@ -297,7 +305,8 @@ class Sheets extends Component {
       }
       this.setState({styles: tempStyles, latestBg:value})
       socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
-      
+      axios.put('/save-sheet', {table: this.state.table, styles: this.state.styles, id: this.props.match.params.id})
+
       console.log(this.state.latestBg)
     }
     
@@ -319,7 +328,8 @@ class Sheets extends Component {
       }
       this.setState({styles: tempStyles, latestFont:value})
       socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
-      
+      axios.put('/save-sheet', {table: this.state.table, styles: this.state.styles, id: this.props.match.params.id})
+
     } else this.setState({latestFont: value})
     
   }
@@ -340,7 +350,8 @@ class Sheets extends Component {
       }
       this.setState({styles: tempStyles, latestFs:value})
       socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
-      
+      axios.put('/save-sheet', {table: this.state.table, styles: this.state.styles, id: this.props.match.params.id})
+
     } else this.setState({latestFs: value})
     
   }
@@ -365,7 +376,8 @@ class Sheets extends Component {
       }
       this.setState({styles: tempStyles, latestBold:newBold})
       socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
-      
+      axios.put('/save-sheet', {table: this.state.table, styles: this.state.styles, id: this.props.match.params.id})
+
     } else this.setState({latestBold: newBold})
     
   }
@@ -389,7 +401,8 @@ class Sheets extends Component {
       this.setState({styles: tempStyles, latestItalic:newItalic})
     } else this.setState({latestItalic: newItalic})
       socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
-    
+      axios.put('/save-sheet', {table: this.state.table, styles: this.state.styles, id: this.props.match.params.id})
+
     
   }
   handleStrike(){
@@ -412,7 +425,8 @@ class Sheets extends Component {
       this.setState({styles: tempStyles, latestStrike:newStrike})
     } else this.setState({latestStrike: newStrike})
       socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
-    
+      axios.put('/save-sheet', {table: this.state.table, styles: this.state.styles, id: this.props.match.params.id})
+
     
   }
   getStyles(row,col){
