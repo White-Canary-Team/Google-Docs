@@ -129,6 +129,12 @@ app.get('/getDocumentById/:id', (req, res) => {
     })
 })
 
+app.get('/getSheetById/:id', (req, res) => {
+    req.app.get('db').SheetById([req.params.id]).then(response => {
+        res.status(200).send(response);
+    })
+})
+
 
 
 
@@ -170,10 +176,17 @@ io.on('connection', socket => {
         req.app.get('db').autoSave([value, id]).then(response =>{res.status(200).send(response)})
     })
 
+    app.put('/save-sheet', (req, res) => {
+        let { id, table, styles } = req.body;
+        table = JSON.stringify(table);
+        styles = JSON.stringify(styles);
+        req.app.get('db').autoSaveSheets([table, styles, id]).then(response =>{res.status(200).send(response)})
+    })
+
 
     socket.on('dataOut', data => {
-
-        socket.broadcast.emit('dataIn', data)
+        console.log(data.id, 'test')
+        socket.broadcast.to(data.id).emit('dataIn', {table: data.table, styles: data.styles})
     })
 
     socket.on('disconnect', function () {
