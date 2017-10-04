@@ -52,6 +52,21 @@ hr {
     margin-left: auto;
     margin-right: auto;
 }
+.social-media {
+    // fill: #4a4b4c;
+    display: flex;
+    align-items: center;
+
+}
+.social-media-icons {
+    // padding-top: 50%;
+    img {
+        height: 50px;
+        width: auto;
+        padding: 5px;
+        fill: red;
+    }
+}
 
 .chris-container {
     height: 300px;
