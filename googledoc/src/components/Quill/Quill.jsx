@@ -13,14 +13,15 @@ class Editor extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            text: ''
+            text: '',
+            test: ''
     } 
     this.handleChange = this.handleChange.bind(this)
   }
 
 
     componentDidMount() {
-    socket =  io('http://localhost:3001');
+    socket =  io('');
 
     axios.get(`/getDocumentById/${this.props.match.params.id}`).then( res => {
         this.setState({text: res.data[0].body})
