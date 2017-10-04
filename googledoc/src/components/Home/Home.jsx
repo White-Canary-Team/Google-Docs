@@ -20,10 +20,13 @@ class Home extends Component {
             userName: '',
             searchTerm: '',
             pic: '',
-            refresh : true
+            refresh : true,
+            sheetModal: false,
+            sheetTitle: ''
         }
         this.handleQuill = this.handleQuill.bind(this)
         this.handleSheet = this.handleSheet.bind(this)
+        this.handleSheetTitle = this.handleSheetTitle.bind(this)
     }
     componentWillMount() {
 
@@ -57,12 +60,6 @@ class Home extends Component {
 
 
         })
-        //axios.get('/documents').then(response =>{
-        //    console.log(response.data)
-        //    this.setState({
-        //        documents: response.data
-        //    })
-        //})
     }
     componentDidMount() {
         this.props.getDocs();
@@ -76,6 +73,7 @@ class Home extends Component {
             doctype: "word"
         })
     }
+    //DIFFERENT FROM ALEX'S!!!!!!!!!!!!!
 
     handleSheet() {
         axios.post('/jsheets', {
@@ -85,6 +83,19 @@ class Home extends Component {
             body: '[[placeholder]]',
             styles: '[[black]]'
         })
+        this.setState({
+            sheetModal: true
+        })
+    }
+    handleSheetTitle(e){
+        this.setState({
+            sheetTitle: e.target.value
+        })
+    }
+    handleTitleUpdate(){
+        axios.post('/jsheet-title',{
+            title: this.state.sheetTitle
+        })
     }
 
 
@@ -93,7 +104,31 @@ class Home extends Component {
 
 
     render() {
-        console.log(this.state.refresh, 'refresh')
+        console.log(this.props.documents, 'refresh')
+        let findId = this.props.documents.filter((e)=>{
+            if(e.doctype === 'excel'){
+                return e.id
+            } return null
+        })
+        let theId = findId[findId.length-1]
+        let idDoc = theId ? theId.id + 1 : 'hahah'
+        console.log(idDoc)
+
+        let newSheetLink = '/sheets/'+ idDoc
+        console.log(newSheetLink)
+
+
+        let newSheet = this.state.sheetModal ? <div className="pop-out"><h1>Title The Sheet</h1><br/><input value={this.state.sheetTitle} onChange={this.handleSheetTitle} placeholder="test"></input><Link to={newSheetLink}><button>Submit</button></Link></div>: 
+        <Paper className="doc-box" zDepth={2} rounded={false} onClick={this.handleSheet}>New Sheet</Paper>
+
+
+        console.log(this.state.sheetTitle)
+        
+
+
+
+
+
         let filteredDoc = this.props.documents ? this.props.documents.filter((e) => {
             if (e.creator === this.props.userId || +e.editors === this.props.userId) {
                 return e
@@ -103,7 +138,6 @@ class Home extends Component {
         }) : null
         console.log(filteredDoc)
         let myDocs = filteredDoc ? filteredDoc.map((c, i) => {
-            console.log("C", c)
             let quillLink = `/quill/${c.id}`;
             let sheetLink = `/sheets/${c.id}`;
             let docStyle = c.doctype === 'word' ? "2px solid #90CAF9" : "2px solid #A5D6A7"
@@ -166,13 +200,14 @@ class Home extends Component {
 
         return (
             <MuiThemeProvider>
+                
                 <div>
                     <Header />
                     <div className="new-doc-box">
                         <p> New Document</p>
                         <div className="new-doc">
                             <Paper className="doc-box" zDepth={2} rounded={false} onClick={this.handleQuill}>New Quill</Paper>
-                            <Paper className="doc-box" zDepth={2} rounded={false} onClick={this.handleSheet}>New Sheet</Paper>
+                           {newSheet}
 
                         </div>
 
