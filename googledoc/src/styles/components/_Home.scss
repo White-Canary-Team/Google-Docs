@@ -42,3 +42,12 @@
 .loader{
     margin: auto;
 }
+
+.pop-out{
+    position: relative;
+    margin: auto;
+    height:70px;
+    width: 220px;
+    background: pink;
+    transition: all 5s ease-in-out;
+}
