@@ -9,14 +9,16 @@ const passport = require('passport')
 const Auth0Strategy = require('passport-auth0')
 const session = require('express-session')
 const massive = require('massive')
+const path = require('path')
 // make sure you import the things apove ^
 const app = express();
 var server = http.createServer(app)
 const io = socketIo(server);
 
-
+app.use(express.static(__dirname + '/googledoc/build'))
 app.use(cors())
 app.use(bodyParser.json())
+
 
 //Express Session Set Up
 app.use(session({
@@ -55,8 +57,8 @@ app.get('/test', (req, res) => { console.log('testing') })
 app.get('/auth', passport.authenticate('auth0'));
 
 app.get('/auth/callback', passport.authenticate('auth0', {
-    successRedirect: 'http://localhost:3000/Home',
-    failureRedirect: 'http://localhost:3000/'
+    successRedirect: 'http://192.168.3.73:3001/Home',
+    failureRedirect: 'http://192.168.3.73:3001/'
 }))
 passport.serializeUser(function (user, done) {
     // console.log( "serializing--->" ,user)
@@ -186,7 +188,9 @@ io.on('connection', socket => {
 
     socket.on('dataOut', data => {
         console.log(data.id, 'test')
+        if (roomid.hasOwnProperty(data.id)) {
         socket.broadcast.to(data.id).emit('dataIn', {table: data.table, styles: data.styles})
+        }
     })
 
     socket.on('disconnect', function () {
@@ -205,6 +209,9 @@ app.get('/auth/logout', (req, res, next) => {
 })
 
 
+app.get('*', function (request, response){
+ response.sendFile(path.join(__dirname, './googledoc/build/', 'index.html'))
+})
 
 
 

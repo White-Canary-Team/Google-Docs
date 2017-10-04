@@ -111,7 +111,7 @@ class Sheets extends Component {
       }
     }
     this.setState({styles:tempStyles})
-    socket = io('http://localhost:3001');
+    socket = io('');
 
 
     socket.emit('room', { id: this.props.match.params.id})
