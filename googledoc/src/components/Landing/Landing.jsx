@@ -44,7 +44,7 @@ class Landing extends Component {
                         <p className='typing-animation-documents'>documents</p>
                     </div>
                         <p className='with-google-docs'>With Google Docs, you can write, edit, and collaborate wherever you are. For free.</p>
-                        <a alt='go to google' href='http://192.168.3.71:3001/auth' className="go-to-google-button">Go to Google Docs</a>
+                        <a alt='go to google' href='http://localhost:3001/auth' className="go-to-google-button">Go to Google Docs</a>
                 </div>
 
                 <div className='do-more-together'>
