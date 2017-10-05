@@ -66,7 +66,6 @@ class Sheets extends Component {
   //On mount, take fillData info from state and put into a 50x50 matrix, then push this matrix to state as table
   componentDidMount(){
     axios.get(`/getSheetById/${this.props.match.params.id}`).then( response =>{
-      console.log(JSON.parse(response.data["0"].styles))
 
 
       this.setState({ table: JSON.parse(response.data['0'].body), styles: JSON.parse(response.data["0"].styles) })
