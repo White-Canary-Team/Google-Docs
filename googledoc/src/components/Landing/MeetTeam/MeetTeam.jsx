@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+import github from './github.svg';
+import linkedIn from './linkedin.svg';
+import twitter from './twitter.svg';
 
 import {slide as Menu} from 'react-burger-menu';
 
@@ -30,13 +33,20 @@ class MeetTeam extends Component {
                     <hr/>
                     <div className='chris-container'>
                         <div className='meet-picture-and-text'>
+                            <div className='social-media'>
+                                <div className='social-media-icons' >
+                                    <a href='https://github.com/Chris502' ><img src={github}/></a>
+                                    <a href='https://www.linkedin.com/in/chris-anderson-b90870142/' ><img src={linkedIn}/></a>
+                                    {/* <a href='https://twitter.com/FIFA_fanatic' ><img src={twitter}/></a> */}
+                                </div>
+                            </div>
                             <img
                                 className='chris-photo'
-                                src='https://timedotcom.files.wordpress.com/2017/06/170615-stock-market-predictions-marc-faber1.jpg?w=300'/>
+                                src='https://i.imgur.com/zN9HT1t.jpg'/>
                             <div className='chris-text-container'>
                                 <h1 className='meet-name'>Chris</h1>
                                 <br/>
-                                <p>City</p>
+                                <p>Hometown: Louisville, Kentucky</p>
                                 <br/>
                                 <p className='meet-description'>
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
@@ -54,7 +64,7 @@ class MeetTeam extends Component {
                             <div className='ruston-text-container'>
                                 <h1 className='meet-name'>Ruston</h1>
                                 <br/>
-                                <p>City</p>
+                                <p>Hometown: Seattle, Washington</p>
                                 <br/>
                                 <p className='meet-description'>
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
@@ -66,19 +76,33 @@ class MeetTeam extends Component {
                             </div>
                             <img
                                 className='ruston-photo'
-                                src='https://timedotcom.files.wordpress.com/2017/06/170615-stock-market-predictions-marc-faber1.jpg?w=300'/>
+                                src='https://i.imgur.com/AKRHth7.jpg'/>
+                            <div className='social-media'>
+                                <div className='social-media-icons' >
+                                    <a href='https://github.com/rustonrr' ><img src={github}/></a>
+                                    <a href='https://www.linkedin.com/in/ruston-reformado-94279391/' ><img src={linkedIn}/></a>
+                                    {/* <a href='https://twitter.com/rustonrr' ><img src={twitter}/></a> */}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <hr/>
                     <div className='alex-container'>
                         <div className='meet-picture-and-text'>
+                            <div className='social-media'>
+                                <div className='social-media-icons' >
+                                    <a href='https://github.com/AlexHill5' ><img src={github}/></a>
+                                    <a href='https://www.linkedin.com/in/alex-hill-a44407130/' ><img src={linkedIn}/></a>
+                                    {/* <a href='https://twitter.com/AlexHill5' ><img src={twitter}/></a> */}
+                                </div>
+                            </div>
                             <img
                                 className='alex-photo'
-                                src='https://timedotcom.files.wordpress.com/2017/06/170615-stock-market-predictions-marc-faber1.jpg?w=300'/>
+                                src='https://i.imgur.com/8pjivIX.jpg'/>
                             <div className='alex-text-container'>
                                 <h1 className='meet-name'>Alex</h1>
                                 <br/>
-                                <p>City</p>
+                                <p>Hometown: Salt Lake City, Utah</p>
                                 <br/>
                                 <p className='meet-description'>
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
@@ -96,7 +120,7 @@ class MeetTeam extends Component {
                             <div className='charlie-text-container'>
                                 <h1 className='meet-name'>Charlie</h1>
                                 <br/>
-                                <p>City</p>
+                                <p>Hometown: Salt Lake City, Utah</p>
                                 <br/>
                                 <p className='meet-description'>
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
@@ -108,7 +132,14 @@ class MeetTeam extends Component {
                             </div>
                             <img
                                 className='charlie-photo'
-                                src='https://timedotcom.files.wordpress.com/2017/06/170615-stock-market-predictions-marc-faber1.jpg?w=300'/>
+                                src='https://i.imgur.com/ya9bLpI.png'/>
+                            <div className='social-media'>
+                                <div className='social-media-icons' >
+                                    <a href='https://github.com/CharlesMurphy94' ><img src={github}/></a>
+                                    <a href='https://www.linkedin.com/in/charles-murphy-823ba993/' ><img src={linkedIn}/></a>
+                                    {/* <a href='http://www.twitter.com/_Chuckiecheeze' ><img src={twitter}/></a> */}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
