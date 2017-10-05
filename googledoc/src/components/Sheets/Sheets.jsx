@@ -513,7 +513,7 @@ class Sheets extends Component {
                 targetOrigin={{horizontal: 'left', vertical: 'top'}}
                 value={this.state.latestColor}
                 onChange={this.handleColorChange}
-                iconStyle={{color:this.state.latestColor}}
+                //iconStyle={{color:this.state.latestColor}}
                 selectedMenuItemStyle={{backgroundColor:'#f5f5f5', color:this.state.latestColor}}
               >
                 <MenuItem value={'black'} primaryText="black" style={ {color: 'black'}} />
@@ -528,18 +528,18 @@ class Sheets extends Component {
                 <MenuItem value={'magenta'} primaryText="magenta" style={ {color: 'magenta'}}/>
                 <MenuItem value={'white'} primaryText="white" style={ {color: 'gray'}}/>
               </IconMenu>
-
+              <div className='color-bar' style={{backgroundColor:this.state.latestColor}} />
             </div> 
           </div> 
 
-          <div className={`bg-select ${this.state.latestBg}`} style={{backgroundColor:this.state.latestBg}}>
+          <div className='bg-select'>
             <IconMenu
               iconButtonElement={<IconButton><FormatColorFill /></IconButton>}
               anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
               targetOrigin={{horizontal: 'left', vertical: 'top'}}
               value={this.state.latestBg}
               onChange={this.handleBgChange}
-              iconStyle={{backgroundColor:this.state.latestBg}}
+              //iconStyle={{backgroundColor:this.state.latestBg}}
               selectedMenuItemStyle={{ color:'lightgray'}}
             >
               <MenuItem value={'bg-white'} primaryText="white" style={ {backgroundColor: 'white', color: 'black'}}/>
@@ -554,10 +554,8 @@ class Sheets extends Component {
               <MenuItem value={'bg-magenta'} primaryText="magenta" style={ {backgroundColor: 'magenta', color: 'white'}}/>
               <MenuItem value={'bg-black'} primaryText="black" style={ {backgroundColor: 'black', color: 'white'}} />
             </IconMenu>
+            <div className={`bg-bar ${this.state.latestBg}`}  />
           </div>
-          
-          
-
         </div>
 
         <div className="table-container" style={{MsTransform: `scale(${this.state.zoom},${this.state.zoom})`, WebkitTransform: `scale(${this.state.zoom},${this.state.zoom})`, transform: `scale(${this.state.zoom},${this.state.zoom})`, transformOrigin: '0% 0%'}}>

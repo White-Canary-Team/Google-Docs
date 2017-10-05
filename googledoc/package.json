@@ -1,6 +1,6 @@
 {
   "name": "googledoc",
-  "homepage": "http://192.168.3.73:3001",
+  "homepage": "http://192.168.3.71:3001",
   "version": "0.1.0",
   "proxy": "http://localhost:3001",
   "private": true,

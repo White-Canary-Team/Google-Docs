@@ -93,24 +93,39 @@
         }
 
         .font-style{
-            width: 150px;
+            width: 160px;
             display: flex;
             flex-direction: row;
             justify-content: space-around;
             align-items: center;
             .bold-select{
+                width: 40px;
+                height: 40px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 cursor: pointer;
                 &:hover{
                     background-color: lightgray;
                 } 
             }
             .italic-select{
+                width: 40px;
+                height: 40px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 cursor: pointer;
                 &:hover{
                     background-color: lightgray;
                 } 
             }
             .strike-select{
+                width: 40px;
+                height: 40px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 cursor: pointer;
                 &:hover{
                     background-color: lightgray;
@@ -122,7 +137,17 @@
             }
             .color-select{
                 width: 40px;
-                height: 36px;
+                height: 40px;
+                position: relative;
+                .color-bar{
+                    // background-color:white;
+                    z-index:5;
+                    width:24px;
+                    height:4px;
+                    position: absolute;
+                    left: 8px;
+                    bottom:6px;
+                }
                 &:hover{
                     background-color: lightgray;
                 } 
@@ -132,44 +157,56 @@
         
         .bg-select{
             width: 40px;
+            // height: 36px;
+            position: relative;
+            .bg-bar{
+                background-color:white;
+                z-index:5;
+                width:24px;
+                height:4px;
+                position: absolute;
+                left: 7px;
+                bottom:6px;
+            }
+            .bg-black {
+                background-color: black;
+            }
+            .bg-red {
+                background-color: red;
+            }
+            .bg-orange{
+                background-color: orange;
+            }
+            .bg-yellow{
+                background-color: yellow;
+            }
+            .bg-lime{
+                background-color: #51ff3f;
+            }
+            .bg-cyan{
+                background-color: cyan;
+            }
+            .bg-cornflowerblue{
+                background-color: cornflowerblue
+            }
+            .bg-blue{
+                background-color: blue;
+            }
+            .bg-purple{
+                background-color: purple
+            }
+            .bg-magenta{
+                background-color: magenta
+            }
+            .bg-white{
+                background-color: white
+            } 
             &:hover{
                 background-color: lightgray;
             }
              
         }
-        .bg-black {
-            background-color: black;
-        }
-        .bg-red {
-            background-color: red;
-        }
-        .bg-orange{
-            background-color: orange;
-        }
-        .bg-yellow{
-            background-color: yellow;
-        }
-        .bg-lime{
-            background-color: #51ff3f;
-        }
-        .bg-cyan{
-            background-color: cyan;
-        }
-        .bg-cornflowerblue{
-            background-color: cornflowerblue
-        }
-        .bg-blue{
-            background-color: blue;
-        }
-        .bg-purple{
-            background-color: purple
-        }
-        .bg-magenta{
-            background-color: magenta
-        }
-        .bg-white{
-            background-color: #eee
-        } 
+        
     }
     
 
