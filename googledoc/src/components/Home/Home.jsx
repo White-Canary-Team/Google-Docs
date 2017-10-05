@@ -204,7 +204,7 @@ class Home extends Component {
 
 
         let filteredDoc = this.props.documents ? this.props.documents.filter((e) => {
-            console.log(e.editors.split(',').includes(this.props.userId.toString()))
+            // console.log(e.editors.split(',').includes(this.props.userId.toString()))
             console.log(this.props.userId)
             if (e.creator === this.props.userId || e.editors.split(',').includes(this.props.userId.toString()) ) {
                 return e
