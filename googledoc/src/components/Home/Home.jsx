@@ -7,6 +7,9 @@ import { Link } from 'react-router-dom'
 import Paper from 'material-ui/Paper'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Tabs, Tab } from 'material-ui/Tabs';
+import SheetIcon from 'material-ui/svg-icons/action/view-list';
+import DocIcon from 'material-ui/svg-icons/action/subject';
+
 
 
 
@@ -24,11 +27,16 @@ class Home extends Component {
             sheetModal: false,
             sheetTitle: '',
             docModal: false,
-            docTitle: ''
+            docTitle: '',
+            goToDoc:true,
         }
         this.handleQuill = this.handleQuill.bind(this)
         this.handleSheet = this.handleSheet.bind(this)
         this.handleSheetTitle = this.handleSheetTitle.bind(this)
+        this.handleDocTitle = this.handleDocTitle.bind(this)
+        this.handleDocUpdate = this.handleDocUpdate.bind(this)
+        this.handleUppercase = this .handleUppercase.bind(this)
+        
     }
     componentWillMount() {
 
@@ -71,10 +79,12 @@ class Home extends Component {
     
     //DIFFERENT FROM ALEX'S!!!!!!!!!!!!!
     handleQuill() {
+        console.log(this.props.userId)
         axios.post('/quill', {
             title: "untitled document",
             creator: this.props.userId,
-            doctype: "word"
+            doctype: "word",
+            editors: this.props.userId
         })
         this.props.getDocs()
         this.setState({
@@ -107,6 +117,43 @@ class Home extends Component {
         })
     }
 
+    handleDocTitle(e){
+        this.setState({
+            docTitle: e.target.value
+        })
+    }
+    handleDocUpdate(){
+        let findQuillId = this.props.documents.filter((e) =>{
+            if(e.doctype === 'word'){
+                return e
+            } return null
+        })
+        
+        let qId = findQuillId[findQuillId.length -1]
+        let idQuill = qId ? qId.id : 'hahahaha'
+        axios.post('/quillTitle',{
+            title: this.state.docTitle,
+            id: idQuill
+        })
+        this.setState({
+            goToDoc: false
+        })
+    }
+
+
+    handleUppercase(title){
+        title=title.split(' ')
+        let words=[]
+        for (let i=0;i<title.length;i++){
+            let wordArr=title[i].split('')
+            let first = wordArr.shift().toUpperCase();
+            wordArr.unshift(first);
+            words.push(wordArr.join(''));
+        }
+        let newTitle = words.join(' ')
+        return newTitle
+    }
+
 
 
 
@@ -127,6 +174,8 @@ class Home extends Component {
         console.log(newSheetLink)
 
 
+        // let newSheet = this.state.sheetModal ? <div className="pop-out"><h1>Title The Sheet</h1><br/><input value={this.state.sheetTitle} onChange={this.handleSheetTitle} placeholder="test"></input><Link to={newSheetLink}><button>Submit</button></Link></div>: 
+        // <Paper className="doc-box" zDepth={2} rounded={false} onClick={this.handleSheet}>New Sheet</Paper>
         let newSheet = this.state.sheetModal ? <div className="pop-out"><h1>Title The Sheet</h1><br/><input value={this.state.sheetTitle} onChange={this.handleSheetTitle} placeholder="test"></input><Link to={newSheetLink}><button>Submit</button></Link></div>: 
         <Paper className="doc-box" zDepth={2} rounded={false} onClick={this.handleSheet}>New Sheet</Paper>
 
@@ -140,12 +189,13 @@ class Home extends Component {
         })
         
         let qId = findQuillId[findQuillId.length -1]
-        let idQuill = qId ? qId.id +1 : 'hahahaha'
+        let idQuill = qId ? qId.id : 'hahahaha'
         console.log(idQuill)
 
         let newDocLink = '/quill/'+ idQuill
 
-        let newQuill = this.state.docModal ? <div className="pop-out"><h1>Title The Sheet</h1><br/><input value={this.state.docTitle} onChange={this.handleDocTitle} placeholder="test"></input><Link to={newDocLink}><button>Submit</button></Link></div>:
+        let goToQuill = this.state.goToDoc ? <div className="pop-out"><h1>Title The Sheet</h1><br/><input value={this.state.docTitle} onChange={this.handleDocTitle} placeholder="test"></input><button onClick={this.handleDocUpdate}>Submit</button></div>: <div className="pop-out"><Link to={newDocLink}><h1>HahA</h1></Link></div>
+        let newQuill = this.state.docModal ? goToQuill:
         <Paper className="doc-box" zDepth={2} rounded={false} onClick={this.handleQuill}>New Quill</Paper>
         
 
@@ -163,13 +213,39 @@ class Home extends Component {
 
         }) : null
         console.log(filteredDoc)
+        // let myDocs = filteredDoc ? filteredDoc.map((c, i) => {
+        //     let quillLink = `/quill/${c.id}`;william
+
+        //     let sheetLink = `/sheets/${c.id}`;
+        //     let docStyle = c.doctype === 'word' ? "2px solid #90CAF9" : "2px solid #A5D6A7"
+        //     let docLink = c.doctype === 'word' ?
+        //         <Link to={quillLink}> <Paper className="doc-box" style={{ border: docStyle }} zDepth={2} key={i} rounded={false}> {c.title} {c.id}</Paper></Link> :
+        //         <Link to={sheetLink}> <Paper className="doc-box" style={{ border: docStyle }} zDepth={2} key={i} rounded={false}>{c.title} {c.id}</Paper></Link>
+
+        //     return (docLink)
+
+
+        // }) : null
         let myDocs = filteredDoc ? filteredDoc.map((c, i) => {
             let quillLink = `/quill/${c.id}`;
+            
             let sheetLink = `/sheets/${c.id}`;
             let docStyle = c.doctype === 'word' ? "2px solid #90CAF9" : "2px solid #A5D6A7"
             let docLink = c.doctype === 'word' ?
-                <Link to={quillLink}> <Paper className="doc-box" style={{ border: docStyle }} zDepth={2} key={i} rounded={false}> {c.title} {c.id}</Paper></Link> :
-                <Link to={sheetLink}> <Paper className="doc-box" style={{ border: docStyle }} zDepth={2} key={i} rounded={false}>{c.title} {c.id}</Paper></Link>
+                <Link to={quillLink}> 
+                    <div className="doc-box " style={{ border: docStyle }} key={i}> 
+                        <DocIcon style={{color:'#5276d0', marginRight:'4px'}}/>
+                        <span>{`${this.handleUppercase(c.title)} ${c.id}`}
+                        </span>
+                    </div>
+                </Link> :
+                <Link to={sheetLink}> 
+                    <div className="doc-box" style={{ border: docStyle }} key={i}>
+                        <SheetIcon style={{color:'#31884a', marginRight:'4px', height:'20px'}}/>  
+                        <span>{`${this.handleUppercase(c.title)} ${c.id}`}
+                        </span>
+                    </div>
+                </Link>
 
             return (docLink)
 
@@ -223,7 +299,7 @@ class Home extends Component {
         }) : <h1> No excel Documents</h1>
         console.log(filteredDocByTypeExcel)
 
-
+        console.log(this.props.userId, 'should be Charlie')
 
         return (
             <MuiThemeProvider>
