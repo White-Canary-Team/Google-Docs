@@ -10,7 +10,9 @@ const Auth0Strategy = require('passport-auth0')
 const session = require('express-session')
 const massive = require('massive')
 const path = require('path')
-// const myIp = 'localhost';
+
+const myIp = 'localhost';
+
 // make sure you import the things apove ^
 const app = express();
 var server = http.createServer(app)
@@ -58,8 +60,10 @@ app.get('/test', (req, res) => { console.log('testing') })
 app.get('/auth', passport.authenticate('auth0'));
 
 app.get('/auth/callback', passport.authenticate('auth0', {
-    successRedirect: `http://localhost:3000/home`,
-    failureRedirect: 'http://localhost:3000/'
+
+    successRedirect: `http://${myIp}:3000/Home`,
+    failureRedirect: `http://${myIp}:3000`
+
 }))
 passport.serializeUser(function (user, done) {
     // console.log( "serializing--->" ,user)
@@ -107,9 +111,15 @@ app.get('/documents', (req, res) => {
 
 
 app.post('/quill', (req, res) => {
-    const { title, creator, doctype } = req.body
-    req.app.get('db').createQuillDoc([title, creator, doctype]).then(response => {
+    const { title, creator, doctype, editors } = req.body
+    req.app.get('db').createQuillDoc([title, creator, doctype, editors]).then(response => {
         res.status(200).send(console.log('We got it"'))
+    })
+})
+app.post('/quillTitle', (req,res) =>{
+    const {title,id} = req.body
+    req.app.get('db').quillTitle([title,id]).then(response =>{
+        res.status(200).send(console.log("I added a quill title"))
     })
 })
 app.post('/jsheets', (req, res) => {
