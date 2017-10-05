@@ -22,7 +22,9 @@ class Home extends Component {
             pic: '',
             refresh : true,
             sheetModal: false,
-            sheetTitle: ''
+            sheetTitle: '',
+            docModal: false,
+            docTitle: ''
         }
         this.handleQuill = this.handleQuill.bind(this)
         this.handleSheet = this.handleSheet.bind(this)
@@ -65,15 +67,21 @@ class Home extends Component {
         this.props.getDocs();
 
 
-    }
+    } 
+    
+    //DIFFERENT FROM ALEX'S!!!!!!!!!!!!!
     handleQuill() {
         axios.post('/quill', {
             title: "untitled document",
             creator: this.props.userId,
             doctype: "word"
         })
+        this.props.getDocs()
+        this.setState({
+            docModal: true
+        })
     }
-    //DIFFERENT FROM ALEX'S!!!!!!!!!!!!!
+   
 
     handleSheet() {
         axios.post('/jsheets', {
@@ -83,6 +91,7 @@ class Home extends Component {
             body: '[[placeholder]]',
             styles: '[[black]]'
         })
+        this.props.getDocs()
         this.setState({
             sheetModal: true
         })
@@ -123,6 +132,21 @@ class Home extends Component {
 
 
         console.log(this.state.sheetTitle)
+
+        let findQuillId = this.props.documents.filter((e) =>{
+            if(e.doctype === 'word'){
+                return e
+            } return null
+        })
+        
+        let qId = findQuillId[findQuillId.length -1]
+        let idQuill = qId ? qId.id +1 : 'hahahaha'
+        console.log(idQuill)
+
+        let newDocLink = '/quill/'+ idQuill
+
+        let newQuill = this.state.docModal ? <div className="pop-out"><h1>Title The Sheet</h1><br/><input value={this.state.docTitle} onChange={this.handleDocTitle} placeholder="test"></input><Link to={newDocLink}><button>Submit</button></Link></div>:
+        <Paper className="doc-box" zDepth={2} rounded={false} onClick={this.handleQuill}>New Quill</Paper>
         
 
 
@@ -130,7 +154,9 @@ class Home extends Component {
 
 
         let filteredDoc = this.props.documents ? this.props.documents.filter((e) => {
-            if (e.creator === this.props.userId || +e.editors === this.props.userId) {
+            console.log(e.editors.split(',').includes(this.props.userId.toString()))
+            console.log(this.props.userId)
+            if (e.creator === this.props.userId || e.editors.split(',').includes(this.props.userId.toString()) ) {
                 return e
             }
             return null
@@ -164,8 +190,8 @@ class Home extends Component {
 
 
 
-        let filteredDocByType = this.props.documents ? this.props.documents.filter((e) => {
-            if (e.creator === this.props.userId && e.doctype === "word") {
+        let filteredDocByType = filteredDoc ? filteredDoc.filter((e) => {
+            if (e.doctype === "word" ) {
                 return e
             }
             return null
@@ -181,8 +207,8 @@ class Home extends Component {
         }) : <h1> No word Documents</h1>
 
 
-        let filteredDocByTypeExcel = this.props.documents ? this.props.documents.filter((e) => {
-            if (e.creator === this.props.userId && e.doctype === "excel") {
+        let filteredDocByTypeExcel = filteredDoc ? filteredDoc.filter((e) => {
+            if (e.doctype === "excel") {
                 return e
             }
             return null
@@ -195,6 +221,7 @@ class Home extends Component {
                 <Link to={sheetLink}> <Paper className="doc-box" style={{ border: docStyle, marginBottom: '30px' }} zDepth={2} key={i} rounded={false}> {c.title} {c.id}</Paper></Link> :null
             return (excelLink)
         }) : <h1> No excel Documents</h1>
+        console.log(filteredDocByTypeExcel)
 
 
 
@@ -206,7 +233,7 @@ class Home extends Component {
                     <div className="new-doc-box">
                         <p> New Document</p>
                         <div className="new-doc">
-                            <Paper className="doc-box" zDepth={2} rounded={false} onClick={this.handleQuill}>New Quill</Paper>
+                           {newQuill}
                            {newSheet}
 
                         </div>
