@@ -1,6 +1,6 @@
 .profile-main-wrapper{
     height: 100vh;
-    width: 100vw;
+    width: 100%;
 }
 
 .profile-banner{
@@ -30,6 +30,7 @@
     justify-content: center;
     align-items: center;
     height: 15%;
+    width: 100%;
 }
 .username-input {
      padding: 5px;
@@ -60,5 +61,17 @@
     background:      -o-linear-gradient(left, hsla(0,0%,0%,0) 0%, hsla(0,0%,0%,.75) 50%, hsla(0,0%,0%,0) 100%);
     background:         linear-gradient(left, hsla(0,0%,0%,0) 0%, hsla(0,0%,0%,.75) 50%, hsla(0,0%,0%,0) 100%);
     margin-top: 2%;
+    width: 100%;
 }
 
+.profile-documents-container{
+    height: 50%;
+    width: 80%;
+    margin-left: 11%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+
+
+}
