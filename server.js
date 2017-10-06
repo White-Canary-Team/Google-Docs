@@ -117,8 +117,8 @@ app.post('/quill', (req, res) => {
     })
 })
 app.post('/quillTitle', (req,res) =>{
-    const {title,id} = req.body
-    req.app.get('db').quillTitle([title,id]).then(response =>{
+    const {title,editors,id} = req.body
+    req.app.get('db').quillTitle([title,editors,id]).then(response =>{
         res.status(200).send(console.log("I added a quill title"))
     })
 })

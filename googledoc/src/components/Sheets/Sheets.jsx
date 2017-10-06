@@ -117,7 +117,6 @@ class Sheets extends Component {
 
     socket.emit('room', { id: this.props.match.params.id})
     socket.on('dataIn', data=>{
-      console.log(data, 'fornt end sould be new data')
       this.setState({table:data.table, styles:data.styles});
     })
   }
@@ -132,7 +131,6 @@ class Sheets extends Component {
     if (changes){      
       let tempChangeLog = this.state.changeLog.slice();
       tempChangeLog.push(changes[0]);
-      // console.log(tempChangeLog)
       this.setState({changeLog:tempChangeLog})
 
       socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
@@ -151,7 +149,6 @@ class Sheets extends Component {
       let row = lastItem[0];
       let column = lastItem[1];
       let tempTable = this.state.table.slice();
-      // console.log(row, tempTable)
       tempTable[row].splice(column,1,lastItem[0][2]);
       this.setState({table: tempTable, undoLog: tempUndoLog, changeLog:tempChangeLog});
       socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
@@ -167,7 +164,6 @@ class Sheets extends Component {
       let tempUndoLog = this.state.undoLog.slice();
       let nextItem = tempUndoLog.pop();
       let tempChangeLog = this.state.changeLog.slice();
-      console.log(nextItem)
       tempChangeLog.push(nextItem)
       let row = nextItem[0];
       let column = nextItem[1];
@@ -204,7 +200,6 @@ class Sheets extends Component {
     let allSameBg = this.state.styles[rStart][cStart].bg;
     let allSameFs = this.state.styles[rStart][cStart].fs;
     let allSameFont = this.state.styles[rStart][cStart].font;
-    console.log(allSameColor) 
     for (let i=rStart;i<=rEnd;i++){
       for (let j=cStart;j<=cEnd;j++){
         if (this.state.styles[i][j].bold !== 'bold') allBold = ''
@@ -290,7 +285,6 @@ class Sheets extends Component {
   }
   handleBgChange(event, value){
     let selected = this.state.activeSelection.slice();
-    // console.log(selected,value)
     if (selected[0] || selected[0] === 0){
       let tempStyles = this.state.styles.slice();
       for (let i=selected[0];i<=selected[2];i++){
@@ -307,8 +301,6 @@ class Sheets extends Component {
       this.setState({styles: tempStyles, latestBg:value})
       socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
       axios.put('/save-sheet', {table: this.state.table, styles: this.state.styles, id: this.props.match.params.id})
-
-      console.log(this.state.latestBg)
     }
     
   }

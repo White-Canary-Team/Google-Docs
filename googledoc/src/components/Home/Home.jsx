@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { emailAdd, getID, getDocs } from './../../ducks/reducer.js'
 import Header from './../Header/Header.jsx'
 import { Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import Paper from 'material-ui/Paper'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Tabs, Tab } from 'material-ui/Tabs';
@@ -11,6 +12,9 @@ import SheetIcon from 'material-ui/svg-icons/action/view-list';
 import DocIcon from 'material-ui/svg-icons/action/subject';
 import AddIcon from 'material-ui/svg-icons/content/add';
 import CancelIcon from 'material-ui/svg-icons/navigation/cancel';
+import AutoComplete from 'material-ui/AutoComplete'
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
 
 
 
@@ -21,6 +25,7 @@ class Home extends Component {
         this.state = {
             emails: '',
             userId: '',
+            users: [],
             documents: [],
             userName: '',
             searchTerm: '',
@@ -28,15 +33,19 @@ class Home extends Component {
             refresh : true,
             sheetModal: false,
             sheetTitle: '',
+            sheetEditors: '',
             docModal: false,
             docTitle: '',
+            docEditors: '',
             goToDoc:true,
+            // redirect: false,
         }
         this.handleQuill = this.handleQuill.bind(this)
         this.handleSheet = this.handleSheet.bind(this)
         this.handleSheetTitle = this.handleSheetTitle.bind(this)
-        this.handleDocTitle = this.handleDocTitle.bind(this)
+        this.handleSheetEditors = this.handleSheetEditors.bind(this)
         this.handleDocUpdate = this.handleDocUpdate.bind(this)
+        this.handleEditorsUpdate = this .handleEditorsUpdate.bind(this)
         this.handleUppercase = this .handleUppercase.bind(this)
         // this.handleCancel = this .handleCancel.bind(this)
         
@@ -47,7 +56,6 @@ class Home extends Component {
             this.setState({
                 emails: response.data.emails[0].value,
                 pic: response.data.picture
-
             })
             this.props.emailAdd(this.state.emails, this.state.pic)
 
@@ -56,6 +64,8 @@ class Home extends Component {
             })
         })
         axios.get('/allUsers').then(response => {
+            console.log(response.data[0])
+            this.setState({users:response.data})
             if (this.state.emails) {
                 let uid = response.data.filter((e) => {
                     if (e.email === this.state.emails) {
@@ -79,15 +89,13 @@ class Home extends Component {
 
 
     } 
-    
-    //DIFFERENT FROM ALEX'S!!!!!!!!!!!!!
+
     handleQuill() {
-        console.log(this.props.userId)
         axios.post('/quill', {
             title: "untitled document",
             creator: this.props.userId,
             doctype: "word",
-            editors: this.props.userId
+            editors: this.props.userId + this.state.sheetEditors
         })
         this.props.getDocs()
         this.setState({
@@ -97,12 +105,6 @@ class Home extends Component {
    
 
     handleSheet() {
-        // let huge = '[["White","Canary","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["is so much","better than","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["Black","Canary","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","a","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","asdfsadf","","asdfsdf","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]]'
-        // let hugeStyle='[[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}]]'
-        
-        // let singleStyle = '[{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""}]'
-        // let hugeStyle = '['+singleStyle+','+singleStyle+','+singleStyle+','+singleStyle+','+singleStyle+','+singleStyle+','+singleStyle+','+singleStyle+','+singleStyle+','+singleStyle+','+']'
-        
         axios.post('/jsheets', {
             title: "untitled document",
             creator: this.props.userId,
@@ -116,40 +118,60 @@ class Home extends Component {
             sheetModal: true
         })
     }
+
     handleSheetTitle(e){
         this.setState({
             sheetTitle: e.target.value
         })
     }
+
+    handleSheetEditors(e){
+        let emails = e.target.value.split(', ');
+        console.log(emails);
+        this.setState({
+            sheetEditors: e.target.value
+        })
+    }
+
     handleTitleUpdate(){
         axios.post('/jsheet-title',{
             title: this.state.sheetTitle
         })
     }
-
-    handleDocTitle(e){
-        this.setState({
-            docTitle: e.target.value
-        })
+    handleEditorsUpdate(email){
+        console.log(email)
+        let validEmail = false;
+        let usersCopy = this.state.users.slice();
+        for (let i=0;i<usersCopy.length;i++){
+            if (usersCopy[i].email === email){
+                validEmail = true;
+                let newEditors = this.state.docEditors 
+                let thisEditor = newEditors.concat(',' + usersCopy[i].id)
+                this.setState({docEditors:thisEditor})
+            }
+        }
+        if (!validEmail)alert("Please enter a valid user email")
     }
+
     handleDocUpdate(){
         let findQuillId = this.props.documents.filter((e) =>{
             if(e.doctype === 'word'){
                 return e
             } return null
         })
-        
         let qId = findQuillId[findQuillId.length -1]
         let idQuill = qId ? qId.id : 'hahahaha'
+        let tempTitle = this.state.docTitle?this.state.docTitle:'untitled document'
+        let tempEditors = this.state.docEditors? this.state.userId + this.state.docEditors : this.props.userId.toString()
+        console.log(tempEditors)
+        
         axios.post('/quillTitle',{
-            title: this.state.docTitle,
+            title: tempTitle,
+            editors: tempEditors,
             id: idQuill
         })
-        this.setState({
-            goToDoc: false
-        })
-    }
 
+    }
 
     handleUppercase(title){
         title=title.split(' ')
@@ -163,17 +185,13 @@ class Home extends Component {
         let newTitle = words.join(' ')
         return newTitle
     }
-    // handleCancel(){
-    //     this.setState({docModal:false})
-    // }
-
 
 
 
 
 
     render() {
-        console.log(this.props.documents, 'refresh')
+        console.log(this.state.docEditors)
         let findId = this.props.documents.filter((e)=>{
             if(e.doctype === 'excel'){
                 return e.id
@@ -181,14 +199,10 @@ class Home extends Component {
         })
         let theId = findId[findId.length-1]
         let idDoc = theId ? theId.id : 'hahah'
-        console.log(idDoc)
-
         let newSheetLink = '/sheets/'+ idDoc
-        console.log(newSheetLink)
 
+        // SPREADSHEET MODAL
 
-        // let newSheet = this.state.sheetModal ? <div className="pop-out"><h1>Title The Sheet</h1><br/><input value={this.state.sheetTitle} onChange={this.handleSheetTitle} placeholder="test"></input><Link to={newSheetLink}><button>Submit</button></Link></div>: 
-        // <Paper className="doc-box" zDepth={2} rounded={false} onClick={this.handleSheet}>New Sheet</Paper>
         let newSheet = this.state.sheetModal ? 
             <div className="pop-out">
                 <h1>
@@ -211,8 +225,6 @@ class Home extends Component {
         </Paper>
 
 
-        console.log(this.state.sheetTitle)
-
         let findQuillId = this.props.documents.filter((e) =>{
             if(e.doctype === 'word'){
                 return e
@@ -221,67 +233,99 @@ class Home extends Component {
         
         let qId = findQuillId[findQuillId.length -1]
         let idQuill = qId ? qId.id : 'hahahaha'
-        console.log(idQuill)
+        // console.log(idQuill)
 
         let newDocLink = '/quill/'+ idQuill
-
-        let goToQuill = this.state.goToDoc ? 
-        <div className="pop-out">
-            <h1>
-                New Spreadsheet
-            </h1>
-            <br/>
-            <input value={this.state.sheetTitle} onChange={this.handleSheetTitle} placeholder="Title">
-            </input>
-            <div className='new-buttons'>
-                <Link to={newDocLink} className='submit'>
-                    Submit
-                </Link>
-                <Link to={newDocLink} className='skip'>
-                    Skip
-                </Link>
-            </div>
-            {/* <div className='cancel' onClick={()=>this.handleCancel()}>
-                <CancelIcon style={{color:'#222', height:'20px',width:'20px', position:'absolute',right:'10px',top:'10px' }}/> 
-            </div> */}
-
-
-        </div> : null;
-        let newQuill = this.state.docModal ? goToQuill:
-        <Paper className="doc-box" style={{position:'relative'}} zDepth={2} rounded={false} onClick={this.handleQuill}>
-            <DocIcon style={{color:'#5276d0', margin:'0px 4px 0px -2px'}} id='doc-icon'/>
-            New Quill
-            <AddIcon style={{color:'#222', height:'100px',width:'100px', position:'absolute',left:'25px',top:'50px' }}/>
-        </Paper>
         
 
 
+        
 
+        const knownEmails = [
+            'cwmurphy7@gmail.com',
+            'rustonreformado@gmail.com',
+            'coldfusion22@gmail.com',
+            'canderson0289@gmail.com'
+        ];
 
+        let quillRedirect = ()=>{
+            let findQuillId = this.props.documents.filter((e) =>{
+                if(e.doctype === 'word'){
+                    return e
+                } return null
+            })
+            
+            let qId = findQuillId[findQuillId.length -1]
+            let idQuill = qId ? qId.id : 'hahahaha'
+            let newDocLink = '/quill/'+ idQuill
+            return <Redirect to={newDocLink}/>;
+        }
+
+        // QUILL MODAL
+
+        let goToQuill = this.state.goToDoc ? 
+        <div className="pop-out">
+            <p>
+                New Document
+            </p>
+            <br/>
+            
+            <div className='share-dropdown-container'>
+            <div>
+                <TextField
+                hintText="Title"
+                value={this.state.docTitle}
+                onChange={(event,newVal) =>{ this.setState({docTitle: newVal})}}
+                style={{marginBottom:'-8px'}}
+                />
+            </div>
+            <div>
+                <AutoComplete
+                onNewRequest={(chosenRequest)=>this.handleEditorsUpdate(chosenRequest)}
+                floatingLabelText="Add editors"
+                filter={AutoComplete.caseInsensitiveFilter}
+                dataSource={knownEmails}
+                />
+            </div>
+          </div>
+            <div className='new-buttons'>
+                <Link to={newDocLink} className='submit' onClick={()=>this.handleDocUpdate()}>
+                <RaisedButton
+                    label="Submit"
+                    labelPosition="before"
+                    containerElement="label"
+                />
+                </Link>
+                <Link to={newDocLink} className='skip'>
+                    <RaisedButton
+                        label="Skip"
+                        labelPosition="before"
+                        containerElement="label"
+                    />
+                </Link>
+            </div>
+        </div> : null;
+
+        let newQuill = this.state.docModal ? 
+            goToQuill:
+            <Paper className="doc-box" style={{position:'relative'}} zDepth={2} rounded={false} onClick={this.handleQuill}>
+                <DocIcon style={{color:'#5276d0', margin:'0px 4px 0px -2px'}} id='doc-icon'/>
+                New Doc
+                <AddIcon style={{color:'#222', height:'100px',width:'100px', position:'absolute',left:'25px',top:'50px' }}/>
+            </Paper>
+
+        // FILTER DOCUMENTS TO ONLY RETURN DOCS WITH LOGGED IN USER AS CREATOR OR EDITOR
 
         let filteredDoc = this.props.documents ? this.props.documents.filter((e) => {
-            // console.log(e.editors.split(',').includes(this.props.userId.toString()))
-            console.log(this.props.userId)
             if (e.creator === this.props.userId || e.editors.split(',').includes(this.props.userId.toString()) ) {
                 return e
             }
             return null
 
         }) : null
-        console.log(filteredDoc)
-        // let myDocs = filteredDoc ? filteredDoc.map((c, i) => {
-        //     let quillLink = `/quill/${c.id}`;william
 
-        //     let sheetLink = `/sheets/${c.id}`;
-        //     let docStyle = c.doctype === 'word' ? "2px solid #90CAF9" : "2px solid #A5D6A7"
-        //     let docLink = c.doctype === 'word' ?
-        //         <Link to={quillLink}> <Paper className="doc-box" style={{ border: docStyle }} zDepth={2} key={i} rounded={false}> {c.title} {c.id}</Paper></Link> :
-        //         <Link to={sheetLink}> <Paper className="doc-box" style={{ border: docStyle }} zDepth={2} key={i} rounded={false}>{c.title} {c.id}</Paper></Link>
+        // DOCUMENTS GRID
 
-        //     return (docLink)
-
-
-        // }) : null
         let myDocs = filteredDoc ? filteredDoc.map((c, i) => {
             let quillLink = `/quill/${c.id}`;
             
@@ -304,12 +348,10 @@ class Home extends Component {
                 </Link>
 
             return (docLink)
-
-
         }) : null
+
         let loader = this.props.loading ? <div className="loader"> <i className="fa fa-spinner fa-pulse fa-5x fa-fw"></i></div> : myDocs
 
-        console.log(this.props.loading)
         let style = {
             height: 100,
             width: 100,
@@ -318,9 +360,6 @@ class Home extends Component {
             display: 'inline-block',
             padding: 20
         };
-
-
-
 
         let filteredDocByType = filteredDoc ? filteredDoc.filter((e) => {
             if (e.doctype === "word" ) {
@@ -340,9 +379,9 @@ class Home extends Component {
                         </span>
                     </div>
                 </Link> :
-                <h1> No word Documents</h1>
+                <h1> No Word Documents</h1>
             return (wordLink)
-        }) : <h1> No word Documents</h1>
+        }) : <h1> No Word Documents</h1>
 
 
         let filteredDocByTypeExcel = filteredDoc ? filteredDoc.filter((e) => {
@@ -366,10 +405,8 @@ class Home extends Component {
             :<h1> No excel Documents</h1>
             return (excelLink)
         }) : <h1> No excel Documents</h1>
-        console.log(filteredDocByTypeExcel)
-
-        console.log(this.props.userId, 'should be Charlie')
-
+        
+        console.log(this.state.docTitle)
         return (
             <MuiThemeProvider>
                 
@@ -380,49 +417,34 @@ class Home extends Component {
                         <div className="new-doc">
                            {newQuill}
                            {newSheet}
-
                         </div>
-
                     </div>
                     <Tabs>
                         <Tab label="All Documents" style={{background: '#2979FF'}}>
                             <div className="recent-doc">
                                 <p>Recent Documents</p>
-
                                 <div className='my-docs'>
-
                                     {loader}
                                 </div>
-
-
                             </div>
                         </Tab>
                         <Tab label="Word Documents" style={{background: '#2979FF'}}>
                             <div className="recent-doc">
                                 <p> Word Documents</p>
-
                                 <div className="my-docs">
                                     {wordDocs}
                                 </div>
-
                             </div>
-
                         </Tab>
-
                         <Tab label="ExcelDocs" style={{background: '#2979FF'}}>
                             <div className="recent-doc">
                                 <p> Excel Documents</p>
-
                                 <div className="my-docs">
                                     {excelDocs}
                                     </div>
-
                             </div>
-
                         </Tab>
-
                     </Tabs>
-
                 </div>
             </MuiThemeProvider>
         )
