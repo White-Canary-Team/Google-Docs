@@ -301,6 +301,8 @@ class Sheets extends Component {
       this.setState({styles: tempStyles, latestBg:value})
       socket.emit('dataOut', {table: this.state.table, id: this.props.match.params.id, styles: this.state.styles})
       axios.put('/save-sheet', {table: this.state.table, styles: this.state.styles, id: this.props.match.params.id})
+
+      console.log(this.state.latestBg)
     }
     
   }
