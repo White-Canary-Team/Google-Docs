@@ -9,6 +9,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import SheetIcon from 'material-ui/svg-icons/action/view-list';
 import DocIcon from 'material-ui/svg-icons/action/subject';
+import AddIcon from 'material-ui/svg-icons/content/add';
+import CancelIcon from 'material-ui/svg-icons/navigation/cancel';
 
 
 
@@ -36,6 +38,7 @@ class Home extends Component {
         this.handleDocTitle = this.handleDocTitle.bind(this)
         this.handleDocUpdate = this.handleDocUpdate.bind(this)
         this.handleUppercase = this .handleUppercase.bind(this)
+        // this.handleCancel = this .handleCancel.bind(this)
         
     }
     componentWillMount() {
@@ -94,12 +97,19 @@ class Home extends Component {
    
 
     handleSheet() {
+        // let huge = '[["White","Canary","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["is so much","better than","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["Black","Canary","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","a","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","asdfsadf","","asdfsdf","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]]'
+        // let hugeStyle='[[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}]]'
+        
+        // let singleStyle = '[{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""},{"bg":"bg-white","color":"black","font":"arial","fs":"ten-point","bold":"","italic":""}]'
+        // let hugeStyle = '['+singleStyle+','+singleStyle+','+singleStyle+','+singleStyle+','+singleStyle+','+singleStyle+','+singleStyle+','+singleStyle+','+singleStyle+','+singleStyle+','+']'
+        
         axios.post('/jsheets', {
             title: "untitled document",
             creator: this.props.userId,
             doctype: "excel",
-            body: '[[placeholder]]',
-            styles: '[[black]]'
+            body: '',
+            styles: '',
+            editors:this.props.userId,
         })
         this.props.getDocs()
         this.setState({
@@ -153,6 +163,9 @@ class Home extends Component {
         let newTitle = words.join(' ')
         return newTitle
     }
+    // handleCancel(){
+    //     this.setState({docModal:false})
+    // }
 
 
 
@@ -167,7 +180,7 @@ class Home extends Component {
             } return null
         })
         let theId = findId[findId.length-1]
-        let idDoc = theId ? theId.id + 1 : 'hahah'
+        let idDoc = theId ? theId.id : 'hahah'
         console.log(idDoc)
 
         let newSheetLink = '/sheets/'+ idDoc
@@ -176,8 +189,26 @@ class Home extends Component {
 
         // let newSheet = this.state.sheetModal ? <div className="pop-out"><h1>Title The Sheet</h1><br/><input value={this.state.sheetTitle} onChange={this.handleSheetTitle} placeholder="test"></input><Link to={newSheetLink}><button>Submit</button></Link></div>: 
         // <Paper className="doc-box" zDepth={2} rounded={false} onClick={this.handleSheet}>New Sheet</Paper>
-        let newSheet = this.state.sheetModal ? <div className="pop-out"><h1>Title The Sheet</h1><br/><input value={this.state.sheetTitle} onChange={this.handleSheetTitle} placeholder="test"></input><Link to={newSheetLink}><button>Submit</button></Link></div>: 
-        <Paper className="doc-box" zDepth={2} rounded={false} onClick={this.handleSheet}>New Sheet</Paper>
+        let newSheet = this.state.sheetModal ? 
+            <div className="pop-out">
+                <h1>
+                    New Spreadsheet
+                </h1>
+                <br/>
+                <input value={this.state.sheetTitle} onChange={this.handleSheetTitle} placeholder="Title">
+                </input>
+                <Link to={newSheetLink} className='submit'>
+                    Submit
+                </Link>
+                <Link to={newSheetLink} className='skip'>
+                    Skip
+                </Link>
+            </div>: 
+        <Paper className="doc-box" style={{position:'relative'}} zDepth={2} rounded={false} onClick={this.handleSheet}>
+            <SheetIcon style={{color:'#31884a', margin:'0px 4px 0px -2px'}} id='doc-icon'/>
+            New Sheet
+            <AddIcon style={{color:'#222', height:'100px',width:'100px', position:'absolute',left:'25px',top:'50px' }}/>
+        </Paper>
 
 
         console.log(this.state.sheetTitle)
@@ -194,9 +225,34 @@ class Home extends Component {
 
         let newDocLink = '/quill/'+ idQuill
 
-        let goToQuill = this.state.goToDoc ? <div className="pop-out"><h1>Title The Sheet</h1><br/><input value={this.state.docTitle} onChange={this.handleDocTitle} placeholder="test"></input><button onClick={this.handleDocUpdate}>Submit</button></div>: <div className="pop-out"><Link to={newDocLink}><h1>HahA</h1></Link></div>
+        let goToQuill = this.state.goToDoc ? 
+        <div className="pop-out">
+            <h1>
+                New Spreadsheet
+            </h1>
+            <br/>
+            <input value={this.state.sheetTitle} onChange={this.handleSheetTitle} placeholder="Title">
+            </input>
+            <div className='new-buttons'>
+                <Link to={newDocLink} className='submit'>
+                    Submit
+                </Link>
+                <Link to={newDocLink} className='skip'>
+                    Skip
+                </Link>
+            </div>
+            {/* <div className='cancel' onClick={()=>this.handleCancel()}>
+                <CancelIcon style={{color:'#222', height:'20px',width:'20px', position:'absolute',right:'10px',top:'10px' }}/> 
+            </div> */}
+
+
+        </div> : null;
         let newQuill = this.state.docModal ? goToQuill:
-        <Paper className="doc-box" zDepth={2} rounded={false} onClick={this.handleQuill}>New Quill</Paper>
+        <Paper className="doc-box" style={{position:'relative'}} zDepth={2} rounded={false} onClick={this.handleQuill}>
+            <DocIcon style={{color:'#5276d0', margin:'0px 4px 0px -2px'}} id='doc-icon'/>
+            New Quill
+            <AddIcon style={{color:'#222', height:'100px',width:'100px', position:'absolute',left:'25px',top:'50px' }}/>
+        </Paper>
         
 
 
@@ -234,15 +290,15 @@ class Home extends Component {
             let docLink = c.doctype === 'word' ?
                 <Link to={quillLink}> 
                     <div className="doc-box " style={{ border: docStyle }} key={i}> 
-                        <DocIcon style={{color:'#5276d0', marginRight:'4px'}}/>
-                        <span>{`${this.handleUppercase(c.title)} ${c.id}`}
+                        <DocIcon style={{color:'#5276d0', margin:'0px 4px 0px -2px'}} id='doc-icon'/>
+                        <span>{`${this.handleUppercase(c.title)} ${c.title==='untitled document'?c.id:''}`}
                         </span>
                     </div>
                 </Link> :
                 <Link to={sheetLink}> 
                     <div className="doc-box" style={{ border: docStyle }} key={i}>
                         <SheetIcon style={{color:'#31884a', marginRight:'4px', height:'20px'}}/>  
-                        <span>{`${this.handleUppercase(c.title)} ${c.id}`}
+                        <span>{`${this.handleUppercase(c.title)} ${c.title==='untitled document'?c.id:''}`}
                         </span>
                     </div>
                 </Link>
@@ -277,7 +333,13 @@ class Home extends Component {
             let quillLink = `/quill/${c.id}`;
             let docStyle = c.doctype === 'word' ? "2px solid #90CAF9" : "2px solid #A5D6A7"
             let wordLink = c.doctype === 'word' ?
-                <Link to={quillLink}> <Paper className="doc-box" style={{ border: docStyle, marginBottom: '30px' }} zDepth={2} key={i} rounded={false}> {c.title} {c.id}</Paper></Link> :
+                <Link to={quillLink}> 
+                    <div className="doc-box " style={{ border: docStyle }} key={i}> 
+                        <DocIcon style={{color:'#5276d0', margin:'0px 4px 0px -2px'}} id='doc-icon'/>
+                        <span>{`${this.handleUppercase(c.title)} ${c.title==='untitled document'?c.id:''}`}
+                        </span>
+                    </div>
+                </Link> :
                 <h1> No word Documents</h1>
             return (wordLink)
         }) : <h1> No word Documents</h1>
@@ -294,7 +356,14 @@ class Home extends Component {
             let sheetLink = `/sheets/${c.id}`;
             let docStyle = c.doctype === 'excel' ? "2px solid #A5D6A7": null
             let excelLink = c.doctype === 'excel' ?
-                <Link to={sheetLink}> <Paper className="doc-box" style={{ border: docStyle, marginBottom: '30px' }} zDepth={2} key={i} rounded={false}> {c.title} {c.id}</Paper></Link> :null
+            <Link to={sheetLink}> 
+                <div className="doc-box" style={{ border: docStyle }} key={i}>
+                    <SheetIcon style={{color:'#31884a', marginRight:'4px', height:'20px'}}/>  
+                    <span>{`${this.handleUppercase(c.title)} ${c.title==='untitled document'?c.id:''}`}
+                    </span>
+                </div>
+            </Link>    
+            :<h1> No excel Documents</h1>
             return (excelLink)
         }) : <h1> No excel Documents</h1>
         console.log(filteredDocByTypeExcel)
