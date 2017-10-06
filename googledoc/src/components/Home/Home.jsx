@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { emailAdd, getID, getDocs } from './../../ducks/reducer.js'
 import Header from './../Header/Header.jsx'
 import { Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import Paper from 'material-ui/Paper'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Tabs, Tab } from 'material-ui/Tabs';
@@ -11,6 +12,9 @@ import SheetIcon from 'material-ui/svg-icons/action/view-list';
 import DocIcon from 'material-ui/svg-icons/action/subject';
 import AddIcon from 'material-ui/svg-icons/content/add';
 import CancelIcon from 'material-ui/svg-icons/navigation/cancel';
+import AutoComplete from 'material-ui/AutoComplete'
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
 
 
 
@@ -28,13 +32,16 @@ class Home extends Component {
             refresh : true,
             sheetModal: false,
             sheetTitle: '',
+            sheetEditors: '',
             docModal: false,
             docTitle: '',
             goToDoc:true,
+            redirect: false,
         }
         this.handleQuill = this.handleQuill.bind(this)
         this.handleSheet = this.handleSheet.bind(this)
         this.handleSheetTitle = this.handleSheetTitle.bind(this)
+        this.handleSheetEditors = this.handleSheetEditors.bind(this)
         this.handleDocTitle = this.handleDocTitle.bind(this)
         this.handleDocUpdate = this.handleDocUpdate.bind(this)
         this.handleUppercase = this .handleUppercase.bind(this)
@@ -82,12 +89,12 @@ class Home extends Component {
     
     //DIFFERENT FROM ALEX'S!!!!!!!!!!!!!
     handleQuill() {
-        console.log(this.props.userId)
+        // console.log(this.props.userId)
         axios.post('/quill', {
             title: "untitled document",
             creator: this.props.userId,
             doctype: "word",
-            editors: this.props.userId
+            editors: this.props.userId + this.state.sheetEditors
         })
         this.props.getDocs()
         this.setState({
@@ -121,6 +128,13 @@ class Home extends Component {
             sheetTitle: e.target.value
         })
     }
+    handleSheetEditors(e){
+        let emails = e.target.value.split(', ');
+        console.log(emails);
+        this.setState({
+            sheetEditors: e.target.value
+        })
+    }
     handleTitleUpdate(){
         axios.post('/jsheet-title',{
             title: this.state.sheetTitle
@@ -148,6 +162,20 @@ class Home extends Component {
         this.setState({
             goToDoc: false
         })
+
+
+        // let findQuillId = this.props.documents.filter((e) =>{
+        //     if(e.doctype === 'word'){
+        //         return e
+        //     } return null
+        // })
+        
+        // let qId = findQuillId[findQuillId.length -1]
+        // let idQuill = qId ? qId.id : 'hahahaha'
+        let newDocLink = '/quill/'+ idQuill
+        //if (this.state.redirect) {
+        return <Redirect to={newDocLink}/>;
+        //}
     }
 
 
@@ -173,7 +201,7 @@ class Home extends Component {
 
 
     render() {
-        console.log(this.props.documents, 'refresh')
+        // console.log(this.props.documents, 'refresh')
         let findId = this.props.documents.filter((e)=>{
             if(e.doctype === 'excel'){
                 return e.id
@@ -181,10 +209,10 @@ class Home extends Component {
         })
         let theId = findId[findId.length-1]
         let idDoc = theId ? theId.id : 'hahah'
-        console.log(idDoc)
+        // console.log(idDoc)
 
         let newSheetLink = '/sheets/'+ idDoc
-        console.log(newSheetLink)
+        // console.log(newSheetLink)
 
 
         // let newSheet = this.state.sheetModal ? <div className="pop-out"><h1>Title The Sheet</h1><br/><input value={this.state.sheetTitle} onChange={this.handleSheetTitle} placeholder="test"></input><Link to={newSheetLink}><button>Submit</button></Link></div>: 
@@ -211,7 +239,7 @@ class Home extends Component {
         </Paper>
 
 
-        console.log(this.state.sheetTitle)
+        // console.log(this.state.sheetTitle)
 
         let findQuillId = this.props.documents.filter((e) =>{
             if(e.doctype === 'word'){
@@ -221,24 +249,58 @@ class Home extends Component {
         
         let qId = findQuillId[findQuillId.length -1]
         let idQuill = qId ? qId.id : 'hahahaha'
-        console.log(idQuill)
+        // console.log(idQuill)
 
         let newDocLink = '/quill/'+ idQuill
 
+        const knownEmails = [
+            'cwmurphy7@gmail.com',
+            'rustonreformado@gmail.com',
+          ];
+
         let goToQuill = this.state.goToDoc ? 
         <div className="pop-out">
-            <h1>
-                New Spreadsheet
-            </h1>
+            <p>
+                New Document
+            </p>
             <br/>
-            <input value={this.state.sheetTitle} onChange={this.handleSheetTitle} placeholder="Title">
-            </input>
+            
+            <div className='share-dropdown-container'>
+            <div>
+                <TextField
+                hintText="Title"
+                value={this.state.docTitle}
+                //onChange={(e)=>this.handleDocTitle(e)}
+                onChange={(event,newVal) =>{ this.setState({docTitle: newVal})}}
+                onNewRequest={(value)=>this.handleDocTitle(value)}
+                style={{marginBottom:'-8px'}}
+                />
+            </div>
+            <div>
+                <AutoComplete
+                /* value={this.state.sheetEditors} */
+                onNewRequest={(chosenRequest)=>this.handleSheetEditors(chosenRequest)}
+                floatingLabelText="Add editors"
+                filter={AutoComplete.caseInsensitiveFilter}
+                dataSource={knownEmails}
+                />
+            </div>
+          </div>
             <div className='new-buttons'>
-                <Link to={newDocLink} className='submit'>
-                    Submit
-                </Link>
+                {/* <Link to={newDocLink} className='submit'> */}
+                    <RaisedButton
+                        onClick={()=>this.handleDocUpdate()}
+                        label="Submit"
+                        labelPosition="before"
+                        containerElement="label"
+                    />
+                {/* </Link> */}
                 <Link to={newDocLink} className='skip'>
-                    Skip
+                    <RaisedButton
+                        label="Skip"
+                        labelPosition="before"
+                        containerElement="label"
+                    />
                 </Link>
             </div>
             {/* <div className='cancel' onClick={()=>this.handleCancel()}>
@@ -260,15 +322,15 @@ class Home extends Component {
 
 
         let filteredDoc = this.props.documents ? this.props.documents.filter((e) => {
-            console.log(e.editors.split(',').includes(this.props.userId.toString()))
-            console.log(this.props.userId)
+            // console.log(e.editors.split(',').includes(this.props.userId.toString()))
+            // console.log(this.props.userId)
             if (e.creator === this.props.userId || e.editors.split(',').includes(this.props.userId.toString()) ) {
                 return e
             }
             return null
 
         }) : null
-        console.log(filteredDoc)
+        // console.log(filteredDoc)
         // let myDocs = filteredDoc ? filteredDoc.map((c, i) => {
         //     let quillLink = `/quill/${c.id}`;william
 
@@ -309,7 +371,7 @@ class Home extends Component {
         }) : null
         let loader = this.props.loading ? <div className="loader"> <i className="fa fa-spinner fa-pulse fa-5x fa-fw"></i></div> : myDocs
 
-        console.log(this.props.loading)
+        // console.log(this.props.loading)
         let style = {
             height: 100,
             width: 100,
@@ -366,10 +428,10 @@ class Home extends Component {
             :<h1> No excel Documents</h1>
             return (excelLink)
         }) : <h1> No excel Documents</h1>
-        console.log(filteredDocByTypeExcel)
+        // console.log(filteredDocByTypeExcel)
 
-        console.log(this.props.userId, 'should be Charlie')
-
+        // console.log(this.props.userId, 'should be Charlie')
+        console.log(this.state.docTitle)
         return (
             <MuiThemeProvider>
                 

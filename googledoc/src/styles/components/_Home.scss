@@ -14,12 +14,12 @@
     .pop-out{
         position: absolute;
         top: 30px;
-        left: calc(50% - 110px);
+        left: calc(50% - 200px);
         z-index:5;
         margin: auto;
         padding: 20px;
-        height:150px;
-        width: 220px;
+        height:250px;
+        width: 400px;
         border-radius: 2px;
         background: whitesmoke;
         color: #222;
@@ -30,6 +30,10 @@
         justify-content: space-around;
 
         transition: all 5s ease-in-out;
+        p{
+            font-size: 22px;
+            color: #222;
+        }
         .new-buttons{
             
             width: 100%;
