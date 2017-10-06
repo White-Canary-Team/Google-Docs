@@ -124,6 +124,12 @@ app.post('/jsheets', (req, res) => {
         res.status(200).send(console.log('We did it"'))
     })
 })
+app.post('/sheetsTitle', (req,res) =>{
+    const {title,editors,id} = req.body
+    req.app.get('db').sheetsTitle([title,editors,id]).then(response =>{
+        res.status(200).send(console.log("I added a sheets title"))
+    })
+})
 
 app.put('/update-username', (req, res) => {
     const { id, username } = req.body

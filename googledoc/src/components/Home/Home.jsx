@@ -38,12 +38,14 @@ class Home extends Component {
             docTitle: '',
             docEditors: '',
             goToDoc:true,
+            goToSheet: true,
             // redirect: false,
         }
         this.handleQuill = this.handleQuill.bind(this)
         this.handleSheet = this.handleSheet.bind(this)
-        this.handleSheetTitle = this.handleSheetTitle.bind(this)
+        // this.handleSheetTitle = this.handleSheetTitle.bind(this)
         this.handleSheetEditors = this.handleSheetEditors.bind(this)
+        this.handleSheetsUpdate = this.handleSheetsUpdate.bind(this)
         this.handleDocUpdate = this.handleDocUpdate.bind(this)
         this.handleEditorsUpdate = this .handleEditorsUpdate.bind(this)
         this.handleUppercase = this .handleUppercase.bind(this)
@@ -119,25 +121,56 @@ class Home extends Component {
         })
     }
 
-    handleSheetTitle(e){
-        this.setState({
-            sheetTitle: e.target.value
+    // handleSheetTitle(e){
+    //     this.setState({
+    //         sheetTitle: e.target.value
+    //     })
+    // }
+
+    handleSheetEditors(email){
+        // let emails = e.target.value.split(', ');
+        // console.log(emails);
+        // this.setState({
+        //     sheetEditors: e.target.value
+        // })
+        console.log(email)
+        let validEmail = false;
+        let usersCopy = this.state.users.slice();
+        for (let i=0;i<usersCopy.length;i++){
+            if (usersCopy[i].email === email){
+                validEmail = true;
+                let newEditors = this.state.sheetEditors 
+                let thisEditor = newEditors.concat(',' + usersCopy[i].id)
+                this.setState({sheetEditors:thisEditor})
+            }
+        }
+        if (!validEmail)alert("Please enter a valid user email")
+    }
+    handleSheetsUpdate(){
+        let findSheetsId = this.props.documents.filter((e) =>{
+            if(e.doctype === 'excel'){
+                return e
+            } return null
         })
+        let sheetId = findSheetsId[findSheetsId.length -1]
+        let idSheet = sheetId ? sheetId.id : 'hahahaha'
+        let tempTitle = this.state.sheetTitle?this.state.sheetTitle:'untitled spreadsheet'
+        let tempEditors = this.state.sheetEditors? this.state.userId + this.state.sheetEditors : this.props.userId.toString()
+        console.log(tempEditors)
+        
+        axios.post('/sheetsTitle',{
+            title: tempTitle,
+            editors: tempEditors,
+            id: idSheet
+        })
+
     }
 
-    handleSheetEditors(e){
-        let emails = e.target.value.split(', ');
-        console.log(emails);
-        this.setState({
-            sheetEditors: e.target.value
-        })
-    }
-
-    handleTitleUpdate(){
-        axios.post('/jsheet-title',{
-            title: this.state.sheetTitle
-        })
-    }
+    // handleTitleUpdate(){
+    //     axios.post('/jsheet-title',{
+    //         title: this.state.sheetTitle
+    //     })
+    // }
     handleEditorsUpdate(email){
         console.log(email)
         let validEmail = false;
@@ -191,38 +224,70 @@ class Home extends Component {
 
 
     render() {
-        console.log(this.state.docEditors)
-        let findId = this.props.documents.filter((e)=>{
+        const knownEmails = [
+            'cwmurphy7@gmail.com',
+            'rustonreformado@gmail.com',
+            'coldfusion22@gmail.com',
+            'canderson0289@gmail.com'
+        ];
+
+
+        console.log(this.state.sheetTitle)
+
+        let findSheetId = this.props.documents.filter((e)=>{
             if(e.doctype === 'excel'){
                 return e.id
             } return null
         })
-        let theId = findId[findId.length-1]
-        let idDoc = theId ? theId.id : 'hahah'
-        let newSheetLink = '/sheets/'+ idDoc
+        let theId = findSheetId[findSheetId.length-1]
+        let idSheet = theId ? theId.id : 'hahah'
+        let newSheetLink = '/sheets/'+ idSheet
 
         // SPREADSHEET MODAL
 
-        let newSheet = this.state.sheetModal ? 
-            <div className="pop-out">
-                <h1>
-                    New Spreadsheet
-                </h1>
-                <br/>
-                <input value={this.state.sheetTitle} onChange={this.handleSheetTitle} placeholder="Title">
-                </input>
-                <Link to={newSheetLink} className='submit'>
-                    Submit
+        let goToSheet = this.state.goToSheet ? 
+        <div className="pop-out">
+            <p>
+                New SpreadSheet
+            </p>
+            <br/>
+            
+            <div className='share-dropdown-container'>
+            <div>
+                <TextField
+                hintText="Title"
+                value={this.state.sheetTitle}
+                onChange={(event,newVal) =>{ this.setState({sheetTitle: newVal})}}
+                style={{marginBottom:'-8px'}}
+                />
+            </div>
+            <div>
+                <AutoComplete
+                onNewRequest={(chosenRequest)=>this.handleSheetEditors(chosenRequest)}
+                floatingLabelText="Add editors"
+                filter={AutoComplete.caseInsensitiveFilter}
+                dataSource={knownEmails}
+                />
+            </div>
+          </div>
+            <div className='new-buttons'>
+                <Link to={newSheetLink} className='submit' onClick={()=>this.handleSheetsUpdate()}>
+                <RaisedButton
+                    label="Submit"
+                    labelPosition="before"
+                    containerElement="label"
+                />
                 </Link>
-                <Link to={newSheetLink} className='skip'>
-                    Skip
-                </Link>
-            </div>: 
-        <Paper className="doc-box" style={{position:'relative'}} zDepth={2} rounded={false} onClick={this.handleSheet}>
-            <SheetIcon style={{color:'#31884a', margin:'0px 4px 0px -2px'}} id='doc-icon'/>
-            New Sheet
-            <AddIcon style={{color:'#222', height:'100px',width:'100px', position:'absolute',left:'25px',top:'50px' }}/>
-        </Paper>
+            </div>
+        </div> : null;
+            
+        let newSheet = this.state.sheetModal?
+            goToSheet:
+            <Paper className="doc-box" style={{position:'relative'}} zDepth={2} rounded={false} onClick={this.handleSheet}>
+                <SheetIcon style={{color:'#31884a', margin:'0px 4px 0px -2px'}} id='doc-icon'/>
+                New Sheet
+                <AddIcon style={{color:'#222', height:'100px',width:'100px', position:'absolute',left:'25px',top:'50px' }}/>
+            </Paper>
 
 
         let findQuillId = this.props.documents.filter((e) =>{
@@ -233,33 +298,7 @@ class Home extends Component {
         
         let qId = findQuillId[findQuillId.length -1]
         let idQuill = qId ? qId.id : 'hahahaha'
-        // console.log(idQuill)
-
         let newDocLink = '/quill/'+ idQuill
-        
-
-
-        
-
-        const knownEmails = [
-            'cwmurphy7@gmail.com',
-            'rustonreformado@gmail.com',
-            'coldfusion22@gmail.com',
-            'canderson0289@gmail.com'
-        ];
-
-        let quillRedirect = ()=>{
-            let findQuillId = this.props.documents.filter((e) =>{
-                if(e.doctype === 'word'){
-                    return e
-                } return null
-            })
-            
-            let qId = findQuillId[findQuillId.length -1]
-            let idQuill = qId ? qId.id : 'hahahaha'
-            let newDocLink = '/quill/'+ idQuill
-            return <Redirect to={newDocLink}/>;
-        }
 
         // QUILL MODAL
 
