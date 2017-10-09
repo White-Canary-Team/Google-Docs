@@ -113,15 +113,21 @@ app.post('/quill', (req, res) => {
     })
 })
 app.post('/quillTitle', (req,res) =>{
-    const {title,id} = req.body
-    req.app.get('db').quillTitle([title,id]).then(response =>{
+    const {title,editors,id} = req.body
+    req.app.get('db').quillTitle([title,editors,id]).then(response =>{
         res.status(200).send(console.log("I added a quill title"))
     })
 })
 app.post('/jsheets', (req, res) => {
-    const { title, creator, doctype, body, styles } = req.body
-    req.app.get('db').createSheetDoc([title, creator, doctype, body, styles]).then(response => {
+    const { title, creator, doctype, body, styles, editors } = req.body
+    req.app.get('db').createSheetDoc([title, creator, doctype, body, styles, editors]).then(response => {
         res.status(200).send(console.log('We did it"'))
+    })
+})
+app.post('/sheetsTitle', (req,res) =>{
+    const {title,editors,id} = req.body
+    req.app.get('db').sheetsTitle([title,editors,id]).then(response =>{
+        res.status(200).send(console.log("I added a sheets title"))
     })
 })
 
