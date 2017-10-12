@@ -14,7 +14,9 @@ class Editor extends React.Component {
         super(props)
         this.state = {
             text: '',
-            test: ''
+            test: '',
+            title: '',
+            editors: '',
     } 
     this.handleChange = this.handleChange.bind(this)
   }
@@ -24,7 +26,8 @@ class Editor extends React.Component {
     socket =  io('');
 
     axios.get(`/getDocumentById/${this.props.match.params.id}`).then( res => {
-        this.setState({text: res.data[0].body})
+        console.log(res.data[0],'please say this has user id')
+        this.setState({text: res.data[0].body, title:res.data[0].title, editors: res.data[0].editors})
     })
 
     socket.emit('room', { id: this.props.match.params.id})
@@ -54,9 +57,14 @@ componentWillUnmount(){
         axios.put('/save-test', {value: value, id: this.props.match.params.id} )
         
     }, 2000) 
+    console.log(this.props, 'this is this props on quill')
         return (
             <div className="main-wrapper-quill">
-                <QuillHeader />
+                <QuillHeader 
+                    title={this.state.title}
+                    editors={this.state.editors}
+                    id={this.props.match.params.id}
+                />
                 <ReactQuill theme={'snow'} onChange={typing} value={this.state.text} modules={Editor.modules}>
                   <div className="my-editing-area"/>
                 </ReactQuill>

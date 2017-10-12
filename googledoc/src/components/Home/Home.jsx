@@ -66,13 +66,12 @@ class Home extends Component {
             })
         })
         axios.get('/allUsers').then(response => {
-            console.log(response.data[0])
             this.setState({users:response.data})
             if (this.state.emails) {
                 let uid = response.data.filter((e) => {
                     if (e.email === this.state.emails) {
 
-                        return e.id
+                        return e
                     }
                     return null
                 })
@@ -233,6 +232,7 @@ class Home extends Component {
 
 
         console.log(this.state.sheetTitle)
+        console.log(this.props.userId, 'lfjkladsjfasd')
 
         let findSheetId = this.props.documents.filter((e)=>{
             if(e.doctype === 'excel'){
@@ -273,7 +273,7 @@ class Home extends Component {
             <div className='new-buttons'>
                 <Link to={newSheetLink} className='submit' onClick={()=>this.handleSheetsUpdate()}>
                 <RaisedButton
-                    label="Submit"
+                    label={this.state.sheetTitle || this.state.sheetEditors?"Submit":"Skip"}
                     labelPosition="before"
                     containerElement="label"
                 />
@@ -330,17 +330,10 @@ class Home extends Component {
             <div className='new-buttons'>
                 <Link to={newDocLink} className='submit' onClick={()=>this.handleDocUpdate()}>
                 <RaisedButton
-                    label="Submit"
+                    label={this.state.docTitle || this.state.docEditors?"Submit":"Skip"}
                     labelPosition="before"
                     containerElement="label"
                 />
-                </Link>
-                <Link to={newDocLink} className='skip'>
-                    <RaisedButton
-                        label="Skip"
-                        labelPosition="before"
-                        containerElement="label"
-                    />
                 </Link>
             </div>
         </div> : null;
