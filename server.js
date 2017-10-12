@@ -10,9 +10,7 @@ const Auth0Strategy = require('passport-auth0')
 const session = require('express-session')
 const massive = require('massive')
 const path = require('path')
-
 const myIp = 'localhost';
-
 // make sure you import the things apove ^
 const app = express();
 var server = http.createServer(app)
@@ -60,10 +58,8 @@ app.get('/test', (req, res) => { console.log('testing') })
 app.get('/auth', passport.authenticate('auth0'));
 
 app.get('/auth/callback', passport.authenticate('auth0', {
-
     successRedirect: `http://${myIp}:3000/Home`,
     failureRedirect: `http://${myIp}:3000`
-
 }))
 passport.serializeUser(function (user, done) {
     // console.log( "serializing--->" ,user)
