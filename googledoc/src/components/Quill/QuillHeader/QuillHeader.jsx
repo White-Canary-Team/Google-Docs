@@ -247,7 +247,7 @@ class QuillHeader extends Component {
                                 onRequestClose={this.handleEmailRequestClose}
                             >
                                 <Menu 
-                                    style={{ width: 300, height: '10%', background: "pink" }}
+                                    style={{ width: 300, height: '10%', background: "whitesmoke" }}
                                 >
                                     <div className="menu-pic-container">
                                         <img className="pro-pic-dropdown" src={this.props.userPic} style={{ width: '100', height: '100' }} />
@@ -298,7 +298,8 @@ class QuillHeader extends Component {
 function mapStateToProps(state) {
     console.log("state" , state)
     return {
-        email: state.email
+        email: state.email,
+        userPic: state.userPic
     }
   }
   export default connect(mapStateToProps)(QuillHeader)
