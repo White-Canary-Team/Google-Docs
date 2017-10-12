@@ -45,6 +45,8 @@ class Sheets extends Component {
       latestBold: '',
       latestItalic: '',
       latestStrike: '',
+      title: '',
+      editors: ''
     }
     
     this.handleChange = this.handleChange.bind(this)
@@ -66,10 +68,13 @@ class Sheets extends Component {
   //On mount, take fillData info from state and put into a 50x50 matrix, then push this matrix to state as table
   componentDidMount(){
     axios.get(`/getSheetById/${this.props.match.params.id}`).then( response =>{
+      console.log(response.data[0], 'the response in Sheets')
+      this.setState({title:response.data[0].title, editors: response.data[0].editors})
       if(response.data['0'].body && response.data['0'].styles){
         this.setState({ table: JSON.parse(response.data['0'].body), styles: JSON.parse(response.data["0"].styles) })
+        
       }
-
+      console.log(this.state.title, 'this is the new title')
       // this.setState({ table: JSON.parse(response.data['0'].body), styles: JSON.parse(response.data["0"].styles) })
     })
 
@@ -439,7 +444,10 @@ class Sheets extends Component {
     return (
       <MuiThemeProvider>
       <div className='sheets'>
-        <SheetsHeader />
+        <SheetsHeader 
+          title={this.state.title}
+          editors={this.state.editors}
+          id={this.props.match.params.id}/>
         <div className='menu-bar'>
 
           <div className='undo-redo'>
