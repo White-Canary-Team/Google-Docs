@@ -141,6 +141,13 @@ app.post('/quillShare', (req,res) =>{
         res.status(200).send(console.log("I shared a quill document"))
     })
 })
+app.post('/sheetsShare', (req,res) =>{
+    const {editors,id} = req.body
+    console.log(parseInt(req.body.id))
+    req.app.get('db').sheetsShare([editors, parseInt(id)]).then(response =>{
+        res.status(200).send(console.log("I shared a Jsheets document"))
+    })
+})
 app.put('/update-username', (req, res) => {
     const { id, username } = req.body
     req.app.get('db').updateUsername([id, username]).then(response => {

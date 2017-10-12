@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-
+import axios from 'axios';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from './../../Header/Header.jsx'
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import AutoComplete from 'material-ui/AutoComplete';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
@@ -24,10 +25,42 @@ class SheetsHeader extends Component {
         this.state = {
             fileOpen: false,
             editOpen: false,
-            emailOpen: false
+            emailOpen: false,
+            shareOpen: false,
+            allEditors: ['cwmurphy7@gmail.com',
+            'rustonreformado@gmail.com',
+            'coldfusion22@gmail.com',
+            'canderson0289@gmail.com',
+            'big_al_hill@comcast.net'],
+            sheetEditors: '',
         };
+        this.handleUppercase = this.handleUppercase.bind(this)
+        this.handleEditorsUpdate = this.handleEditorsUpdate.bind(this)
     }
+    componentDidMount(){
+        console.log(this.props, 'these are the header props')
+        this.setState({title: this.props.title})
+        axios.get('/allUsers').then(response => {
+            console.log(response.data[0])
+            this.setState({users:response.data})
+            if (this.state.emails) {
+                let uid = response.data.filter((e) => {
+                    if (e.email === this.state.emails) {
 
+                        return e.id
+                    }
+                    return null
+                })
+
+                this.setState({
+                    userId: uid[0].id
+                })
+                this.props.getID(this.state.userId)
+            }
+
+
+        })
+    }
     handleFileTouchTap = (event) => {
         // This prevents ghost click.
         event.preventDefault();
@@ -59,10 +92,57 @@ class SheetsHeader extends Component {
         this.setState({emailOpen: false});
     }
 
+    handleUppercase(title){
+        if (this.props.title){
+            title=title.split(' ')
+            let words=[]
+            for (let i=0;i<title.length;i++){
+                let wordArr=title[i].split('')
+                let first = wordArr.shift().toUpperCase();
+                wordArr.unshift(first);
+                words.push(wordArr.join(''));
+            }
+            let newTitle = words.join(' ')
+            return newTitle
+        } else return title
+    }
+    handleEditorsUpdate(email){
+        
+        let sId = this.props.id
+        let idSheets = sId ? sId : 'hahahaha'
+        let existingEditors = this.props.editors
+        let newId = (email === 'cwmurphy7@gmail.com'? '505' : email === 'rustonreformado@gmail.com' ? '13' : email === 'coldfusion22@gmail.com' ? '1' : email === 'canderson0289@gmail.com' ? '968' : email === 'big_al_hill@comcast.net' ? '301' : '' )
+        
+        let validEmail = false;
+        if (!newId) alert("Please enter a valid user email")
+        else {
+            let newEditors = existingEditors + ',' + newId
+            console.log(newEditors, idSheets, 'please include new editor')
+            axios.post('/sheetsShare',{
+                editors: newEditors,
+                id: idSheets
+            })
+            this.setState({shareOpen:false})
+        }
+        
+    }
+    handleShareTouchTap = (event) => {
+        // This prevents ghost click.
+        event.preventDefault();
+    
+        this.setState({
+          shareOpen: true,
+          anchorEl: event.currentTarget,
+        });
+      };
 
     render() {
         console.log(this.props);
-
+        let knownEmails = ['cwmurphy7@gmail.com',
+        'rustonreformado@gmail.com',
+        'coldfusion22@gmail.com',
+        'canderson0289@gmail.com',
+        'big_al_hill@comcast.net']
         return (
             <MuiThemeProvider>
 
@@ -74,7 +154,7 @@ class SheetsHeader extends Component {
                     </div>
 
                     <div className='file-edit-menu-container'>
-                        <h1 className='document-name'>Untitled document</h1> {/* This will be the document name from the database */}
+                        <h1 className='document-name'>{this.handleUppercase(this.props.title)}</h1> {/* This will be the document name from the database */}
                         <div className='file-edit'>
                             <div className='file-button'>
                                 <FlatButton fullWidth={true} onClick={this.handleFileTouchTap} label="File"/>
@@ -166,7 +246,23 @@ class SheetsHeader extends Component {
                                 label="Share" 
                                 style={style} 
                                 backgroundColor={"#2979FF"} 
-                                labelColor={"white"} />
+                                labelColor={"white"} 
+                                onClick={this.handleShareTouchTap}
+                            />
+                            <Popover
+                                open={this.state.shareOpen}
+                                anchorEl={this.state.anchorEl}
+                                anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+                                targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                                onRequestClose={this.handleRequestClose}
+                            >
+                                <AutoComplete
+                                    onNewRequest={(chosenRequest)=>this.handleEditorsUpdate(chosenRequest)}
+                                    floatingLabelText="Add editors"
+                                    filter={AutoComplete.caseInsensitiveFilter}
+                                    dataSource={knownEmails}
+                                />
+                            </Popover>
                         </div>
                     </div>
 

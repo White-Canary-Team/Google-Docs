@@ -133,16 +133,8 @@ class QuillHeader extends Component {
         let idQuill = qId ? qId : 'hahahaha'
         let existingEditors = this.props.editors
         let newId = (email === 'cwmurphy7@gmail.com'? '505' : email === 'rustonreformado@gmail.com' ? '13' : email === 'coldfusion22@gmail.com' ? '1' : email === 'canderson0289@gmail.com' ? '968' : email === 'big_al_hill@comcast.net' ? '301' : '' )
-        // console.log(email, 'this is the new email')
+        
         let validEmail = false;
-        // for (let i=0;i<editorsCopy.length;i++){
-        //     if (editorsCopy[i].email === email){
-        //         validEmail = true;
-        //         let newEditors = this.state.docEditors 
-        //         let thisEditor = newEditors.concat(',' + newId)
-        //         this.setState({docEditors:thisEditor})
-        //     }
-        // }
         if (!newId) alert("Please enter a valid user email")
         else {
             let newEditors = existingEditors + ',' + newId
