@@ -28,7 +28,7 @@ class Sheets extends Component {
     super();
     this.state={
       rows: 35,
-      fillData:[['White', 'Canary'],['is so much','better than'], ['Black', 'Canary']],
+      fillData:[['White', 'Canary','Rocks!'],['',''], ['', '']],
       // fillStyles:[[{bg:' bg-blue',color:'white'}, {bg:'bg-gray',color:'yellow'}]],
       columns: 30,
       table: [],
