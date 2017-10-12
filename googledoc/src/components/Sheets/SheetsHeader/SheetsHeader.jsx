@@ -225,7 +225,7 @@ class SheetsHeader extends Component {
                                 onRequestClose={this.handleEmailRequestClose}
                             >
                                 <Menu 
-                                    style={{ width: 300, height: '10%', background: "pink" }}
+                                    style={{ width: 300, height: '10%', background: "whitesmoke" }}
                                 >
                                     <div className="menu-pic-container">
                                         <img className="pro-pic-dropdown" src={this.props.userPic} style={{ width: '100', height: '100' }} />
