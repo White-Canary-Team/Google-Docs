@@ -11,6 +11,7 @@ import { connect } from 'react-redux'
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import { Link } from 'react-router-dom'
+import {getSearch, getDocs} from './../../ducks/reducer.js'
 
 
 
@@ -21,12 +22,13 @@ class Header extends Component {
     super(props);
     this.state = {
       open: false,
-      searchTerm: '',
+      searchInput: '',
       menu1: false,
       menu2: false,
       menu3: false
 
     };
+    this.handleSearch = this.handleSearch.bind(this)
 
   }
 
@@ -83,6 +85,10 @@ class Header extends Component {
       menu3: false,
     });
   };
+  handleSearch(){
+   this.props.getSearch(this.state.searchInput)
+   this.props.getDocs()
+  }
 
   render() {
     let selecter = this.state.menu3 ? '3px solid CornflowerBlue' : null
@@ -96,7 +102,7 @@ class Header extends Component {
       margin: 20,
       display: 'inline-block',
     };
-    console.log(this.props.email)
+    console.log(this.props.searchTerm)
     return (
 
       <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
@@ -109,11 +115,12 @@ class Header extends Component {
             iconElementRight={<div><SearchBar
               onChange={(val) => {
                 this.setState({
-                  searchTerm: val
+                  searchInput: val
                 })
+                
               }}
 
-              onRequestSearch={() => console.log('onRequestSearch')}
+              onRequestSearch={this.handleSearch}
 
               style={{
                 position: "absolute",
@@ -199,7 +206,8 @@ class Header extends Component {
 function mapStateToProps(state) {
   return {
     email: state.email,
-    userPic: state.userPic
+    userPic: state.userPic,
+    searchTerm: state.searchTerm
   }
 }
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, {getSearch, getDocs})(Header);
