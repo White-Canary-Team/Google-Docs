@@ -283,6 +283,7 @@ class QuillHeader extends Component {
                                     floatingLabelText="Add editors"
                                     filter={AutoComplete.caseInsensitiveFilter}
                                     dataSource={knownEmails}
+                                    style={{width: '300px',height:'80px', paddingLeft:'15px'}}
                                 />
                             </Popover>
 
