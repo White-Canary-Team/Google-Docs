@@ -12,8 +12,6 @@ class Landing extends Component {
                     <Menu right width={ 300 } >
                         <a id="home" className="menu-item" href="/">Home</a>
                         <a id="test" className="menu-item" href='/meetteam'>Meet The Team</a>
-                        <a id="test" className="menu-item" href="#">test</a>
-                        <a id="test" className="menu-item" href="#">test</a>
                     </Menu>
                 </div>
                 
@@ -22,6 +20,33 @@ class Landing extends Component {
                         <Typing className='typing-animation'>
                             Create persuasive
                             <Backspace count={10} delay={1000}/> {"impactful"}
+                            <Backspace count={11} delay={1000}/> {"meaningful"}
+                            <Backspace count={11} delay={1000}/> {"persuasive"}
+                            <Backspace count={11} delay={1000}/> {"impactful"}
+                            <Backspace count={11} delay={1000}/> {"meaningful"}
+                            <Backspace count={11} delay={1000}/> {"persuasive"}
+                            <Backspace count={11} delay={1000}/> {"impactful"}
+                            <Backspace count={11} delay={1000}/> {"meaningful"}
+                            <Backspace count={11} delay={1000}/> {"persuasive"}
+                            <Backspace count={11} delay={1000}/> {"impactful"}
+                            <Backspace count={11} delay={1000}/> {"meaningful"}
+                            <Backspace count={11} delay={1000}/> {"persuasive"}
+                            <Backspace count={11} delay={1000}/> {"impactful"}
+                            <Backspace count={11} delay={1000}/> {"meaningful"}
+                            <Backspace count={11} delay={1000}/> {"persuasive"}
+                            <Backspace count={11} delay={1000}/> {"impactful"}
+                            <Backspace count={11} delay={1000}/> {"meaningful"}
+                            <Backspace count={11} delay={1000}/> {"persuasive"}
+                            <Backspace count={11} delay={1000}/> {"impactful"}
+                            <Backspace count={11} delay={1000}/> {"meaningful"}
+                            <Backspace count={11} delay={1000}/> {"persuasive"}
+                            <Backspace count={11} delay={1000}/> {"impactful"}
+                            <Backspace count={11} delay={1000}/> {"meaningful"}
+                            <Backspace count={11} delay={1000}/> {"persuasive"}
+                            <Backspace count={11} delay={1000}/> {"impactful"}
+                            <Backspace count={11} delay={1000}/> {"meaningful"}
+                            <Backspace count={11} delay={1000}/> {"persuasive"}
+                            <Backspace count={11} delay={1000}/> {"impactful"}
                             <Backspace count={11} delay={1000}/> {"meaningful"}
                             <Backspace count={11} delay={1000}/> {"persuasive"}
                             <Backspace count={11} delay={1000}/> {"impactful"}

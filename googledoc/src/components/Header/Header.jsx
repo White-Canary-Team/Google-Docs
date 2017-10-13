@@ -187,8 +187,8 @@ class Header extends Component {
 
 
           <Drawer containerStyle={{ height: 'calc(100% - 64px)', top: 64 }} docked={true} width={200} open={this.state.open} zDepth={2}>
-            <MenuItem containerElement={<Link to="/Quill"/>} primaryText="Quill"/>
-            <MenuItem>Test 1</MenuItem>
+            <MenuItem primaryText="Quill"/>
+            <MenuItem primaryText="Sheet"/>
           </Drawer>
         </div>
       </MuiThemeProvider>
