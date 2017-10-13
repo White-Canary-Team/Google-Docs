@@ -6,6 +6,7 @@ const GET_ID = "GET_ID"
 const GET_DOCS ="GET_DOCS"
 const GET_DOCS_PENDING = "GET_DOCS_PENDING"
 const GET_DOCS_FULFILLED = "GET_DOCS_FULFILLED"
+const GET_SEARCH = "GET_SEARCH"
 
 
 let initialState = {
@@ -13,7 +14,8 @@ let initialState = {
     userId: '',
     documents: [],
     userPic:'',
-    loading:false
+    loading:false,
+    searchTerm: ''
 }
 export function getDocs(){
     return{
@@ -38,6 +40,12 @@ export function getID(id){
         payload: id
     }
 }
+export function getSearch(search){
+    return {
+        type: GET_SEARCH,
+        payload: search
+    }
+}
 
 
 
@@ -55,6 +63,9 @@ export default function reducer(state = initialState, action){
 
         case GET_DOCS_FULFILLED:
             return Object.assign({},state,{loading: false, documents: action.payload})
+        
+        case GET_SEARCH:
+            return Object.assign({},state,{searchTerm: action.payload})
     }
         
     return state

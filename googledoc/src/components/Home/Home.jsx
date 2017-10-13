@@ -223,16 +223,14 @@ class Home extends Component {
 
 
     render() {
-        const knownEmails = [
-            'cwmurphy7@gmail.com',
-            'rustonreformado@gmail.com',
-            'coldfusion22@gmail.com',
-            'canderson0289@gmail.com'
-        ];
+        const knownEmails = ['cwmurphy7@gmail.com',
+        'rustonreformado@gmail.com',
+        'coldfusion22@gmail.com',
+        'canderson0289@gmail.com',
+        'big_al_hill@comcast.net'];
 
 
         console.log(this.state.sheetTitle)
-        console.log(this.props.userId, 'lfjkladsjfasd')
 
         let findSheetId = this.props.documents.filter((e)=>{
             if(e.doctype === 'excel'){
@@ -273,7 +271,7 @@ class Home extends Component {
             <div className='new-buttons'>
                 <Link to={newSheetLink} className='submit' onClick={()=>this.handleSheetsUpdate()}>
                 <RaisedButton
-                    label={this.state.sheetTitle || this.state.sheetEditors?"Submit":"Skip"}
+                    label="Submit"
                     labelPosition="before"
                     containerElement="label"
                 />
@@ -330,10 +328,17 @@ class Home extends Component {
             <div className='new-buttons'>
                 <Link to={newDocLink} className='submit' onClick={()=>this.handleDocUpdate()}>
                 <RaisedButton
-                    label={this.state.docTitle || this.state.docEditors?"Submit":"Skip"}
+                    label="Submit"
                     labelPosition="before"
                     containerElement="label"
                 />
+                </Link>
+                <Link to={newDocLink} className='skip'>
+                    <RaisedButton
+                        label="Skip"
+                        labelPosition="before"
+                        containerElement="label"
+                    />
                 </Link>
             </div>
         </div> : null;
@@ -358,6 +363,8 @@ class Home extends Component {
 
         // DOCUMENTS GRID
 
+
+
         let myDocs = filteredDoc ? filteredDoc.map((c, i) => {
             let quillLink = `/quill/${c.id}`;
             
@@ -380,9 +387,37 @@ class Home extends Component {
                 </Link>
 
             return (docLink)
-        }) : null
+        }) : null;
 
-        let loader = this.props.loading ? <div className="loader"> <i className="fa fa-spinner fa-pulse fa-5x fa-fw"></i></div> : myDocs
+        let searchDoc = filteredDoc && this.props.searchTerm ? filteredDoc.map((c,i)=>{
+            if(c.title === this.props.searchTerm){
+                let quillLink = `/quill/${c.id}`;
+            
+            let sheetLink = `/sheets/${c.id}`;
+            let docStyle = c.doctype === 'word' ? "2px solid #90CAF9" : "2px solid #A5D6A7"
+            let searchDocs = c.doctype === 'word' ?
+                <Link to={quillLink}> 
+                    <div className="doc-box " style={{ border: docStyle }} key={i}> 
+                        <DocIcon style={{color:'#5276d0', margin:'0px 4px 0px -2px'}} id='doc-icon'/>
+                        <span>{`${this.handleUppercase(c.title)}`}
+                        </span>
+                    </div>
+                </Link> :
+                <Link to={sheetLink}> 
+                    <div className="doc-box" style={{ border: docStyle }} key={i}>
+                        <SheetIcon style={{color:'#31884a', marginRight:'4px', height:'20px'}}/>  
+                        <span>{`${this.handleUppercase(c.title)}`}
+                        </span>
+                    </div>
+                </Link>
+                
+                return searchDocs
+            }else{
+                return console.log('that')
+            } 
+        }) : myDocs
+        console.log(this.props.searchTerm)
+        let loader = this.props.loading ? <div className="loader"> <i className="fa fa-spinner fa-pulse fa-5x fa-fw"></i></div> : searchDoc
 
         let style = {
             height: 100,
@@ -488,7 +523,8 @@ function mapStateToProps(state) {
         userPic: state.userPic,
         userId: state.userId,
         loading: state.loading,
-        documents: state.documents
+        documents: state.documents,
+        searchTerm: state.searchTerm
     }
 }
 export default connect(mapStateToProps, { emailAdd, getID, getDocs })(Home)
